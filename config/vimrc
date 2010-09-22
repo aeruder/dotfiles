@@ -69,12 +69,11 @@ com! -nargs=0 Gnuindent
 set encoding=utf-8
 
 """"""""""""""""""""""""
-" Wrap lines, but color column 85 so we can tell when we're
-" writing extra long lines.
+" Wrap lines
 set wrap
 set textwidth=79
 set formatoptions=qrn1
-set colorcolumn=85
+set colorcolumn=
 
 """"""""""""""""""""""""
 " Give us some context around the cursor when scrolling
