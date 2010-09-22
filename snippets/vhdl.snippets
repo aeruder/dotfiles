@@ -1,0 +1,77 @@
+# library ieee
+snippet lib
+	library ieee;
+	use ieee.std_logic_1164.all;
+	use ieee.numeric_std.all;
+	
+	library az_core_lib;
+	use az_core_lib.ip_comp_pack.all;
+	use az_core_lib.ip_math_pack.all;
+	use az_core_lib.ip_std_pack.all;
+	use az_core_lib.ip_if_pack.all;
+	use az_core_lib.ip_mem_map_pack.all;
+	
+	-- synthesis translate_off
+	use az_core_lib.ip_tb_util_pack.all;
+	use az_core_lib.ip_tb_pack.all;
+	use std.textio.all;
+	-- synthesis translate_on
+
+#Entity, generic, and port declaration
+snippet ent
+	entity ${1:<ent_name>} is
+	  generic (
+	  );
+	  port (
+	  );
+	end entity $1;
+	
+	architecture ${2:rtl} of $1 is
+	
+	begin
+	end architecture $2;
+
+# Create package
+snippet pack
+	package ${1:<pack_name>} is
+	end $1;
+	
+	package body $1 is
+	end package body $1;
+
+# Create function
+snippet func
+	function ${1:<name>} (${2:Var1: std_logic; Var2: std_logic}) return ${3:std_logic} is
+	begin
+	
+	end function $1;
+
+# Create procedure
+snippet proc
+	procedure ${1:<name>} (${2:Var1: out std_logic; Var2: in std_logic}) is
+	begin
+	end procedure $1;
+
+# Create process
+snippet process
+	${1:<name>}: process (
+	) is
+	begin
+	end process $1;
+
+# New FF declaration (for custom types)
+snippet newff
+	procedure FF (signal   q            : out   ${1:<type>};
+	              constant d            : in    $1;
+	              constant INIT_VAL     : in    $1;
+	              signal   rst          : in    sl;
+	              signal   clk          : in    sl;
+	              constant en           : in    sl := '1';
+	              constant EDGE         : in    sl := '1') is
+	begin
+	  if (rst = '1') then
+	    q <= INIT_VAL;
+	  elsif (clk'event and clk = EDGE) then
+	    if (en = '1') then q <= d; end if;
+	  end if;
+	end procedure FF;

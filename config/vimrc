@@ -1,0 +1,362 @@
+" File mappings
+
+filetype off
+call pathogen#runtime_append_all_bundles()
+
+
+
+
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Lots and lots of settings
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+
+set nocompatible
+syntax on
+
+""""""""""""""""""""""""
+" Color scheme
+if has ("gui_running")
+    set guifont=Anonymous\ Pro\ 10
+    colors desert
+else
+    set background=dark
+    colors desert
+endif
+
+""""""""""""""""""""""""
+" Use with :Usespaces <num> and we
+" are configured with indentation of <num>
+" using spaces.
+com! -nargs=1 Usespaces
+  \ setlocal tabstop=<args> |
+  \ setlocal expandtab |
+  \ setlocal shiftwidth=<args> |
+  \ setlocal softtabstop=<args> |
+  \ setlocal nocopyindent
+
+""""""""""""""""""""""""
+" Use with :Usetabs <num> and we are
+" configured with indentation of <num> using
+" tabs.
+com! -nargs=1 Usetabs
+  \ setlocal tabstop=<args> |
+  \ setlocal noexpandtab |
+  \ setlocal shiftwidth=<args> |
+  \ setlocal softtabstop=<args> |
+  \ setlocal copyindent
+
+""""""""""""""""""""""""
+" GNU indentation style is a mess
+com! -nargs=0 Gnuindent
+  \ setlocal tabstop=8 |
+  \ setlocal shiftwidth=2 |
+  \ setlocal softtabstop=2 |
+  \ setlocal noexpandtab |
+  \ setlocal nocopyindent
+
+""""""""""""""""""""""""
+" Our default indentation style
+:Usespaces 4
+
+""""""""""""""""""""""""
+" If we use special characters, ensure we are doing so with
+" utf-8
+set encoding=utf-8
+
+""""""""""""""""""""""""
+" Wrap lines, but color column 85 so we can tell when we're
+" writing extra long lines.
+set wrap
+set textwidth=79
+set formatoptions=qrn1
+set colorcolumn=85
+
+""""""""""""""""""""""""
+" Give us some context around the cursor when scrolling
+set sidescroll=10 sidescrolloff=10
+set scrolloff=4
+
+""""""""""""""""""""""""
+" Set how we indent new lines, autoindent seems most
+" sane to me (except when filetype indent is available)
+set nosmartindent
+set nocindent
+set autoindent
+set shiftround
+filetype plugin indent on
+
+""""""""""""""""""""""""
+" Set up our status bar with lots of good information
+set showmode
+set showcmd
+set ruler
+
+""""""""""""""""""""""""
+" Make our backspace sane (we want to be able to backspace over everything)
+set backspace=indent,eol,start
+
+""""""""""""""""""""""""
+" Tab completion in command mode
+set wildmenu
+set wildmode=list:longest
+
+""""""""""""""""""""""""
+" When beeping, do it visually not audibly (which half the time
+" doesn't work anyway)
+set visualbell
+
+""""""""""""""""""""""""
+" Highlight the entire line we are on
+set cursorline
+
+""""""""""""""""""""""""
+" 99% of the time we'll be working on a really fast tty, so
+" this makes redraw more smooth.
+set ttyfast
+
+""""""""""""""""""""""""
+" Always enable the status line for the window, even if there is just
+" one window.
+set laststatus=2
+
+""""""""""""""""""""""""
+" Display the line numbers relative to the current line
+set relativenumber
+
+""""""""""""""""""""""""
+" Persistent undo even if we quit vim.  Store that information in ~/.undo
+set undofile
+set undodir=~/.undo
+
+""""""""""""""""""""""""
+" Search settings
+nnoremap / /\v
+vnoremap / /\v
+" If we search for Abc, it is case-sensitive, abc is case-insensitive
+set ignorecase
+set smartcase
+" Search as we type
+set incsearch
+" Highlight our searches
+set hlsearch
+" Wrap at the end
+set wrapscan
+
+""""""""""""""""""""""""
+" When we type a bracket, quickly jump to the matching bracket
+set showmatch
+
+""""""""""""""""""""""""
+" CScope settings
+set cscopequickfix=s-,c-,d-,i-,t-,e-,g-
+set cscopetag
+
+""""""""""""""""""""""""
+" Allow us to switch away from an unsaved buffer
+set hidden
+
+""""""""""""""""""""""""
+" When we yank text into the unnamed register, automatically put
+" it on the clipboard.
+set clipboard+=unnamed
+
+""""""""""""""""""""""""
+" When doing folds, base it on the syntax
+set foldmethod=syntax
+
+""""""""""""""""""""""""
+" When using vimdiff, ignore white-space changes
+set diffopt=iwhite,filler
+
+""""""""""""""""""""""""
+" Show tabs, trailing spaces, etc..
+set list listchars=tab:»·,trail:·,extends:>,precedes:<
+
+
+
+
+
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Key bindings
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+
+" Change our leader key to , rather than \
+let mapleader = ","
+
+" Helps debug making syntax files, displays the syntax of the
+" character underneath the cursor.
+nnoremap <leader>S :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+         \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+         \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" Clear the highlighted search
+nnoremap <leader><space> :nohlsearch<CR>
+
+" Highlight spacing errors
+nnoremap <leader>s /\v(\s+$)\|(<space>\ze<tab>)<CR>
+
+" Highlight tabs
+nnoremap <leader><Tab> /<Tab><CR>
+
+" Highlight just pasted text
+nnoremap <leader>v V`]
+
+" Open vimrc
+nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
+
+" Open vertical split and switch to it
+nnoremap <leader>w <C-w>v<C-w>l
+
+" Moving around windows
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Make j and k go through wrapped lines
+nnoremap j gj
+nnoremap k gk
+
+" Let us use ; instead of : for command mode
+nnoremap ; :
+
+" Use <tab> to bounce between matching parens
+nnoremap <tab> %
+vnoremap <tab> %
+
+" Use 'jj' instead of ESC
+inoremap jj <ESC>
+
+" Toggle in and out of hex dump mode
+nnoremap <leader>h :Hexmode<Cr>
+
+" Open a scratch buffer
+nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
+
+" Open buffer explorer
+nnoremap <leader>b :NERDTreeFind<Cr>
+
+" Open Ack
+nnoremap <leader>a :Ack 
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Our active abbreviations
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+abbreviate teh the
+abbreviate sl std_logic
+abbreviate slv std_logic_vector
+
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Misc custom commands, etc.
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+
+" This makes % work for a lot more than just
+" {(<, it also works on html, etc..
+runtime macros/matchit.vim
+
+" This makes :Man open manpages in a split with syntax highlighting
+runtime ftplugin/man.vim
+
+" Set our ack path (which we store in our vim directory)
+let s:ackexes = split(globpath(&rtp, 'bin/ack'), "\n")
+if (len(s:ackexes) > 0)
+    let g:ackprg="perl " . s:ackexes[0] . " -H --nocolor --nogroup --column"
+endif
+
+" Some filesystems that are mounted in /tmp (particularly on OS X), cause
+" problems with backup files
+autocmd BufRead /tmp/*
+    \ setlocal nobackup |
+    \ setlocal nowritebackup
+
+" Some custom filetypes
+au BufNewFile,BufRead build_log.txt     setf changelog
+au BufNewFile,BufRead *.phys            setf cmphys
+
+" Space/tab settings for different filetypes
+au FileType *
+    \ Usespaces 4
+
+au FileType python
+    \ Usespaces 2
+
+au FileType ruby
+    \ Usespaces 2
+
+au FileType make
+    \ Usetabs 8
+
+au FileType vhdl
+    \ Usespaces 2
+
+" This is used when editing a mutt mail message
+comm! -nargs=0 BeginMailMessage call BeginMailMessage()
+function! BeginMailMessage()
+    set tw=72
+    set wrap
+    set expandtab
+    set ft=mail
+    silent! g/^Message-Id: <.*@.*>/d
+    silent! %s/^My-\(Message-Id: <.*@.*>\)$/\1/
+    normal 1G
+endfunction
+
+" Hex editing support (from http://vim.wikia.com/wiki/Improved_hex_editing)
+command -bar Hexmode call ToggleHex()
+
+" helper function to toggle hex mode
+function ToggleHex()
+  " hex mode should be considered a read-only operation
+  " save values for modified and read-only for restoration later,
+  " and clear the read-only flag for now
+  let l:modified=&mod
+  let l:oldreadonly=&readonly
+  let &readonly=0
+  let l:oldmodifiable=&modifiable
+  let &modifiable=1
+  if !exists("b:editHex") || !b:editHex
+    " save old options
+    let b:oldft=&ft
+    let b:oldbin=&bin
+    " set new options
+    setlocal binary " make sure it overrides any textwidth, etc.
+    let &ft="xxd"
+    " set status
+    let b:editHex=1
+    " switch to hex editor
+    %!xxd
+  else
+    " restore old options
+    let &ft=b:oldft
+    if !b:oldbin
+      setlocal nobinary
+    endif
+    " set status
+    let b:editHex=0
+    " return to normal editing
+    %!xxd -r
+  endif
+  " restore values for modified and read only state
+  let &mod=l:modified
+  let &readonly=l:oldreadonly
+  let &modifiable=l:oldmodifiable
+endfunction
