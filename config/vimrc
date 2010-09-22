@@ -246,8 +246,11 @@ nnoremap <leader>h :Hexmode<Cr>
 " Open a scratch buffer
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 
-" Open buffer explorer
-nnoremap <leader>b :NERDTreeFind<Cr>
+" Open NERDTree from directory where current file is
+nnoremap <leader>bb :NERDTreeFind<Cr>
+
+" Open NERDTree from current working directory
+nnoremap <leader>bc :NERDTree<Cr>
 
 " Open Ack
 nnoremap <leader>a :Ack 
