@@ -247,10 +247,10 @@ nnoremap <leader>h :Hexmode<Cr>
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 
 " Open NERDTree from directory where current file is
-nnoremap <leader>bb :NERDTreeFind<Cr>
+nnoremap <leader>bf :NERDTreeFind<Cr>
 
 " Open NERDTree from current working directory
-nnoremap <leader>bc :NERDTree<Cr>
+nnoremap <leader>bt :NERDTree<Cr>
 
 " Open Ack
 nnoremap <leader>a :Ack 
