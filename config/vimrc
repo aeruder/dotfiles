@@ -73,8 +73,8 @@ com! -nargs=0 Gnuindent
 set encoding=utf-8
 
 """"""""""""""""""""""""
-" Wrap lines
-set wrap
+" Line wrap settings
+set nowrap
 set textwidth=79
 set formatoptions=qrn1
 set colorcolumn=
