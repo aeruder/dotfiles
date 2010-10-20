@@ -196,6 +196,18 @@ set list listchars=tab:»·,trail:·,extends:>,precedes:<
 " Change our leader key to , rather than \
 let mapleader = ","
 
+" Align comma'd lists like
+"
+" a, b, c, d
+" foo, bar, blah, baz
+"
+" to this when selected and ran through this command:
+"
+" a,   b,   c,    d
+" foo, bar, blah, baz
+"
+vnoremap <leader>A, :Align ,<CR>gv:s/\v(\s+)(,)\s?/\2\1/g<CR>:let @/=""<CR>
+
 " Helps debug making syntax files, displays the syntax of the
 " character underneath the cursor.
 nnoremap <leader>S :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
