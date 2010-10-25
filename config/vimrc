@@ -271,6 +271,11 @@ nnoremap <leader>bt :NERDTree<Cr>
 " Open Ack
 nnoremap <leader>a :Ack 
 
+" Some plugin overrides
+nmap <leader>Pswp <Plug>SaveWinPosn
+nmap <leader>Prwp <Plug>RestoreWinPosn
+
+
 """"""""""""""""""""""""
 """"""""""""""""""""""""
 """"""""""""""""""""""""
