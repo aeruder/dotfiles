@@ -216,6 +216,12 @@ nnoremap <leader>S :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") .
 
 " Clear the highlighted search
 nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <leader>D :%s/<C-R>///g<CR>
+nnoremap <leader>gD :%g/<C-R>//d<CR>
+nnoremap <leader>g!D :%g!/<C-R>//d<CR>
+vnoremap <leader>D :s/<C-R>///g<CR>
+vnoremap <leader>gD :g/<C-R>//d<CR>
+vnoremap <leader>g!D :g!/<C-R>//d<CR>
 
 " Highlight spacing errors
 nnoremap <leader>s /\v(\s+$)\|(<space>\ze<tab>)<CR>
