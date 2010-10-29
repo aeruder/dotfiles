@@ -16,7 +16,6 @@ snippet lib
 	use az_core_lib.ip_tb_pack.all;
 	use std.textio.all;
 	-- synthesis translate_on
-
 #Entity, generic, and port declaration
 snippet ent
 	entity ${1:<ent_name>} is
@@ -30,7 +29,6 @@ snippet ent
 	
 	begin
 	end architecture $2;
-
 # Create package
 snippet pack
 	package ${1:<pack_name>} is
@@ -38,27 +36,23 @@ snippet pack
 	
 	package body $1 is
 	end package body $1;
-
 # Create function
 snippet func
 	function ${1:<name>} (${2:Var1: std_logic; Var2: std_logic}) return ${3:std_logic} is
 	begin
 	
 	end function $1;
-
 # Create procedure
 snippet proc
 	procedure ${1:<name>} (${2:Var1: out std_logic; Var2: in std_logic}) is
 	begin
 	end procedure $1;
-
 # Create process
 snippet process
 	${1:<name>}: process (
 	) is
 	begin
 	end process $1;
-
 # New FF declaration (for custom types)
 snippet newff
 	procedure FF (signal   q            : out   ${1:<type>};

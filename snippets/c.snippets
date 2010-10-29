@@ -1,0 +1,21 @@
+snippet dim
+	(${1:size_t})(sizeof(${2:x})/sizeof($2[0]))
+snippet dimloop
+	for (${1:var} = 0; $1 < (${3:size_t})(sizeof(${2:array})/sizeof($2[0])); $1++) {
+	}
+snippet once
+	#ifndef ${1:}${2:`toupper(fnamemodify(bufname("%"), ":t:gs?[^a-zA-Z0-9]?_?"))`}${3:}
+	#define $1$2$3
+
+	${4}
+
+	#endif /* $1$2$3 */
+snippet struct
+	typedef struct ${1:}_s {
+	} $1_t;
+snippet enum
+	typedef enum ${1:}_e {
+	} $1_t;
+snippet union
+	typedef union ${1:}_u {
+	} $1_t;
