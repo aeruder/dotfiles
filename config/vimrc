@@ -138,8 +138,6 @@ set undodir=~/.undo
 
 """"""""""""""""""""""""
 " Search settings
-nnoremap / /\v
-vnoremap / /\v
 " If we search for Abc, it is case-sensitive, abc is case-insensitive
 set ignorecase
 set smartcase
@@ -148,7 +146,7 @@ set incsearch
 " Highlight our searches
 set hlsearch
 " Wrap at the end
-set wrapscan
+set nowrapscan
 
 """"""""""""""""""""""""
 " When we type a bracket, quickly jump to the matching bracket
