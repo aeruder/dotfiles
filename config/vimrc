@@ -238,16 +238,6 @@ nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
 " Open vertical split and switch to it
 nnoremap <leader>w <C-w>v<C-w>l
 
-" Moving around windows
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-nnoremap <Up> <C-w>+
-nnoremap <Down> <C-w>-
-nnoremap <Left> <C-w><
-nnoremap <Right> <C-w>>
-
 " Make j and k go through wrapped lines
 nnoremap j gj
 nnoremap k gk
