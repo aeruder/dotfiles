@@ -204,7 +204,7 @@ let mapleader = ","
 " a,   b,   c,    d
 " foo, bar, blah, baz
 "
-vnoremap <leader>A, :Align ,<CR>gv:s/\v(\s+)(,)\s?/\2\1/g<CR>:let @/=""<CR>
+vnoremap <leader>A, :Tab /[;,]<CR>gv:s/\v(\s+)([,;])\s?/\2\1/g<CR>gv:s/\v\s+$//<CR>:let @/=""<CR>
 
 " Helps debug making syntax files, displays the syntax of the
 " character underneath the cursor.

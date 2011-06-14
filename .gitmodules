@@ -1,9 +1,6 @@
 [submodule "bundle/snipmate.vim"]
 	path = bundle/snipmate.vim
 	url = http://github.com/msanders/snipmate.vim
-[submodule "bundle/Align.vim"]
-	path = bundle/Align.vim
-	url = http://github.com/vim-scripts/Align.vim
 [submodule "bundle/a.vim"]
 	path = bundle/a.vim
 	url = http://github.com/vim-scripts/a.vim
@@ -25,3 +22,6 @@
 [submodule "bundle/vim-fugitive.vim"]
 	path = bundle/vim-fugitive.vim
 	url = http://github.com/tpope/vim-fugitive.git
+[submodule "bundle/tabular"]
+	path = bundle/tabular
+	url = http://github.com/godlygeek/tabular
