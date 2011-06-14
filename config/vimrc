@@ -259,8 +259,8 @@ nnoremap ; :
 nnoremap <tab> %
 vnoremap <tab> %
 
-" Use 'jj' instead of ESC
-inoremap jj <ESC>
+" Use 'jk' instead of ESC
+inoremap jk <ESC>
 
 " Toggle in and out of hex dump mode
 nnoremap <leader>h :Hexmode<Cr>
