@@ -397,7 +397,7 @@ endfunction
 " Pull in our zsh special directories
 function PullInZshNamedDirectories()
     if (exists("$HOME"))
-        let l:namedirs = $HOME . "/.zsh-named-dirs"
+        let l:namedirs = $HOME . "/.znameddirs"
         if (filereadable(l:namedirs))
             let l:lines = readfile(l:namedirs)
             for l:a in l:lines
