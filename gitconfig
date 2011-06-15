@@ -1,0 +1,14 @@
+[user]
+	name = Andrew Ruder
+	email = andy@aeruder.net
+[alias]
+	stat = status
+	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
+	co = checkout
+	cia = commit -a
+	cpick = cherry-pick
+	fancylog = log --pretty=oneline --decorate --graph
+[color]
+	ui = auto
+[merge]
+	log = True
