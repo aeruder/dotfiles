@@ -1,14 +1,27 @@
 [user]
-	name = Andrew Ruder
-	email = andy@aeruder.net
+    name = Andrew Ruder
+    email = andy@aeruder.net
 [alias]
-	stat = status
-	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
-	co = checkout
-	cia = commit -a
-	cpick = cherry-pick
-	fancylog = log --pretty=oneline --decorate --graph
+    stat = status
+    st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
+    co = checkout
+    cia = commit -a
+    cpick = cherry-pick
+    fancylog = log --pretty=oneline --decorate --graph
+    flog = log --pretty=oneline --decorate --graph --all
 [color]
-	ui = auto
+    ui = auto
 [merge]
-	log = True
+    log = True
+    conflictstyle = diff3
+[push]
+    default = tracking
+[log]
+    decorate = True
+[diff]
+    renames = copy
+[am]
+    keepcr = True
+[core]
+    preloadindex = True
+    excludesfile = ~/.gitignore
