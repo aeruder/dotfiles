@@ -175,3 +175,12 @@ bindkey '^J' backward-word
 bindkey '^K' forward-word
 
 bindkey '^R' history-incremental-search-backward
+
+##################################
+# Some options
+##################################
+HISTFILE=$HOME/.history
+HISTSIZE=900000000
+SAVEHIST=100000
+DIRSTACKSIZE=20
+
