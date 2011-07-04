@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage: CC=blah $0 <args> <header>" >&2
+    exit 1
+fi
+
+if [ -z "$CC" ]; then
+    CC=gcc
+fi
+
+args=( "$@" )
+
+header="${args[${#args[@]}-1]}"
+
+if [ $# -gt 1 ]; then
+    args=( ${args[@]:0:$((${#args[@]}-1))} )
+else
+    args=()
+fi
+
+$CC "${args[@]}" - -o /dev/null <<EOF
+#include "$header"
+
+int main(void) { return 0; }
+EOF
+
