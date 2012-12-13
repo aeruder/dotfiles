@@ -5,6 +5,9 @@ call pathogen#runtime_append_all_bundles()
 
 
 
+""""""""""""""""""""""""
+" Turn off fuf data file
+let g:fuf_dataDir = ''
 
 
 """"""""""""""""""""""""
@@ -255,6 +258,9 @@ nnoremap <leader>h :Hexmode<Cr>
 
 " Open a scratch buffer
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
+
+" Open Fuzzyfinder
+nnoremap <leader>be :FufBuffer<Cr>
 
 " Open NERDTree from directory where current file is
 nnoremap <leader>bf :NERDTreeFind<Cr>
