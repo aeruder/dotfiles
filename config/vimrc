@@ -348,10 +348,10 @@ function! BeginMailMessage()
 endfunction
 
 " Hex editing support (from http://vim.wikia.com/wiki/Improved_hex_editing)
-command -bar Hexmode call ToggleHex()
+comm! -bar Hexmode call ToggleHex()
 
 " helper function to toggle hex mode
-function ToggleHex()
+function! ToggleHex()
   " hex mode should be considered a read-only operation
   " save values for modified and read-only for restoration later,
   " and clear the read-only flag for now
@@ -389,7 +389,7 @@ function ToggleHex()
 endfunction
 
 " Pull in our zsh special directories
-function PullInZshNamedDirectories()
+function! PullInZshNamedDirectories()
     if (exists("$HOME"))
         let l:namedirs = $HOME . "/.znameddirs"
         if (filereadable(l:namedirs))
