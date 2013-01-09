@@ -24,9 +24,7 @@ syntax on
 """"""""""""""""""""""""
 " Color scheme
 if has ("gui_running")
-    if has ("gui_win32")
-        set guifont=Anonymous_Pro:h11
-    else
+    if !(has("gui_win32"))
         set guifont=Anonymous\ Pro\ 10
     endif
     colors desert
