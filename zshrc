@@ -133,6 +133,10 @@ setopt pushdsilent
 # pushd with no arguments is pushd $HOME
 setopt pushdtohome
 
+# Don't prompt for correction ever
+setopt nocorrect
+setopt nocorrectall
+
 ##################################
 # Alias
 ##################################
