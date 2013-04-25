@@ -27,6 +27,17 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+##################################
+# add our battery to the prompt
+##################################
+function battery_percent() {
+    local a b
+    a=$(</sys/class/power_supply/BAT1/energy_now)
+    b=$(</sys/class/power_supply/BAT1/energy_full)
+    echo "$(((a * 100) / b))%%"
+}
+
+PR_FLAGS+=(battery_percent)
 
 ##################################
 # add directory size to our prompt
