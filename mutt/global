@@ -1,0 +1,49 @@
+# vim:ft=muttrc
+
+set nomark_old
+set mbox_type=mbox
+set timeout=60
+
+set read_inc=50
+set write_inc=50
+
+set delete=yes
+set editor='vim + -c "BeginMailMessage"'
+set weed=yes
+
+set realname="Andrew Ruder"
+
+set edit_headers
+set wait_key=no
+set envelope_from=yes
+
+set folder_format="%3N %f"
+
+set from="andy@aeruder.net"
+
+alternates "(aer|gnomes)@absoft.com"
+alternates ".*@aeruder.net"
+alternates "aeruder@ksu.edu"
+
+set signature="~/.signature"
+
+set sort_aux = 'reverse-last-date-received'
+set smart_wrap=yes
+unset bounce_delivered
+unset write_bcc
+set sort=threads
+unset use_domain
+set use_from=yes
+set sort_browser=unsorted
+set quit=ask-yes
+set pipe_decode=no
+set pipe_sep=yes
+set ascii_chars=yes
+set alias_file=~/.homefiles/mutt/aliases
+
+alternative_order text/plain text/html *
+auto_view text/html
+set pager_index_lines=6
+
+ignore *
+unignore Subject From To Bcc Cc Reply-To List-Id User-Agent X-Mailer Organization Date Message-ID My-Message-ID

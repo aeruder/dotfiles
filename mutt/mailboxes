@@ -1,0 +1,3 @@
+# vim:ft=muttrc
+
+set imap_check_subscribed=yes

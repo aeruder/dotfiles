@@ -1,0 +1,23 @@
+# vim:ft=muttrc
+
+#bind index d quit
+#bind index ^D quit
+#bind index <Esc>d quit
+#bind index D quit
+#
+#bind browser,pager d exit
+#bind browser,pager ^D exit
+#bind browser,pager <Esc>d exit
+#bind browser,pager D exit
+
+macro index,pager \cb "<pipe-message>urlview<Enter>" "call urlview to extract URLs out of a message"
+
+macro generic <f1> "!vim /usr/share/doc/mutt/manual.txt.gz\n" "Show Mutt documentation"
+macro index   <f1> "!vim /usr/share/doc/mutt/manual.txt.gz\n" "Show Mutt documentation"
+macro pager   <f1> "!vim /usr/share/doc/mutt/manual.txt.gz\n" "Show Mutt documentation"
+
+macro index,pager y "<change-folder>?<toggle-mailboxes>" "show incoming mailboxes list"
+bind browser y exit
+bind editor <Tab> complete-query
+bind editor ^T complete
+bind editor <space> noop 

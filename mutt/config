@@ -1,0 +1,5 @@
+# vim:ft=muttrc
+
+# Anything that can be overridden by hooks goes in here
+
+set index_format="%4C %Z %{%m/%d} %-18.18n (%6c) %s"

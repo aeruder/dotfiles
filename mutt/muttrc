@@ -1,0 +1,8 @@
+source ~/.mutt/aliases
+source ~/.mutt/colors
+source ~/.mutt/macros
+source ~/.mutt/global
+source ~/.mutt/hooks
+source ~/.mutt/mailboxes.global
+source ~/.mutt/mailboxes
+source ~/.mutt/subscriptions

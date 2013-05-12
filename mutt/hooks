@@ -1,0 +1,3 @@
+# vim:ft=muttrc
+
+folder-hook . source ~/.mutt/config 
