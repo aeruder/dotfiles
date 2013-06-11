@@ -112,7 +112,7 @@ set wildmode=list:longest
 """"""""""""""""""""""""
 " When beeping, do it visually not audibly (which half the time
 " doesn't work anyway)
-set visualbell
+" set visualbell
 
 """"""""""""""""""""""""
 " Highlight the entire line we are on
