@@ -25,3 +25,6 @@
 [submodule "bundle/tabular"]
 	path = bundle/tabular
 	url = http://github.com/godlygeek/tabular
+[submodule "bundle/vim-notes"]
+	path = bundle/vim-notes
+	url = https://github.com/xolox/vim-notes.git
