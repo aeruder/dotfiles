@@ -1,5 +1,3 @@
-if [ -z "$ZSH_ENV_LOADED" ]; then
-export ZSH_ENV_LOADED=1
 
 # Environment variables for non-interactive shells
 export EDITOR=vim
@@ -74,4 +72,3 @@ done
 ldpath=( ${(u)ldpath[@]} )
 export LD_LIBRARY_PATH="${(j%:%)ldpath}"
 
-fi # ZSH_ENV_LOADED
