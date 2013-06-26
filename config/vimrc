@@ -316,6 +316,8 @@ autocmd BufRead /tmp/*
 " Some custom filetypes
 au BufNewFile,BufRead build_log.txt     setf changelog
 au BufNewFile,BufRead *.phys            setf cmphys
+au BufNewFile,BufRead *.vb              set ft=vbnet
+au BufNewFile,BufRead *.il              set ft=ilasm
 
 " Space/tab settings for different filetypes
 au FileType *
