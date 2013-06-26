@@ -9,6 +9,10 @@ call pathogen#runtime_append_all_bundles()
 " Turn off fuf data file
 let g:fuf_dataDir = ''
 
+"""""
+" Default notes directory
+let g:notes_directories = [ '~/.notes' ]
+
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
