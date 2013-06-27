@@ -18,7 +18,7 @@ manpath=( "${(s%:%)MANPATH}" )
 [ -e ~/.zsh-pre-manpaths ] || touch ~/.zsh-pre-manpaths
 [ -e ~/.zsh-post-manpaths ] || touch ~/.zsh-post-manpaths
 
-prepaths=( )
+prepaths=( ~/.dotfiles/man )
 prepaths+=( ${(f)"$(<~/.zsh-pre-manpaths)"} )
 
 postpaths=( )
@@ -37,8 +37,7 @@ export MANPATH="${(j%:%)manpath}"
 [ -e ~/.zsh-pre-paths ] || touch ~/.zsh-pre-paths
 [ -e ~/.zsh-post-paths ] || touch ~/.zsh-post-paths
 
-prepaths=( )
-prepaths+=( "$HOME/.dotfiles/bin" )
+prepaths=( ~/.dotfiles/bin )
 prepaths+=( ${(f)"$(<~/.zsh-pre-paths)"} )
 
 postpaths=( )
