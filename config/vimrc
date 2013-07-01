@@ -29,12 +29,15 @@ syntax on
 " Color scheme
 if has ("gui_running")
     if !(has("gui_win32"))
-        set guifont=Anonymous\ Pro\ 10
+        set guifont=Inconsolata\ 10
     endif
-    colors desert
+    colors jellybeans
 else
+    if $COLORTERM == "gnome-terminal" || $KONSOLE_PROFILE_NAME != ""
+        set t_Co=256
+    endif
     set background=dark
-    colors desert
+    colors jellybeans
 endif
 
 """"""""""""""""""""""""
@@ -265,10 +268,10 @@ nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 " nnoremap <leader>be :FufBuffer<Cr>
 
 " Open NERDTree from directory where current file is
-nnoremap <leader>bf :NERDTreeFind<Cr>
+nnoremap <leader>bF :NERDTreeFind<Cr>
 
 " Open NERDTree from current working directory
-" nnoremap <leader>bt :NERDTree<Cr>
+nnoremap <leader>bT :NERDTree<Cr>
 
 " Open Ack
 nnoremap <leader>a :Ack 
