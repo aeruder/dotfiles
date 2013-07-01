@@ -1,5 +1,6 @@
 # vim:ft=muttrc
 
+source ~/.mutt/imap_auth
 set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
 set imap_check_subscribed
