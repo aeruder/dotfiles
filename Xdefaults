@@ -1,0 +1,15 @@
+XTerm*loginShell: True
+XTerm*faceSize: 13
+XTerm*faceName: Inconsolata
+XTerm*background: black
+XTerm*foreground: white
+XTerm*locale: UTF-8
+XTerm*scrollBar: false
+XTerm*scrollKey: true
+XTerm*saveLines: 8000
+XTerm*scrollTtyOutput: false
+XTerm*toolBar: false
+XTerm*termName: xterm-256color
+XTerm*eightBitInput: false
+XTerm*internalBorder: 2
+XTerm*altSendsEscape: true
