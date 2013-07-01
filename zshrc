@@ -232,3 +232,14 @@ SAVEHIST=100000
 DIRSTACKSIZE=20
 
 . ~/.zshenv
+
+armflag() {
+    echo "arm"
+}
+
+convert_arm() {
+    export CROSS_COMPILE=arm-linux-gnueabi-
+    export ARCH=arm
+
+    PR_FLAGS+=(armflag)
+}
