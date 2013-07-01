@@ -262,13 +262,13 @@ nnoremap <leader>h :Hexmode<Cr>
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 
 " Open Fuzzyfinder
-nnoremap <leader>be :FufBuffer<Cr>
+" nnoremap <leader>be :FufBuffer<Cr>
 
 " Open NERDTree from directory where current file is
 nnoremap <leader>bf :NERDTreeFind<Cr>
 
 " Open NERDTree from current working directory
-nnoremap <leader>bt :NERDTree<Cr>
+" nnoremap <leader>bt :NERDTree<Cr>
 
 " Open Ack
 nnoremap <leader>a :Ack 
@@ -276,6 +276,26 @@ nnoremap <leader>a :Ack
 " Some plugin overrides
 nmap <leader>Pswp <Plug>SaveWinPosn
 nmap <leader>Prwp <Plug>RestoreWinPosn
+
+" Unite
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>br :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>bo :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>by :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>be :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+  setlocal ic
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
 
 
 """"""""""""""""""""""""
