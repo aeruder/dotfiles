@@ -274,9 +274,9 @@ nnoremap <leader>bF :NERDTreeFind<Cr>
 nnoremap <leader>bT :NERDTree<Cr>
 
 " grep utilities
-nnoremap <leader>fa yiw:Ack <C-R>"<C-Left>
-nnoremap <leader>fg yiw:Ggrep <C-R>"<C-Left>
-nnoremap <leader>fb yiw:Bgrep <C-R>"<C-Left>
+nnoremap <leader>fa yiw:Ack <C-R>"
+nnoremap <leader>fg yiw:Ggrep <C-R>"
+nnoremap <leader>fb yiw:Bgrep <C-R>"
 
 " Some plugin overrides
 nmap <leader>Pswp <Plug>SaveWinPosn
