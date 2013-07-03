@@ -1,7 +1,7 @@
 " File mappings
 
-filetype off
-call pathogen#runtime_append_all_bundles()
+runtime bundle/pathogen/autoload/pathogen.vim
+execute pathogen#infect()
 
 
 
