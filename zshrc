@@ -184,12 +184,28 @@ alias -g US='| sort -u'
 ##################################
 # Keybindings
 ##################################
-bindkey '^W' beginning-of-line
-bindkey '^E' end-of-line
-bindkey '^J' backward-word
-bindkey '^K' forward-word
 
-bindkey '^R' history-incremental-search-backward
+bindkey -v
+
+function vim_mode_flag() {
+    echo $vim_mode
+}
+PR_FLAGS+=vim_mode_flag
+
+vim_ins_mode="INS"
+vim_cmd_mode="CMD"
+vim_mode=$vim_ins_mode
+
+function zle-keymap-select {
+  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+  zle reset-prompt
+}
+zle -N zle-keymap-select
+
+function zle-line-finish {
+  vim_mode=$vim_ins_mode
+}
+zle -N zle-line-finish
 
 ##################################
 # Some options
