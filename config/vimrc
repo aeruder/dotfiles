@@ -2,8 +2,10 @@
 
 
 runtime bundle/pathogen/autoload/pathogen.vim
+if has('vim_starting')
+    let config=pathogen#split(&runtimepath)[0]
+endif
 execute pathogen#infect()
-
 
 
 """"""""""""""""""""""""
@@ -307,6 +309,27 @@ function! s:unite_settings()
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
 endfunction
+
+" Enable snippets
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory=config.'/snippets,'.config.'/bundle/vim-snippets/snippets'
+
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
 
 
 """"""""""""""""""""""""
