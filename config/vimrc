@@ -292,7 +292,7 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 nnoremap <leader>bf :<C-u>Unite -start-insert file_rec/async<cr>
 nnoremap <leader>br :<C-u>Unite -start-insert file_mru<cr>
-nnoremap <leader>bo :<C-u>Unite -start-insert outline<cr>
+nnoremap <leader>bo :<C-u>Unite outline<cr>
 nnoremap <leader>by :<C-u>Unite history/yank<cr>
 nnoremap <leader>be :<C-u>Unite -start-insert buffer<cr>
 nnoremap <leader>bb :<C-u>Unite -quick-match buffer<cr>
