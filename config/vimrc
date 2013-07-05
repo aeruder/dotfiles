@@ -1,5 +1,6 @@
 " File mappings
 
+
 runtime bundle/pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
@@ -45,31 +46,31 @@ endif
 " are configured with indentation of <num>
 " using spaces.
 com! -nargs=1 Usespaces
-  \ setlocal tabstop=<args> |
-  \ setlocal expandtab |
-  \ setlocal shiftwidth=<args> |
-  \ setlocal softtabstop=<args> |
-  \ setlocal nocopyindent
+            \ setlocal tabstop=<args> |
+            \ setlocal expandtab |
+            \ setlocal shiftwidth=<args> |
+            \ setlocal softtabstop=<args> |
+            \ setlocal nocopyindent
 
 """"""""""""""""""""""""
 " Use with :Usetabs <num> and we are
 " configured with indentation of <num> using
 " tabs.
 com! -nargs=1 Usetabs
-  \ setlocal tabstop=<args> |
-  \ setlocal noexpandtab |
-  \ setlocal shiftwidth=<args> |
-  \ setlocal softtabstop=<args> |
-  \ setlocal copyindent
+            \ setlocal tabstop=<args> |
+            \ setlocal noexpandtab |
+            \ setlocal shiftwidth=<args> |
+            \ setlocal softtabstop=<args> |
+            \ setlocal copyindent
 
 """"""""""""""""""""""""
 " GNU indentation style is a mess
 com! -nargs=0 Gnuindent
-  \ setlocal tabstop=8 |
-  \ setlocal shiftwidth=2 |
-  \ setlocal softtabstop=2 |
-  \ setlocal noexpandtab |
-  \ setlocal nocopyindent
+            \ setlocal tabstop=8 |
+            \ setlocal shiftwidth=2 |
+            \ setlocal softtabstop=2 |
+            \ setlocal noexpandtab |
+            \ setlocal nocopyindent
 
 """"""""""""""""""""""""
 " Our default indentation style
@@ -217,8 +218,8 @@ vnoremap <leader>A, :Tab /[;,]<CR>gv:s/\v(\s+)([,;])\s?/\2\1/g<CR>gv:s/\v\s+$//<
 " Helps debug making syntax files, displays the syntax of the
 " character underneath the cursor.
 nnoremap <leader>S :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-         \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-         \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+            \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+            \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " Clear the highlighted search
 nnoremap <leader><space> :nohlsearch<CR>
@@ -243,6 +244,9 @@ nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
 
 " Open vertical split and switch to it
 nnoremap <leader>w <C-w>v<C-w>l
+
+" Open undotree
+nnoremap <leader>u :UndotreeToggle<Cr>
 
 " Make j and k go through wrapped lines
 nnoremap j gj
@@ -285,11 +289,13 @@ nmap <leader>Prwp <Plug>RestoreWinPosn
 " Unite
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-nnoremap <leader>br :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>bo :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
-nnoremap <leader>by :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>be :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
+" nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>bf :<C-u>Unite -start-insert file_rec/async<cr>
+nnoremap <leader>br :<C-u>Unite -start-insert file_mru<cr>
+nnoremap <leader>bo :<C-u>Unite -start-insert outline<cr>
+nnoremap <leader>by :<C-u>Unite history/yank<cr>
+nnoremap <leader>be :<C-u>Unite -start-insert buffer<cr>
+nnoremap <leader>bb :<C-u>Unite -quick-match buffer<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
