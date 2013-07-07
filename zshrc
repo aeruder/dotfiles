@@ -98,11 +98,11 @@ setopt histexpiredupsfirst
 
 # Don't include duplicate commands in the
 # history
-setopt histfindnodups
+# setopt histfindnodups
 
 # Ignore all dups so that they will
 # get removed
-setopt histignorealldups
+# setopt histignorealldups
 
 # If a command starts with a space, don't put it in the
 # history
@@ -207,6 +207,18 @@ function zle-line-finish {
   vim_mode=$vim_ins_mode
 }
 zle -N zle-line-finish
+
+##################################
+# sudo vim -> sudoedit
+##################################
+function sudo() {
+    if [ "$1" = vim ]; then
+        shift
+        sudo -e "$@"
+    else
+        command sudo "$@"
+    fi
+}
 
 ##################################
 # Some options
