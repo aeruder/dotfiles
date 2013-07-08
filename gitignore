@@ -12,3 +12,4 @@ tags
 .gdbinit
 .ccmwaid.inf
 *.pyc
+*.dSYM
