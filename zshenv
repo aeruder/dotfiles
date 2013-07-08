@@ -4,6 +4,11 @@ export EDITOR=vim
 export VISUAL=vim
 export LESS=-FmqXR
 
+# Deal with konsole's broken TERM setting
+if [ "$COLORTERM" = "gnome-terminal" ] || [ -n "$KONSOLE_PROFILE_NAME" ]; then
+    export TERM=xterm-256color
+fi
+
 # Read in from .zsh-pre-manpaths and .zsh-post-manpaths
 if [ -z "$MANPATH" ]; then
     unset MANPATH
