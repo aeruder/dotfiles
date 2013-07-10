@@ -76,7 +76,7 @@ endfunction
 function s:ApplyLocalConfiguration(fname, dname, path)
 	let l:fullfname = a:path . '/' . a:fname
 	let l:fulldname = a:path . '/' . a:dname
-	let l:fulltagname = a:path . '/' . a:dname . '/tags'
+	let l:fulltagname = a:path . '/tags'
 
 	if (isdirectory(l:fulldname))
 		execute "set runtimepath+=" . l:fulldname
@@ -85,7 +85,7 @@ function s:ApplyLocalConfiguration(fname, dname, path)
 		exec 'source ' . l:fullfname
 	endif
 	if (filereadable(l:fulltagname))
-		exec 'set tags +=' . l:fulltagname
+		exec 'setlocal tags+=' . l:fulltagname
 	endif
 endfunction
 

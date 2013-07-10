@@ -4,8 +4,9 @@
 runtime bundle/pathogen/autoload/pathogen.vim
 if has('vim_starting')
     let config=pathogen#split(&runtimepath)[0]
+    execute pathogen#infect()
+    call dirsettings#Install()
 endif
-execute pathogen#infect()
 
 
 """"""""""""""""""""""""
