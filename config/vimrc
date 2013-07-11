@@ -77,7 +77,11 @@ com! -nargs=0 Gnuindent
 
 """"""""""""""""""""""""
 " Our default indentation style
-:Usespaces 4
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set nocopyindent
 
 """"""""""""""""""""""""
 " If we use special characters, ensure we are doing so with
@@ -379,20 +383,8 @@ au BufNewFile,BufRead *.vb              set ft=vbnet
 au BufNewFile,BufRead *.il              set ft=ilasm
 
 " Space/tab settings for different filetypes
-au FileType *
-    \ Usespaces 4
-
-au FileType python
-    \ Usespaces 2
-
-au FileType ruby
-    \ Usespaces 2
-
 au FileType make
     \ Usetabs 8
-
-au FileType vhdl
-    \ Usespaces 2
 
 " This is used when editing a mutt mail message
 comm! -nargs=0 BeginMailMessage call BeginMailMessage()
