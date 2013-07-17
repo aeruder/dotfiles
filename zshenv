@@ -3,6 +3,7 @@
 export EDITOR=vim
 export VISUAL=vim
 export LESS=-FmqXR
+export PAGER=less
 
 # Deal with konsole's broken TERM setting
 if [ "$COLORTERM" = "gnome-terminal" ] || [ -n "$KONSOLE_PROFILE_NAME" ]; then
