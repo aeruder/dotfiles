@@ -238,10 +238,10 @@ vnoremap <leader>gD :g/<C-R>//d<CR>
 vnoremap <leader>g!D :g!/<C-R>//d<CR>
 
 " Highlight spacing errors
-nnoremap <leader>s /\v(\s+$)\|(<space>\ze<tab>)<CR>
+nnoremap <leader>f<space> /\v(\s+$)\|(<space>\ze<tab>)<CR>
 
 " Highlight tabs
-nnoremap <leader><Tab> /<Tab><CR>
+nnoremap <leader>f<Tab> /<Tab><CR>
 
 " Highlight just pasted text
 nnoremap <leader>v V`]
@@ -261,10 +261,6 @@ nnoremap k gk
 
 " Let us use ; instead of : for command mode
 nnoremap ; :
-
-" Use <tab> to bounce between matching parens
-nnoremap <tab> %
-vnoremap <tab> %
 
 " Use 'jk' instead of ESC
 inoremap jk <ESC>
