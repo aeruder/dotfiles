@@ -37,7 +37,9 @@ function battery_percent() {
     echo "$(((a * 100) / b))%%"
 }
 
-PR_FLAGS+=(battery_percent)
+if [ `hostname` = tanooki ]; then
+    PR_FLAGS+=(battery_percent)
+fi
 
 ##################################
 # add directory size to our prompt
