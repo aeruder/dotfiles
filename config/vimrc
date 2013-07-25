@@ -36,6 +36,9 @@ if has ("gui_running")
         set guifont=Inconsolata\ 10
     endif
     colors jellybeans
+elseif $TERM == "linux"
+    set background=dark
+    colors elflord
 else
     if $COLORTERM == "gnome-terminal" || $KONSOLE_PROFILE_NAME != ""
         set t_Co=256
