@@ -293,8 +293,12 @@ nmap <leader>Pswp <Plug>SaveWinPosn
 nmap <leader>Prwp <Plug>RestoreWinPosn
 
 " Unite
+let g:unite_enable_ignore_case = 0
+let g:unite_enable_smart_case = 0
 let g:unite_source_history_yank_enable = 1
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#matcher_default#use(['matcher_glob'])
+call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_rank')
+" call unite#custom#source('tag', 'matchers', 'matcher_exact')
 " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 nnoremap <leader>bf :<C-u>Unite -start-insert file_rec/async<cr>
 nnoremap <leader>br :<C-u>Unite -start-insert file_mru<cr>
@@ -308,7 +312,6 @@ autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
   " Play nice with supertab
   let b:SuperTabDisabled=1
-  setlocal ic
   " Enable navigation with control-j and control-k in insert mode
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
