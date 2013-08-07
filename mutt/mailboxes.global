@@ -9,7 +9,7 @@ set mail_check = 120
 set timeout = 300
 set imap_keepalive = 300
 set postponed = "+[GMail]/Drafts"
-set record = "+[GMail]/Sent Mail"
+set record = ""
 set move = no
 set copy= yes
 

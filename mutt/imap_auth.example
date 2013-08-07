@@ -1,2 +1,3 @@
 set imap_user=andy@aeruder.net
 set imap_pass=yourmom
+set smtp_url=smtps://andy@aeruder.net:yourmom@smtp.gmail.com
