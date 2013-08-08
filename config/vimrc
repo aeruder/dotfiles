@@ -301,6 +301,7 @@ call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_ran
 " call unite#custom#source('tag', 'matchers', 'matcher_exact')
 " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 nnoremap <leader>bf :<C-u>Unite -start-insert file_rec/async<cr>
+nnoremap <leader>bc :<C-u>execute "Unite -start-insert file_rec/async:" . expand("%:p:h")<cr>
 nnoremap <leader>br :<C-u>Unite -start-insert file_mru<cr>
 nnoremap <leader>bo :<C-u>Unite outline<cr>
 nnoremap <leader>by :<C-u>Unite history/yank<cr>
