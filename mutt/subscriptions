@@ -1,17 +1,10 @@
 # vim:ft=muttrc
 
-subscribe discuss-gnustep
-subscribe gnustep-discuss
-subscribe gnustep-dev
-subscribe gnustep-bugs
-subscribe linux-kernel
-subscribe linux-security-module
-subscribe lejos-discussion 
-subscribe zsh-workers
-subscribe zsh-users
-subscribe svk-dev
-subscribe arch-ports
-subscribe modules-interest
-subscribe modules-devel
-subscribe ctags-users
-subscribe git
+subscribe netdev@vger.kernel.org
+subscribe git@vger.kernel.org
+subscribe linux-kernel@vger.kernel.org
+subscribe linux-leds@vger.kernel.org
+subscribe linux-embedded@vger.kernel.org
+subscribe linux-gpio@vger.kernel.org
+subscribe linux-arm-kernel@lists.infradead.org
+subscribe linux-arm-kernel@lists.infradead.org
