@@ -294,9 +294,6 @@ let g:unite_enable_smart_case = 0
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_rec_max_cache_files = 5000
 let g:unite_source_file_mru_long_limit = 5000
-if executable("ag")
-    let g:unite_source_rec_async_command = 'ag -l .'
-end
 
 call unite#filters#matcher_default#use(['matcher_glob'])
 call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_length')
