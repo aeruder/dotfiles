@@ -99,6 +99,11 @@ set formatoptions=qrn1
 set colorcolumn=
 
 """"""""""""""""""""""""
+" Default split directions
+set splitbelow
+set splitright
+
+""""""""""""""""""""""""
 " Give us some context around the cursor when scrolling
 set sidescroll=10 sidescrolloff=10
 set scrolloff=4
@@ -130,7 +135,7 @@ set wildmode=list:longest
 """"""""""""""""""""""""
 " When beeping, do it visually not audibly (which half the time
 " doesn't work anyway)
-" set visualbell
+set visualbell t_vb=
 
 """"""""""""""""""""""""
 " Highlight the entire line we are on
@@ -274,15 +279,6 @@ nnoremap <leader>h :Hexmode<Cr>
 " Open a scratch buffer
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 
-" Open Fuzzyfinder
-" nnoremap <leader>be :FufBuffer<Cr>
-
-" Open NERDTree from directory where current file is
-nnoremap <leader>bF :NERDTreeFind<Cr>
-
-" Open NERDTree from current working directory
-nnoremap <leader>bT :NERDTree<Cr>
-
 " grep utilities
 nnoremap <leader>fa yiw:Ack <C-R>"
 nnoremap <leader>fg yiw:Ggrep <C-R>"
@@ -296,17 +292,27 @@ nmap <leader>Prwp <Plug>RestoreWinPosn
 let g:unite_enable_ignore_case = 0
 let g:unite_enable_smart_case = 0
 let g:unite_source_history_yank_enable = 1
+let g:unite_source_rec_max_cache_files = 5000
+let g:unite_source_file_mru_long_limit = 5000
+if executable("ag")
+    let g:unite_source_rec_async_command = 'ag -l .'
+end
+
 call unite#filters#matcher_default#use(['matcher_glob'])
-call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_rank')
+call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_length')
+call unite#custom#source('file_mru', 'max_candidates', 10)
 " call unite#custom#source('tag', 'matchers', 'matcher_exact')
 " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-nnoremap <leader>bf :<C-u>Unite -start-insert file_rec/async<cr>
-nnoremap <leader>bc :<C-u>execute "Unite -start-insert file_rec/async:" . expand("%:p:h")<cr>
+nnoremap <leader>bf :<C-u>execute "Unite -start-insert file" . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file_rec/async:!' . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file/new'<cr>
+nnoremap <leader>bc :<C-u>execute "Unite -start-insert"                                                         . ' file_rec/async'   . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file/new'<cr>
+nnoremap <leader>bp :<C-u>execute "Unite -start-insert"                                                         . ' file_rec/async'   . (expand('%') == '' ? '' : ':' . expand('%:h:h')) . ' file/new'<cr>
 nnoremap <leader>br :<C-u>Unite -start-insert file_mru<cr>
 nnoremap <leader>bo :<C-u>Unite outline<cr>
 nnoremap <leader>by :<C-u>Unite history/yank<cr>
-nnoremap <leader>be :<C-u>Unite -start-insert buffer<cr>
+nnoremap <leader>be :<C-u>Unite -start-insert buffer file_mru:all<cr>
 nnoremap <leader>bb :<C-u>Unite -quick-match buffer<cr>
+
+comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnamemodify("<args>", ':p:~:.')
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
