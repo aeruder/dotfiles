@@ -24,6 +24,7 @@ set from="andy@aeruder.net"
 alternates "(aer|gnomes)@absoft.com"
 alternates ".*@aeruder.net"
 alternates "aeruder@ksu.edu"
+alternates "andrew.ruder@elecsyscorp.com"
 
 set signature="~/.signature"
 
