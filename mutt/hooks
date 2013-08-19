@@ -1,3 +1,5 @@
 # vim:ft=muttrc
 
 folder-hook . source ~/.mutt/config 
+folder-hook . "push <collapse-all>"
+

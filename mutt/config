@@ -2,4 +2,4 @@
 
 # Anything that can be overridden by hooks goes in here
 
-set index_format="%4C %Z %{%m/%d} %-18.18n (%6c) %s"
+set index_format="%4C %?H?[%H] ? %Z %{%b %d} %-15.15F %?M?(#%03M)&(%4c)? %s"
