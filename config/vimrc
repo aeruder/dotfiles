@@ -280,7 +280,7 @@ nnoremap <leader>h :Hexmode<Cr>
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 
 " grep utilities
-nnoremap <leader>fa yiw:Ack <C-R>"
+nnoremap <leader>fa yiw:Ag <C-R>"
 nnoremap <leader>fg yiw:Ggrep <C-R>"
 nnoremap <leader>fb yiw:Bgrep <C-R>"
 
