@@ -8,6 +8,8 @@ if has('vim_starting')
     call dirsettings#Install()
 endif
 
+let &directory=expand("<sfile>:p:h:h")."/swp"
+let &undodir=expand("<sfile>:p:h:h")."/undo"
 
 """"""""""""""""""""""""
 " Turn off fuf data file
@@ -156,9 +158,8 @@ set laststatus=2
 set relativenumber
 
 """"""""""""""""""""""""
-" Persistent undo even if we quit vim.  Store that information in ~/.undo
+" Persistent undo even if we quit vim.
 set undofile
-set undodir=~/.undo
 
 """"""""""""""""""""""""
 " Search settings
@@ -193,6 +194,7 @@ set clipboard+=unnamed
 """"""""""""""""""""""""
 " When doing folds, base it on the syntax
 set foldmethod=syntax
+set foldnestmax=2
 
 """"""""""""""""""""""""
 " When using vimdiff, ignore white-space changes
