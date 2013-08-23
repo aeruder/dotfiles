@@ -238,7 +238,7 @@ armflag() {
 }
 
 convert_arm() {
-    export CROSS_COMPILE=arm-linux-gnueabi-
+    export CROSS_COMPILE=arm-buildroot-linux-uclibcgnueabi-
     export ARCH=arm
 
     PR_FLAGS+=(armflag)
