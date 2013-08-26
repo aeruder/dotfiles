@@ -4,6 +4,9 @@ export EDITOR=vim
 export VISUAL=vim
 export LESS=-FmqXR
 export PAGER=less
+if [ -e /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+fi
 
 # Deal with konsole's broken TERM setting
 if [ "$COLORTERM" = "gnome-terminal" ] || [ -n "$KONSOLE_PROFILE_NAME" ]; then
