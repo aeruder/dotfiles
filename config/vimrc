@@ -219,6 +219,7 @@ set list listchars=tab:»·,trail:·,extends:>,precedes:<
 
 " Change our leader key to , rather than \
 let mapleader = ","
+let g:EasyMotion_leader_key = '<Space>'
 
 " Align comma'd lists like
 "
@@ -302,7 +303,7 @@ call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_len
 call unite#custom#source('file_mru', 'max_candidates', 10)
 " call unite#custom#source('tag', 'matchers', 'matcher_exact')
 " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-nnoremap <leader>bf :<C-u>execute "Unite -start-insert file" . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file_rec/async:!' . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file/new'<cr>
+nnoremap <leader>bf :<C-u>execute "Unite -start-insert file" . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file_rec/async:!'                                                    . ' file/new'<cr>
 nnoremap <leader>bc :<C-u>execute "Unite -start-insert"                                                         . ' file_rec/async'   . (expand('%') == '' ? '' : ':' . expand('%:h'))   . ' file/new'<cr>
 nnoremap <leader>bp :<C-u>execute "Unite -start-insert"                                                         . ' file_rec/async'   . (expand('%') == '' ? '' : ':' . expand('%:h:h')) . ' file/new'<cr>
 nnoremap <leader>br :<C-u>Unite -start-insert file_mru<cr>
