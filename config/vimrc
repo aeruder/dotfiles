@@ -35,10 +35,13 @@ syntax on
 " Color scheme
 if has ("gui_running")
     if !(has("gui_win32"))
-        set guifont=Inconsolata\ 10
+        set guifont=Inconsolata:h10,Terminal:h10
     endif
     colors jellybeans
 elseif $TERM == "linux"
+    set background=dark
+    colors elflord
+elseif has("win32") && !has("gui")
     set background=dark
     colors elflord
 else
