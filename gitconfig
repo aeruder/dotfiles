@@ -7,8 +7,8 @@
     co = checkout
     cia = commit -a
     cpick = cherry-pick
-    fancylog = log --pretty=oneline --decorate --graph
-    flog = log --pretty=oneline --decorate --graph --all
+    fancylog = log --pretty=oneline --decorate --graph --abbrev-commit
+    flog = log --pretty=oneline --decorate --graph --all --abbrev-commit
 [color]
     ui = auto
 [merge]
