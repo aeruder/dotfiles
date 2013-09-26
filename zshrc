@@ -190,7 +190,7 @@ alias -g US='| sort -u'
 bindkey -v
 bindkey '^R' history-incremental-search-backward
 bindkey -M viins 'jk' vi-cmd-mode
-bindkey "^?" backward-delete-character
+bindkey "^?" backward-delete-char
 
 function vim_mode_flag() {
     echo $vim_mode
