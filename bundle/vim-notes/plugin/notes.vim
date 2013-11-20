@@ -37,9 +37,6 @@ augroup PluginNotes
   autocmd!
   au SwapExists * call xolox#notes#swaphack()
   au BufUnload * call xolox#notes#unload_from_cache()
-  au BufReadPost,BufWritePost * call xolox#notes#refresh_syntax()
-  au InsertEnter,InsertLeave * call xolox#notes#refresh_syntax()
-  au CursorHold,CursorHoldI * call xolox#notes#refresh_syntax()
   " NB: "nested" is used here so that SwapExists automatic commands apply
   " to notes (which is IMHO better than always showing the E325 prompt).
   au BufReadCmd note:* nested call xolox#notes#shortcut()
