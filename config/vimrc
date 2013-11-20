@@ -192,7 +192,7 @@ set hidden
 """"""""""""""""""""""""
 " When we yank text into the unnamed register, automatically put
 " it on the clipboard.
-set clipboard+=unnamedplus
+set clipboard=autoselect,unnamed
 
 """"""""""""""""""""""""
 " When doing folds, base it on the syntax
