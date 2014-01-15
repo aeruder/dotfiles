@@ -11,6 +11,10 @@ endif
 let &directory=expand("<sfile>:p:h:h")."/swp"
 let &undodir=expand("<sfile>:p:h:h")."/undo"
 
+if has("win32")
+    let $PATH=$PATH.";".expand("<sfile>:p:h:h")."\\bin"
+endif
+
 """"""""""""""""""""""""
 " Turn off fuf data file
 let g:fuf_dataDir = ''
