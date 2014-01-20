@@ -1,0 +1,9 @@
+#!/usr/bin/python
+
+import os, sys, random
+
+alllines = sys.stdin.readlines()
+random.shuffle(alllines)
+sys.stdout.writelines(alllines)
+
+sys.exit(0)

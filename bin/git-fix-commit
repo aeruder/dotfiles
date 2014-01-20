@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "Usage: $0 <commitid> |<badbranch>|"
+	exit 1
+fi
+
+if [ -n "$2" ]; then
+	badbranch="$2"
+else
+	badbranch=$(git-symbolic-ref HEAD | sed -e 's%^refs/heads/%%')
+	if ! ( git-cat-file -e "$badbranch" ); then 
+		echo "Failed to access $badbranch" 
+		exit 1
+	fi
+fi
+echo "Working against tip $badbranch"
+
+bad=fixerbad
+mytmp=fixertmp
+
+git tag -d "$bad"
+git branch -D "$mytmp"
+
+git tag "$bad" "$1" || exit 2
+git checkout -q -b "$mytmp" "$bad" || exit 3
+oldcommit="$(git-cat-file commit HEAD)"
+
+echo "Make your changes, amend your commit"
+git log -n 1 --pretty=oneline
+
+zsh
+
+newcommit="$(git-cat-file commit HEAD)"
+if [ "$newcommit" = "$oldcommit" ]; then
+	echo "It appears you didn't commit anything, going back to $badbranch"
+	git co "$badbranch"
+else
+	git rebase --onto "$mytmp" "$bad" "$badbranch" 
+fi

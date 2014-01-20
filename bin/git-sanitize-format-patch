@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby 
+
+$stdin.each_line { |line|
+  if line =~ /^Message-Id: <[0-9a-zA-Z]{40}\..*>$/
+    print "My-#{line}"
+  end
+  print line
+}

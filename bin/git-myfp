@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+tmpfile=`mktemp -t format-patchXXXX`
+git format-patch --stdout "$@" > "$tmpfile"
+ret="$?"
+if [ "$ret" = "0" ]; then
+	cat "$tmpfile" | git-sanitize-format-patch
+fi
+
+rm -f "$tmpfile"
+return "$ret"
+
