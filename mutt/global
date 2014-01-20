@@ -17,7 +17,7 @@ set edit_headers
 set wait_key=no
 set envelope_from=yes
 
-set folder_format="%3N %f"
+set folder_format="%6N %f"
 
 set from="andy@aeruder.net"
 
