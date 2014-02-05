@@ -97,3 +97,6 @@
 [submodule "submodules/unite-colorscheme.ujihisa.github.com"]
 	path = submodules/unite-colorscheme.ujihisa.github.com
 	url = https://github.com/ujihisa/unite-colorscheme
+[submodule "submodules/gruvbox.morhetz.github.com"]
+	path = submodules/gruvbox.morhetz.github.com
+	url = https://github.com/morhetz/gruvbox
