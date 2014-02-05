@@ -1,0 +1,1115 @@
+#!/bin/bash --posix
+#
+# git-submodule-ext.sh: submodule extensions
+#
+# Lots of things copied and pasted from git-submodule.sh
+# TODO Add in other updates to git-submodule-foreach
+
+# TODO I think subshells are preventing things from properly dying on error. Need to fix
+# Yep, they're definitely not dying...
+
+# TODO git `sube refresh --reset` was not resetting to the correct sha. Need a submodule-level 'update' command, or a 'git sube rev-parse' command.
+
+# NOTE: Need to research `update --remote` to look into more functionality
+# Follow up - I think the update --remote does what this intended to do. Need to delete this function if it surely does so.
+# Use git_submodule_config to ease use of 'branch'
+# Transition from '--list LIST' to 'command opts -- LIST' - even in the case of foreach, refresh, etc (will be better than current system of trying to pass var)
+
+shopt -s xpg_echo
+
+dashless=$(basename "$0" | sed -e 's/-/ /')
+OPTIONS_SPEC=
+
+USAGE='[list | branch | set-url | refresh | config-sync | gitdir]'
+
+USAGE_list="\
+$dashless list [-c | --constrain]
+    list staged submodules in current repo.
+"
+
+USAGE_foreach="\
+$dashless foreach [options] command
+    iterate through submodules, using eval subshell (bash) in current process
+variables: \$name, \$path, \$sm_ptah, \$toplevel, \$is_top.
+be wary of escaping!
+    -c, --constrain            Use git-config 'scm.focusGroup' to constrain iteration
+    -t, --top-level            Include top-level
+    -r, --recursive            Iterate recursively
+    -p, --post-order           Do post-order traversal (default is pre-order, top-level first)
+    --cached                   Traverse cached / staged submodules (implies --no-cd)
+    -k, --keep-going           Keep going if a submodule encounters an error (robust option)
+    --no-cd                    Do not cd to submodules directory (TODO Remove)
+    --cd-orig                  cd to original repo (if git-new-workdir was used). \
+Not applied recursively. Can also specify git-config 'scm.cdOrig'
+"
+
+USAGE_set_url="\
+$dashless set-url [options] [foreach-options] [repo | config | super]
+    url synchronization utilities (TODO Add [modules] to the end)
+    --remote REMOTE            Use specified remote to retrieve url. Otherwise use default.
+    subcommands
+      repo                     Read GIT_CONFIG => Set repo's url
+        -g, --use-gitmodules   Read .gitmodules instead => Set repo's url and GIT_CONFIG
+        -S, --no-sync          With --use-gitmodules, do not copy to GIT_CONFIG
+      config                   Read repo's url => Set config's url
+        -g, --set-gitmodules   Set url in .gitmodules as well
+      super                    Read super url => Set submodule url to \$super/\$path (TODO Deprecate and remove?)
+"
+
+USAGE_refresh="\
+$dashless refresh [options] [foreach-options]
+    general purpose updating utility. By default, this will update the supermodules, \
+synchronize urls, checkout branches specified in .gitmodules, and attempt to merge \
+changes from \$remote's branch of same name.
+    -b, --branch BRANCH        Use specificed branch (or commit).
+    --remote REMOTE            Use specified remote, default if unspecified
+    -f, --force                Use force checkout
+    --pre-clean                Delete all unhidden files of worktree of supermodule and reinitialize submodules. \
+Preserves local history if your gitdir's are in \$toplevel/.git/modules, destructive \
+otherwise.
+    --reset                    Instead of --force / --pre_clean, will update submodule to staged \
+SHA1, and reset branch name (if specified) to that SHA.
+    --no-sync                  Do not synchronize urls
+    --no-track                 Do not set branches to track
+    -T, --no-top-level-merge   Do not merge supermodule's remote branch
+    -N, --no-fetch             Do not fetch from \$remote
+    -n, --dry-run              (Semi-supported) Don't do anythnig, just print
+"
+
+USAGE_branch="\
+$dashless branch [foreach-options] [write | checkout]
+    useful branch operations
+    subcommands
+      write         Record submodules branches to .gitmodules. If detached head, will \
+delete branch config entry.
+      checkout [checkout-options]
+                    Checkout branch (if) specified in .gitmodules 
+"
+
+USAGE_config_sync="\
+$dashless config-sync [options] [foreach-options]
+    will go through and add worktree submodules to .gitmodules, writing each one's name, path, \
+and url. Useful for making sure submodules added via direct clone or git-new-workdir are properly mapped.
+    --remote REMOTE    Use specified remote when retrieving URL
+    -B, --no-branch    Do not write branch in .gitmodules file (includes branch by default)
+    --pre-clean        Remove .gitmodules file before writing (to re-sort, update, etc.)
+"
+
+USAGE_gitdir="\
+$dashless gitdir [independent | submodule]
+    utility for managing gitdir
+    subcommands
+      independent
+        Move \$GIT_DIR into local directory of repository if it is not already there. Useful for \
+when you're moving submodules. Execute inside submodule.
+      submodule [foreach-options]
+        NOT IMPLEMENTED
+        For each submodule, move \$GIT_DIR into \$toplevel/.git/modules/\$path and adjust the gitfile
+accordingly.
+"
+
+LONG_USAGE="See https://github.com/eacousineau/util/blob/master/SUBMODULES.md for some tips on using."
+
+OPTIONS_SPEC=
+
+export PATH=$PATH:$(git --exec-path) # Put git libexec on path
+
+. git-sh-setup
+. git-sh-i18n
+. git-parse-remote
+
+# @todo Currently cannot call help on individual commands. Refactor to allow this?
+require_work_tree
+
+# http://stackoverflow.com/questions/171550/find-out-which-remote-branch-a-local-branch-is-tracking
+# git name-rev --name-only HEAD
+
+# get_default_remote
+
+# var=origin/feature/something; echo ${var#origin/}
+
+set -u -e
+
+#
+# Get submodule info for registered submodules
+# $@ = path to limit submodule list
+#
+module_list()
+{
+	(
+		git ls-files --error-unmatch --stage -- "$@" ||
+		echo "unmatched pathspec exists"
+	) |
+	perl -e '
+	my %unmerged = ();
+	my ($null_sha1) = ("0" x 40);
+	my @out = ();
+	my $unmatched = 0;
+	while (<STDIN>) {
+		if (/^unmatched pathspec/) {
+			$unmatched = 1;
+			next;
+		}
+		chomp;
+		my ($mode, $sha1, $stage, $path) =
+			/^([0-7]+) ([0-9a-f]{40}) ([0-3])\t(.*)$/;
+		next unless $mode eq "160000";
+		if ($stage ne "0") {
+			if (!$unmerged{$path}++) {
+				push @out, "$mode $null_sha1 U\t$path\n";
+			}
+			next;
+		}
+		push @out, "$_\n";
+	}
+	if ($unmatched) {
+		print "#unmatched\n";
+	} else {
+		print for (@out);
+	}
+	'
+}
+
+die_if_unmatched ()
+{
+	if test "$1" = "#unmatched"
+	then
+		exit 1
+	fi
+}
+
+#
+# Map submodule path to submodule name
+#
+# $1 = path
+#
+module_name()
+{
+	# Do we have "submodule.<something>.path = $1" defined in .gitmodules file?
+	sm_path="$1"
+	re=$(printf '%s\n' "$1" | sed -e 's/[].[^$\\*]/\\&/g')
+	name=$( git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
+		sed -n -e 's|^submodule\.\(.*\)\.path '"$re"'$|\1|p' )
+	test -z "$name" &&
+	die "$(eval_gettext "No submodule mapping found in .gitmodules for path '\$sm_path'")"
+	echo "$name"
+}
+
+foreach_read_constrained() {
+	if test -n "$constrain"
+	then
+		if test -z "$foreach_list"
+		then
+			# Ensure that if this command fails, it still returns zero status
+			foreach_list=$(git config scm.focusGroup || :)
+		else
+			echo "Note: List set for parent, only constraining on submodules"
+		fi
+	fi
+}
+
+cmd_list()
+{
+	# No use for --recursive option right now
+	constrain=
+	raw=
+	# Show only those in working tree?
+	while test $# -ne 0
+	do
+		case "$1" in
+		-c|--constrain) constrain=1;;
+		--raw) raw=1;;
+		*) usage;;
+		esac
+		shift
+	done
+
+	foreach_list=
+	if test -n "$constrain"
+	then
+		foreach_list=$(git config scm.focusGroup || :)
+	fi
+
+	module_list $foreach_list |
+	while read mode sha1 stage sm_path
+	do
+		if test -z "$raw"
+		then
+			echo $sm_path
+		else
+			echo $mode $sha1 $stage "$sm_path"
+		fi
+	done
+}
+
+# Hack (for now) to pass lists in to foreach
+foreach_list=
+
+cmd_foreach()
+{
+	# parse $args after "submodule ... foreach".
+	recursive=
+	post_order=
+	include_super=
+	constrain=
+	recurse_flags=--not-top
+	is_top=1
+	cached=
+	no_cd=
+	cd_orig=$(git config scm.cdOrig || :)
+	keep_going=
+
+	while test $# -ne 0
+	do
+		case "$1" in
+		-r|--recursive)
+			recursive=1
+			recurse_flags="$recurse_flags $1"
+			;;
+		-p|--post-order)
+			post_order=1
+			recurse_flags="$recurse_flags $1"
+			;;
+		-c|--constrain)
+			constrain=1
+			recurse_flags="$recurse_flags $1"
+			;;
+		-t|--top-level)
+			include_super=1
+			;;
+		--no-cd)
+			no_cd=1
+			recurse_flags="$recurse_flags $1"
+			;;
+		-l|--list)
+			if test -n "$foreach_list"
+			then
+				die '$foreach_list supplied but --list was supplied also'
+			fi
+			foreach_list=$2
+			shift
+			;;
+		--not-top)
+			# Less hacky way?
+			is_top=
+			;;
+		--cached)
+			cached=1
+			;;
+		-k|--keep-going)
+			keep_going=1
+			recurse_flags="$recurse_flags $1"
+			;;
+		--cd-orig)
+			cd_orig=1
+			;;
+		-h|--help)
+			echo "$USAGE_foreach"
+			exit 0
+			;;
+		--)
+			break
+			;;
+		-*)
+			usage
+			;;
+		*)
+			break
+			;;
+		esac
+		shift
+	done
+
+	toplevel=$(pwd)
+
+	# dup stdin so that it can be restored when running the external
+	# command in the subshell (and a recursive call to this function)
+	exec 3<&0
+
+	# For supermodule
+	name=$(basename $toplevel)
+
+	# This is absolute... Is that a good idea?
+	test -z "${prefix+D}" && prefix=
+	path=$toplevel
+
+	is_worktree=1
+
+	maybe_die()
+	{
+		if test -z "$keep_going"
+		then
+			die Stopping "$@"
+		else
+			echo Error "$@" Continuing 1>&2
+		fi
+	}
+
+	super_eval()
+	{
+		verb=$1
+		shift
+		say "$(eval_gettext "$verb supermodule '$name'")"
+		( eval "$@" ) || maybe_die "at supermodule; script returned non-zero status."
+	}
+
+	if test -n "$include_super" -a -z "$post_order"
+	then
+		super_eval Entering "$@"
+	fi
+	
+	foreach_read_constrained
+
+	module_list $foreach_list |
+	while read mode sha1 stage sm_path
+	do
+		die_if_unmatched "$mode"
+
+		enter_msg="$(eval_gettext "Entering '\$prefix\$sm_path'")"
+		cached_msg="$(eval_gettext "Entering cached '\$prefix\$sm_path'")"
+		exit_msg="$(eval_gettext "Leaving '\$prefix\$sm_path'")"
+		die_msg="$(eval_gettext "at '\$sm_path'; script returned non-zero status.")"
+		
+		(
+			is_top=
+			name=$(module_name "$sm_path")
+			prefix="$prefix$sm_path/"
+			clear_local_git_env
+			# we make $path available to scripts ...
+			path=$sm_path
+
+			foreach_list=
+			is_worktree=
+			if test -e "$sm_path"/.git
+			then
+				is_worktree=1
+			fi
+
+			if test -n "$cached"
+			then
+				say "$cached_msg"
+				is_top=
+				( eval "$@" ) || exit 1
+			elif test -n "$is_worktree"
+			then
+				if test -z "$no_cd"
+				then
+					cd "$sm_path"
+					if test -n "$cd_orig"
+					then
+						orig_path="$(git-new-workdir --show-orig . 2> /dev/null)"
+						test -n "$orig_path" && cd "$orig_path"
+					fi
+				fi
+				# Contain so things don't spill to post_order
+				if test -z "$post_order"
+				then
+					say "$enter_msg"
+					( eval "$@" ) || exit 1
+				fi
+
+				if test -n "$recursive"
+				then
+					(
+						test -n "$no_cd" && cd "$sm_path"
+						cmd_foreach $recurse_flags "$@"
+					) || exit 1
+				fi
+				
+				if test -n "$post_order"
+				then
+					say "$exit_msg"
+					( eval "$@" ) || exit 1
+				fi
+			fi
+		) <&3 3<&- || maybe_die "$die_msg"
+	done || exit 1
+
+	if test -n "$include_super" -a -n "$post_order"
+	then
+		super_eval Leaving "$@"
+	fi
+}
+
+branch_get() {
+	git rev-parse --abbrev-ref HEAD
+}
+branch_set_upstream() {
+	# For Git < 1.8
+	branch=$(branch_get)
+	git branch --set-upstream $branch $remote/$branch
+}
+
+branch_remote_checkout() { (
+	branch="$1"
+	if test -z "${remote+D}"
+	then
+		remote="$(get_default_remote || :)"
+	fi
+	if git show-branch $branch > /dev/null 2>&1
+	then
+		git checkout $branch
+	else
+		git checkout -t -b $branch "$remote/$branch"
+	fi
+) }
+
+branch_iter_write() {
+	branch=$(branch_get)
+	file="$toplevel/.gitmodules"
+	var="submodule.$name.branch"
+	if ! test "$branch" = "HEAD"
+	then
+		git config -f $file $var $branch
+	else
+		# Delete config option
+		git config -f $file --unset $var
+	fi
+	return 0
+}
+branch_iter_get()
+{
+	branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch 2>/dev/null)"
+}
+branch_iter_checkout() {
+	if branch_iter_get
+	then
+		branch_remote_checkout "$branch"
+	fi
+}
+
+cmd_branch()
+{
+	# Flags before or after?
+	foreach_flags= command=
+	while test $# -gt 0
+	do
+		case $1 in
+			-c|-r)
+				foreach_flags="$foreach_flags $1"
+				;;
+			-h|--help)
+				echo "$USAGE_branch"
+				exit 0
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+	test $# -eq 0 && usage
+	case $1 in
+		write | checkout)
+			command=$1
+			;;
+		*)
+			usage
+			;;
+	esac
+	cmd_foreach $foreach_flags branch_iter_${command}
+}
+
+cmd_refresh()
+{
+	# How to get current remote?
+	remote=origin track=1 sync=1
+	force= pre_clean= no_fetch= recursive= force= foreach_list= constrain=
+	reset=
+	branch=
+	foreach_flags=
+	update_flags=--checkout
+	no_top_level_merge=
+	dry_run=
+	while test $# -gt 0
+	do
+		case $1 in
+			--remote)
+				remote=$2
+				shift
+				;;
+			-f|--force)
+				force=1
+				;;
+			--pre-clean|--clear|--oompf)
+				force=1
+				pre_clean=1
+				;;
+			--reset)
+				reset=1
+				;;
+			--no-sync)
+				sync=
+				;;
+			--no-track)
+				track=
+				;;
+			-T|--no-top-level-merge)
+				no_top_level_merge=1
+				;;
+			-N|--no-fetch)
+				no_fetch=1
+				update_flags="$update_flags -N"
+				;;
+			-c|--constrain)
+				constrain=1
+				;;
+			-r|--recursive)
+				foreach_flags="$foreach_flags $1"
+				;;
+			-n|--dry-run)
+				dry_run=1
+				;;
+			-h|--help)
+				echo "$USAGE_refresh"
+				exit 0
+				;;
+			-b|--branch)
+				shift
+				branch=$1
+				;;
+			--*)
+				usage
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
+	if test $# -gt 0
+	then
+		die "Invalid number of arguments specified"
+	fi
+
+	# For update, either need to a) update only the submodules not changed or
+	# b) do a post-order update... Or the submodule can decide
+
+	# Can do something like `cd $toplevel; git submodule update $update_flags -- $path`
+
+	refresh_iter() {
+		if test -z "$no_fetch"
+		then
+			say "Fetching $prefix"
+			test -z "$dry_run" && git fetch --no-recurse-submodules $remote
+		fi
+
+		if test -z "$is_top"
+		then
+			# Show branch if it's a dry run?
+			if test -z "$dry_run"
+			then
+				if branch_iter_get
+				then
+					if test -n "$reset"
+					then
+						# Assuming that submodule is already on update'd sha
+						echo "\tOld sha for $branch: $(git rev-parse --short $branch)"
+						echo "\tResetting to current sha: $(git rev-parse --short HEAD)"
+						git checkout -B "$branch"
+					else
+						branch_remote_checkout "$branch"
+					fi
+				fi
+			fi
+		elif test -n "$branch"
+		then
+			if test -z "$dry_run"
+			then
+				if test -n "$force"
+				then
+					# TODO This is redundant here. Make sure it works well with code down below.
+					say "Force checkout"
+					test -z "$dry_run" && git checkout -fB $branch $remote/$branch
+				else
+					# TODO Errors out if branch is ambiguous due to multiple origins
+					git checkout $branch
+				fi
+			fi
+		fi
+		branch=$(branch_get)
+
+		if test "$branch" = "HEAD"
+		then
+			echo "$name is in a detached head state. Can't refresh, skipping"
+		elif test -z "$is_top" -o -z "$no_top_level_merge"
+		then
+			if test -n "$force"
+			then
+				if test -n "$pre_clean" -a -n "$is_top"
+				then
+					# This does not need to applied recursively
+					# Add an option to skip ignored files? How? Remove everything except for .git? How to do that?
+					say "Removing files"
+					test -z "$dry_run" && rm -rf ./*
+				fi
+				say "Force checkout"
+				test -z "$dry_run" && git checkout -fB $branch $remote/$branch
+			elif test -z "$reset" -o -n "$is_top"
+			then
+				say "Merge $remote/$branch"
+				test -z "$dry_run" && git merge $remote/$branch
+			fi
+		fi
+
+		# Do supermodule things
+		# TODO Need more elegant logic here
+		# 'recursive' is set by foreach
+		if test -e .gitmodules -a \( -n "$is_top" -o -n "$recursive" \)
+		then
+			# NOTE: $foreach_list comes from cmd_foreach
+			say "Submodule initialization, sync, and update"
+			if test -z "$dry_run"
+			then
+				git submodule init -- $foreach_list
+				test -n "$sync" && git submodule sync -- $foreach_list
+				git submodule update $update_flags -- $foreach_list || echo "Update failed... Still continuing"
+			fi
+		fi
+	}
+
+	foreach_read_constrained
+
+	ask=
+	if test -n "$force"
+	then
+		echo "WARNING: A force refresh will do a HARD RESET on all of your branches to your remote's branch."
+		if test -n "$pre_clean"
+		then
+			echo "MORE WARNING: An pre-clean refresh will remove all files before the reset."
+			if test -n "$foreach_list"
+			then
+				echo "EVEN MORE WARNING: Constraining your submodule list with an pre_clean refresh will leave certain modules not checked out / initialized."
+				echo "It can also leave it hard to refresh back your old modules without doing an pre-clean refresh"
+			fi
+		fi
+		ask=1
+	fi
+	if test -n "$reset"
+	then
+		test -z "$force" || die "Cannot --reset and --force"
+		echo "CAUTION: A reset refresh will RESET the branch name specified in .gitmodules to the commits pointed to by the supermodule."
+		echo "This will CHANGE what your local branch points to."
+		ask=1
+	fi
+
+	if test -n "$ask"
+	then
+		echo "Are you sure you want to continue? [y/N]"
+		read choice
+		case "$choice" in
+			Y|y)
+				;;
+			*)
+				die "Aborting"
+				;;
+		esac
+	fi
+
+	# Now do it, including top-level
+	cmd_foreach --top-level $foreach_flags refresh_iter
+}
+
+# TODO Add below functionality, for syncing with other computers via git-daemon
+# git sfer 'echo $(cd $toplevel && cd $(git rev-parse --git-dir) && pwd)/modules/$path'
+
+# Add 'write' / 'sub' to write submodule's url to .gitmodules
+# Good words for doing that?
+
+cmd_set_url()
+{
+	remote=
+	foreach_flags="--cached"
+
+	while test $# -ne 0
+	do
+		case $1 in
+			-r|--recursive|-c|--constrain)
+				foreach_flags="$foreach_flags $1"
+				;;
+			-l|--list)
+				foreach_list="$2"
+				shift
+				;;
+			--remote)
+				remote=$2
+				shift
+				;;
+			-h|--help)
+				echo "$USAGE_set_url"
+				exit 0
+				;;
+			--*)
+				usage
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
+	test $# -eq 0 && usage
+
+	case $1 in
+		repo | config | super)
+			command=$1
+			shift
+			;;
+		base)
+			command=super
+			shift
+			;;
+		*)
+			usage
+			;;
+	esac
+	
+	# --include-staged option is somehting to be wary of...
+	set_url_${command}_setup "$@"
+	cmd_foreach $foreach_flags set_url_${command}_iter
+}
+
+set_url_iter() {
+	if test -z "$remote"
+	then
+		if test -n "$is_worktree"
+		then
+			# Allow submodules to have different default remotes?
+			remote=$(cd "$sm_path" && get_default_remote || :) # Does not return successful at times?
+		else
+			remote=origin
+		fi
+	fi
+}
+
+set_url_config_setup() {
+	set_gitmodules=
+	while test $# -gt 0
+	do
+		case $1 in
+		-g|--set-gitmodules)
+			set_gitmodules=1
+			;;
+		*)
+			break
+			;;
+		esac
+		shift
+	done
+}
+set_url_config_iter() {
+	set_url_iter
+	if test -n "$is_worktree"
+	then
+		sm_url=$(cd "$sm_path" && git config "remote.$remote.url")
+		set_module_config_url
+	fi
+}
+
+set_url_super_setup() {
+	# Same options
+	set_url_config_setup
+}
+set_url_super_iter() {
+	set_url_iter
+	# Redundant :/
+	topurl=$(git config remote."$remote".url)
+	sm_url=$topurl/$path
+	
+	set_module_config_url
+	noun="toplevel"
+	set_module_url_if_worktree
+}
+
+set_url_repo_setup() {
+	use_gitmodules=
+	no_sync=
+	while test $# -gt 0
+	do
+		case $1 in
+		-g|--use-gitmodules)
+			use_gitmodules=1
+			;;
+		-S|--no-sync)
+			no_sync=1
+			;;
+		*)
+			break
+			;;
+		esac
+		shift
+	done
+}
+set_url_repo_iter() {
+	set_url_iter
+	key="submodule.$name.url"
+	if test -n "$use_gitmodules"
+	then
+		sm_url=$(git config -f .gitmodules "$key")
+		noun=".gitmodules"
+		if test -z "$no_sync"
+		then
+			git config "$key" "$sm_url"
+			say "Synced .git/config url to '$sm_url' (from .gitmodules)"
+		fi
+	else
+		sm_url=$(cd $toplevel && git config "$key")
+		noun=".git/config"
+	fi
+	set_module_url_if_worktree
+}
+
+# set_url_sync_setup() { }
+# set_url_sync_iter() {
+# 	set_url_iter
+# 	# Copy and paste :/
+# 	key="submodule.$name.url"
+# 	sm_url=$(git config -f .gitmodules "$key")
+# 	git config "$key" "$sm_url"
+# 	say "Synced .git/config url to '$sm_url' (from .gitmodules)"
+# }
+
+set_module_url_if_worktree() {
+	if test -n "$is_worktree"
+	then
+		cd "$sm_path"
+		if git config remote."$remote".url > /dev/null
+		then
+			say "Set remote '$remote' url to '$sm_url' (from $noun)"
+			git remote set-url "$remote" "$sm_url"
+		else
+			say "Adding remote '$remote' with url '$sm_url' (from $noun)"
+			git remote add "$remote" "$sm_url"
+		fi
+	fi
+}
+
+set_module_config_url() {
+	# Add check to see if mapping exists?
+
+	key="submodule.$name.url"
+	git config "$key" "$sm_url"
+	nouns=".git/config"
+
+	if test -n "$set_gitmodules"
+	then
+		nouns="$nouns and .gitmodules"
+		git config -f .gitmodules "$key" "$sm_url"
+	fi
+	say "Set $nouns url to '$sm_url'"
+}
+
+cmd_config_sync() {
+	remote=
+	foreach_flags="--cached"
+	write_branch=1
+	pre_clean=
+
+	while test $# -ne 0
+	do
+		case $1 in
+			-r|--recursive|-c|--constrain)
+				foreach_flags="$foreach_flags $1"
+				;;
+			-B|--no-branch)
+				write_branch=;;
+			--pre-clean)
+				pre_clean=1;;
+			--remote)
+				remote=$2
+				shift
+				;;
+			-h|--help)
+				echo "$USAGE_config_sync"
+				exit 0
+				;;
+			--*)
+				usage
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
+	if test -n "$pre_clean"
+	then
+		echo "Removing .gitmodules"
+		rm -f .gitmodules
+	fi
+
+	echo "Updating entires in .gitmodules..."
+	GIT_QUIET=1 cmd_foreach $foreach_flags config_sync_iter
+}
+
+config_sync_iter() {
+	name="$sm_path"
+	if test -e "$sm_path/.git"
+	then
+		cd "$sm_path"
+		# Just overwrite everything in .gitmodules
+		test -z "$remote" && remote=$(get_default_remote || :)
+		echo "Adding $name"
+		url=$(git config remote.$remote.url)
+		branch=$(branch_get)
+	else
+		echo "WARNING: Repository does not exist, just setting url to relative directory"
+		url="./$sm_path"
+		branch=HEAD
+	fi
+	cd $toplevel
+	cmd="git config -f .gitmodules submodule.$name"
+	${cmd}.path $name
+	${cmd}.url $url
+	if test -n "$write_branch" -a $branch != HEAD
+	then
+		${cmd}.branch $branch
+	fi
+}
+
+# Return relative path of $1 with respect to $2
+# Adapted from `git-submodule.sh`
+rel_path()
+{
+    test $# -eq 2 || { echo "Must supply two paths" >&2; return 1; }
+    target=$1
+    # Add trailing slash, otherwise it won't be robust to common prefixes
+    # that don't begin with a /
+    base=$2/
+
+    while test "${target%%/*}" = "${base%%/*}"
+    do
+        target=${target#*/}
+        base=${base#*/}
+    done
+    # Now chop off the trailing '/'s that were added in the beginning
+    target=${target%/}
+    base=${base%/}
+
+    # Turn each leading "*/" component into "../", and strip trailing '/'s
+    rel=$(echo $base | sed -e 's|[^/][^/]*|..|g' | sed -e 's|*/+$||g')
+    if test -n "$rel"
+    then
+        echo $rel/$target
+    else
+        echo $target
+    fi
+}
+
+cmd_gitdir()
+{
+    test $# -eq 0 && usage
+    case $1 in
+        independent)
+            command=independent
+            shift
+            ;;
+        submodule)
+            command=submodule
+            shift
+            ;;
+        *)
+            usage
+            ;;
+    esac
+
+    cmd_gitdir_$command "$@"
+}
+
+cmd_gitdir_independent()
+{
+    cd $(git rev-parse --show-toplevel) || die "Invalid repo"
+    if test -f .git
+    then
+        # Parse gitdir, then move it here
+        src="$(git rev-parse --git-dir)"
+        dest=".git"
+        git config --unset core.worktree
+        rm $dest
+        mv "$src" "$dest"
+        echo "Moved gitdir from '$src' to '$dest'"
+    fi
+}
+
+cmd_gitdir_submodule()
+{
+    foreach_flags=""
+
+    while test $# -ne 0
+    do
+        case $1 in
+            -r|--recursive|-c|--constrain)
+                foreach_flags="$foreach_flags $1"
+                ;;
+            -h|--help)
+                echo "$USAGE_gitdir"
+                exit 0
+                ;;
+            --*)
+                usage
+                ;;
+            *)
+                break
+                ;;
+        esac
+        shift
+    done
+
+    cmd_foreach $foreach_flags cmd_gitdir_submodule_iter
+}
+
+cmd_gitdir_submodule_iter()
+{
+    if test -d .git
+    then
+        src="$(pwd)"
+        dest="$(cd $toplevel && cd $(git rev-parse --git-dir) && pwd)/modules/$path"
+
+        test -d "$dest" && die "Target module dir already exists: $dest"
+        echo "Moving '$src/.git' to '$dest'"
+        mv $src/.git $dest
+
+        gitdir_path=$(rel_path "$dest" "$src")
+        echo "gitdir: $gitdir_path" > .git
+
+        GIT_WORK_TREE=. git config core.worktree "$(rel_path "$src" "$dest")"
+    fi
+}
+
+command=
+while test $# != 0 && test -z "$command"
+do
+	case "$1" in
+	foreach | refresh | branch | list | gitdir)
+		command=$1
+		;;
+	set-url)
+		command="set_url"
+		;;
+	womp)
+		command="refresh" # Compatibility
+		;;
+	config-sync)
+		command="config_sync"
+		;;
+	-q|--quiet)
+		GIT_QUIET=1
+		;;
+	--)
+		break
+		;;
+	-*)
+		usage
+		;;
+	*)
+		break
+		;;
+	esac
+	shift
+done
+test -z "$command" && usage
+
+"cmd_$command" "$@"
