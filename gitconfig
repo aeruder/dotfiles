@@ -26,3 +26,5 @@
 [core]
     preloadindex = True
     excludesfile = ~/.gitignore
+[pull]
+	rebase = true
