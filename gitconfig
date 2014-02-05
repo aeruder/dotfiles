@@ -28,3 +28,8 @@
     excludesfile = ~/.gitignore
 [pull]
 	rebase = true
+[sendemail]
+    smtpencryption = tls
+    smtpserver = smtp.gmail.com
+    smtpuser = andy@aeruder.net
+    smtpserverport = 587
