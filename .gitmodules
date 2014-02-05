@@ -100,3 +100,9 @@
 [submodule "submodules/gruvbox.morhetz.github.com"]
 	path = submodules/gruvbox.morhetz.github.com
 	url = https://github.com/morhetz/gruvbox
+[submodule "submodules/vim-protodef.derekwyatt.github.com"]
+	path = submodules/vim-protodef.derekwyatt.github.com
+	url = https://github.com/derekwyatt/vim-protodef
+[submodule "submodules/vim-fswitch.derekwyatt.github.com"]
+	path = submodules/vim-fswitch.derekwyatt.github.com
+	url = https://github.com/derekwyatt/vim-fswitch
