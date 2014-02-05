@@ -280,8 +280,8 @@ nnoremap k gk
 " Let us use ; instead of : for command mode
 nnoremap ; :
 
-" Use 'jf' instead of ESC
-inoremap jf <ESC>
+" Use 'jk' instead of ESC
+inoremap jk <ESC>
 
 " Toggle in and out of hex dump mode
 nnoremap <leader>h :Hexmode<Cr>
@@ -374,6 +374,7 @@ function! s:unite_settings()
   imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
 
   nmap <buffer> <ESC> <Plug>(unite_exit)
+  nmap <buffer> jk <Plug>(unite_exit)
 endfunction
 
 
