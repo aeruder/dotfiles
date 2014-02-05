@@ -1,0 +1,99 @@
+[submodule "submodules/vim-fugitive.tpope.github.com"]
+	path = submodules/vim-fugitive.tpope.github.com
+	url = https://github.com/tpope/vim-fugitive
+[submodule "submodules/jellybeans-vim.nanotech.github.com"]
+	path = submodules/jellybeans-vim.nanotech.github.com
+	url = https://github.com/nanotech/jellybeans.vim
+[submodule "submodules/vim-abolish.tpope.github.com"]
+	path = submodules/vim-abolish.tpope.github.com
+	url = https://github.com/tpope/vim-abolish
+[submodule "submodules/vim-unimpaired.tpope.github.com"]
+	path = submodules/vim-unimpaired.tpope.github.com
+	url = https://github.com/tpope/vim-unimpaired
+[submodule "submodules/vim-repeat.tpope.github.com"]
+	path = submodules/vim-repeat.tpope.github.com
+	url = https://github.com/tpope/vim-repeat
+[submodule "submodules/vim-speeddating.tpope.github.com"]
+	path = submodules/vim-speeddating.tpope.github.com
+	url = https://github.com/tpope/vim-speeddating
+[submodule "submodules/vim-surround.tpope.github.com"]
+	path = submodules/vim-surround.tpope.github.com
+	url = https://github.com/tpope/vim-surround
+[submodule "submodules/vim-pathogen.tpope.github.com"]
+	path = submodules/vim-pathogen.tpope.github.com
+	url = https://github.com/tpope/vim-pathogen
+[submodule "submodules/vim-eunuch.tpope.github.com"]
+	path = submodules/vim-eunuch.tpope.github.com
+	url = https://github.com/tpope/vim-eunuch
+[submodule "submodules/vim-sleuth.tpope.github.com"]
+	path = submodules/vim-sleuth.tpope.github.com
+	url = https://github.com/tpope/vim-sleuth
+[submodule "submodules/vim-endwise.tpope.github.com"]
+	path = submodules/vim-endwise.tpope.github.com
+	url = https://github.com/tpope/vim-endwise
+[submodule "submodules/vim-signify.mhinz.github.com"]
+	path = submodules/vim-signify.mhinz.github.com
+	url = https://github.com/mhinz/vim-signify
+[submodule "submodules/vim-airline.bling.github.com"]
+	path = submodules/vim-airline.bling.github.com
+	url = https://github.com/bling/vim-airline
+[submodule "submodules/vim-sneak.justinmk.github.com"]
+	path = submodules/vim-sneak.justinmk.github.com
+	url = https://github.com/justinmk/vim-sneak
+[submodule "submodules/csv-vim.chrisbra.github.com"]
+	path = submodules/csv-vim.chrisbra.github.com
+	url = https://github.com/chrisbra/csv.vim
+[submodule "submodules/undotree.mbbill.github.com"]
+	path = submodules/undotree.mbbill.github.com
+	url = https://github.com/mbbill/undotree
+[submodule "submodules/unite-vim.Shougo.github.com"]
+	path = submodules/unite-vim.Shougo.github.com
+	url = https://github.com/Shougo/unite.vim
+[submodule "submodules/vinarise-vim.Shougo.github.com"]
+	path = submodules/vinarise-vim.Shougo.github.com
+	url = https://github.com/Shougo/vinarise.vim
+[submodule "submodules/vimproc-vim.Shougo.github.com"]
+	path = submodules/vimproc-vim.Shougo.github.com
+	url = https://github.com/Shougo/vimproc.vim
+[submodule "submodules/vimshell-vim.Shougo.github.com"]
+	path = submodules/vimshell-vim.Shougo.github.com
+	url = https://github.com/Shougo/vimshell.vim
+[submodule "submodules/unite-outline.Shougo.github.com"]
+	path = submodules/unite-outline.Shougo.github.com
+	url = https://github.com/Shougo/unite-outline
+[submodule "submodules/neocomplete-vim.Shougo.github.com"]
+	path = submodules/neocomplete-vim.Shougo.github.com
+	url = https://github.com/Shougo/neocomplete.vim
+[submodule "submodules/ultisnips.SirVer.github.com"]
+	path = submodules/ultisnips.SirVer.github.com
+	url = https://github.com/SirVer/ultisnips
+[submodule "submodules/vim-plugin-dirsettings.mantiz.github.com"]
+	path = submodules/vim-plugin-dirsettings.mantiz.github.com
+	url = https://github.com/mantiz/vim-plugin-dirsettings
+[submodule "submodules/vimshell-pure-vim.supermomonga.github.com"]
+	path = submodules/vimshell-pure-vim.supermomonga.github.com
+	url = https://github.com/supermomonga/vimshell-pure.vim
+[submodule "submodules/nerdtree.scrooloose.github.com"]
+	path = submodules/nerdtree.scrooloose.github.com
+	url = https://github.com/scrooloose/nerdtree
+[submodule "submodules/a-vim.vim-scripts.github.com"]
+	path = submodules/a-vim.vim-scripts.github.com
+	url = https://github.com/vim-scripts/a.vim
+[submodule "submodules/ag-vim.rking.github.com"]
+	path = submodules/ag-vim.rking.github.com
+	url = https://github.com/rking/ag.vim
+[submodule "submodules/scratch-vim.mtth.github.com"]
+	path = submodules/scratch-vim.mtth.github.com
+	url = https://github.com/mtth/scratch.vim
+[submodule "submodules/tabular.godlygeek.github.com"]
+	path = submodules/tabular.godlygeek.github.com
+	url = https://github.com/godlygeek/tabular
+[submodule "submodules/vim-notes.xolox.github.com"]
+	path = submodules/vim-notes.xolox.github.com
+	url = https://github.com/xolox/vim-notes
+[submodule "submodules/vim-misc.xolox.github.com"]
+	path = submodules/vim-misc.xolox.github.com
+	url = https://github.com/xolox/vim-misc
+[submodule "submodules/unite-colorscheme.ujihisa.github.com"]
+	path = submodules/unite-colorscheme.ujihisa.github.com
+	url = https://github.com/ujihisa/unite-colorscheme

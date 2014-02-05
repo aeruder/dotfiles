@@ -1,0 +1,22 @@
+#!/bin/sh
+
+url="$1"
+
+if [ -z "$url" ]; then
+    echo "Usage: $0 <url>" >&2
+    exit 1
+fi
+
+base="`echo "$url" | sed -e 's/.*\/\///'`"
+githubcom="`echo "$base" | cut -d/ -f1`"
+githubname="`echo "$base" | cut -d/ -f2 | sed -e 's/\./-/g'`"
+projname="`echo "$base" | cut -d/ -f3 | sed -e 's/\./-/g'`"
+
+if [ "$githubcom" != "github.com" ]; then
+    echo "Can't parse url '$url' as github" >&2
+    exit 1
+fi
+
+echo git submodule add "$url" "${projname}.${githubname}.${githubcom}"
+git submodule add "$url" "${projname}.${githubname}.${githubcom}"
+
