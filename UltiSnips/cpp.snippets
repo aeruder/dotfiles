@@ -1,0 +1,16 @@
+snippet qobject
+class ${1:name} : public QObject
+{
+	Q_OBJECT
+public:
+	${1/(\w+).*/$1/}(${2:QObject *parent = 0});
+	~${1/(\w+).*/$1/}();
+public slots:
+private slots:
+signals:
+private:
+	${0:/* data */}
+};
+endsnippet
+
+# vim:ft=snippets:
