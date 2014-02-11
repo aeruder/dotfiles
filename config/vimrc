@@ -339,6 +339,8 @@ nnoremap <leader>b/ :Unite grep:.<cr>
 nnoremap <leader>by :Unite history/yank<cr>
 nnoremap <leader>bC :Unite colorscheme -auto-preview<cr>
 
+comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnamemodify("<args>", ':p:~:.')
+
 let g:unite_source_grep_max_candidates = 200
 
 if executable('ag')
