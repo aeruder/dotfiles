@@ -341,6 +341,13 @@ nnoremap <leader>bC :Unite colorscheme -auto-preview<cr>
 
 comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnamemodify("<args>", ':p:~:.')
 
+" Some custom directory searches
+if (isdirectory("/usr/include/qt"))
+  nnoremap <leader>bq :Go /usr/include/qt<Cr>
+elseif (isdirectory("/usr/include/qt4"))
+  nnoremap <leader>bq :Go /usr/include/qt4<Cr>
+endif
+
 let g:unite_source_grep_max_candidates = 200
 
 if executable('ag')
