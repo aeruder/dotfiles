@@ -52,6 +52,9 @@ else
     if $COLORTERM == "gnome-terminal" || $KONSOLE_PROFILE_NAME != ""
         set t_Co=256
     endif
+    if $TERM == "screen"
+      set t_Co=256
+    endif
     set background=dark
     colors jellybeans
 endif
