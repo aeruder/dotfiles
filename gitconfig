@@ -33,3 +33,7 @@
     smtpserver = smtp.gmail.com
     smtpuser = andy@aeruder.net
     smtpserverport = 587
+[url "https://github.com/"]
+	pushInsteadOf = git://github.com/
+[url "https://github.com/"]
+	pushInsteadOf = http://github.com/
