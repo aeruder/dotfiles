@@ -37,12 +37,16 @@ syntax on
 
 """"""""""""""""""""""""
 " Color scheme
-if has ("gui_running")
-    if !(has("gui_win32"))
-        set guifont=Inconsolata:h10,Terminal:h10
+if has ("gui") && &guifont == ""
+    set guifontset=
+    if has("gui_win32")
+        set guifont=Anka/Coder:h12,Terminus:h12,Inconsolata:h12,ProFont:h12,Terminal:h12
+    else
+        set guifont=Anka/Coder\ 12,Terminus\ 12,Inconsolata\ 12,ProFont\ 12,Bitstream\ Vera\ Sans\ Mono\ 12,Terminal\ 12,Monospace\ 12
     endif
-    colors jellybeans
-elseif $TERM == "linux"
+endif
+
+if $TERM == "linux"
     set background=dark
     colors elflord
 elseif has("win32") && !has("gui")
