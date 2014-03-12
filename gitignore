@@ -11,3 +11,4 @@ tags
 .settings
 .gdbinit
 .ccmwaid.inf
+*.pyc
