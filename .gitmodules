@@ -106,3 +106,6 @@
 [submodule "submodules/vim-fswitch.derekwyatt.github.com"]
 	path = submodules/vim-fswitch.derekwyatt.github.com
 	url = https://github.com/derekwyatt/vim-fswitch
+[submodule "submodules/Insertlessly.dahu.github.com"]
+	path = submodules/Insertlessly.dahu.github.com
+	url = https://github.com/dahu/Insertlessly
