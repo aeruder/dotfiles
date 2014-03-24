@@ -408,6 +408,11 @@ let g:neocomplete#force_overwrite_completefunc = 1
 let g:insertlessly_cleanup_trailing_ws = 0
 let g:insertlessly_cleanup_all_ws = 0
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  ultisnips                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+
 """"""""""""""""""""""""
 """"""""""""""""""""""""
 """"""""""""""""""""""""
