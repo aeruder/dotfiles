@@ -338,7 +338,7 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 nnoremap <leader>br :Unite file_rec/async:!<cr>
 nnoremap <leader>bf :Unite file_rec/async:.<cr>
 
-nnoremap <leader>bc :execute 'Unite file_rec/async' . (expand('%') == '' ? '' : ':' . expand('%:h'))<cr>
+nnoremap <leader>bc :execute 'Unite file_rec/async' . (expand('%') == '' ? '' : ':' . fnameescape(substitute(expand('%:h'), '\\', '\\\\', 'g')))<cr>
 nnoremap <leader>bo :Unite outline<cr>
 nnoremap <leader>be :<C-u>Unite buffer file_mru:all<cr>
 nnoremap <leader>bb :<C-u>Unite -quick-match buffer<cr>
@@ -347,7 +347,7 @@ nnoremap <leader>b/ :Unite grep:.<cr>
 nnoremap <leader>by :Unite history/yank<cr>
 nnoremap <leader>bC :Unite colorscheme -auto-preview<cr>
 
-comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnamemodify("<args>", ':p:~:.')
+comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnameescape(substitute(fnamemodify(<q-args>, ':p:~:.'), '\\', '\\\\', 'g'))
 
 " Some custom directory searches
 if (isdirectory("/usr/include/qt"))
