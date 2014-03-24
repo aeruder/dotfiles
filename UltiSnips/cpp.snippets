@@ -14,4 +14,20 @@ private:
 };
 endsnippet
 
+snippet qget
+${1:QString} ${2:property}() { return $2_; }
+endsnippet
+
+snippet qset
+void set`!p snip.rv = t[2][0].upper() + t[2][1:] if t[2] != "" else ""`(`!p snip.rv = 'const ' if re.search(r'^[A-Z]', t[1]) else ""`${1:QString}`!p snip.rv = '&' if re.search(r'^[A-Z]', t[1]) else ""` ${2:property}) { $2_ = $2; }
+endsnippet
+
+snippet qprop
+Q_PROPERTY(${1:QString} ${2:property} READ $2 WRITE set`!p snip.rv = t[2][0].upper() + t[2][1:] if t[2] != "" else ""`)
+endsnippet
+
+snippet qroprop
+Q_PROPERTY(${1:QString} ${2:property} READ $2)
+endsnippet
+
 # vim:ft=snippets:
