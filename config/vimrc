@@ -170,6 +170,7 @@ set laststatus=2
 """"""""""""""""""""""""
 " Display the line numbers relative to the current line
 set relativenumber
+set number
 
 """"""""""""""""""""""""
 " Persistent undo even if we quit vim.
