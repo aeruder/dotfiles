@@ -21,7 +21,9 @@ let g:fuf_dataDir = ''
 
 """""
 " Default notes directory
-let g:notes_directories = [ '~/.notes' ]
+if !exists("g:notes_directories")
+    let g:notes_directories = [ '~/.notes' ]
+endif
 
 
 """"""""""""""""""""""""
