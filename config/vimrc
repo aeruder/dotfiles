@@ -274,6 +274,9 @@ nnoremap <leader>f<Tab> /<Tab><CR>
 " Highlight just pasted text
 nnoremap <leader>v V`]
 
+" Highlight the current word
+nnoremap <leader>iw yiw:let @/="\\<<C-R>"\\>"<Cr>
+
 " Open vimrc
 nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
 
