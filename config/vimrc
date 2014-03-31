@@ -275,7 +275,10 @@ nnoremap <leader>f<Tab> /<Tab><CR>
 nnoremap <leader>v V`]
 
 " Highlight the current word
-nnoremap <leader>iw yiw:let @/="\\<<C-R>"\\>"<Cr>
+nnoremap <leader>yiw yiw:set hlsearch<Cr>:let @/="\\V\\<" . escape(@", "\\") . "\\>"<Cr>
+
+" Highlight the current line
+nnoremap <leader>yy ^y$:set hlsearch<Cr>:let @/="\\V\\^" . escape(@", "\\") . "\\$"<Cr>
 
 " Open vimrc
 nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
