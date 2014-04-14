@@ -112,3 +112,6 @@
 [submodule "submodules/vim-snippets.honza.github.com"]
 	path = submodules/vim-snippets.honza.github.com
 	url = https://github.com/honza/vim-snippets
+[submodule "submodules/neomru-vim.Shougo.github.com"]
+	path = submodules/neomru-vim.Shougo.github.com
+	url = https://github.com/Shougo/neomru.vim
