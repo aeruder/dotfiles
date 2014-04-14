@@ -106,3 +106,9 @@
 [submodule "submodules/vim-fswitch.derekwyatt.github.com"]
 	path = submodules/vim-fswitch.derekwyatt.github.com
 	url = https://github.com/derekwyatt/vim-fswitch
+[submodule "submodules/writable_search-vim.AndrewRadev.github.com"]
+	path = submodules/writable_search-vim.AndrewRadev.github.com
+	url = https://github.com/AndrewRadev/writable_search.vim
+[submodule "submodules/vim-snippets.honza.github.com"]
+	path = submodules/vim-snippets.honza.github.com
+	url = https://github.com/honza/vim-snippets
