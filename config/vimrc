@@ -343,13 +343,13 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 " call unite#custom#source('tag', 'matchers', 'matcher_exact')
 " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 
-nnoremap <leader>br :Unite file_rec/async:!<cr>
+nnoremap <leader>bF :Unite file_rec/async:!<cr>
 nnoremap <leader>bf :Unite file_rec/async:.<cr>
 
-nnoremap <leader>bc :execute 'Unite file_rec/async' . (expand('%') == '' ? '' : ':' . fnameescape(substitute(expand('%:h'), '\\', '\\\\', 'g')))<cr>
+nnoremap <leader>bc :Go %:h<Cr>
 nnoremap <leader>bo :Unite outline<cr>
-nnoremap <leader>be :<C-u>Unite buffer file_mru:all<cr>
-nnoremap <leader>bb :<C-u>Unite -quick-match buffer<cr>
+nnoremap <leader>be :<C-u>Unite buffer<cr>
+nnoremap <leader>br :<C-u>Unite file_mru:all<cr>
 
 nnoremap <leader>b/ :Unite grep:.<cr>
 nnoremap <leader>by :Unite history/yank<cr>
