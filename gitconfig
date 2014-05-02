@@ -7,8 +7,8 @@
     co = checkout
     cia = commit -a
     cpick = cherry-pick
-    fl = log --pretty=oneline --decorate --graph --abbrev-commit
-    fla = log --pretty=oneline --decorate --graph --abbrev-commit --all
+    fl = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    fla = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
     l = log --abbrev-commit
 [color]
     ui = auto
