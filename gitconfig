@@ -11,6 +11,7 @@
     fla = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
     l = log --abbrev-commit
 	root = rev-parse --show-toplevel
+	amend = commit --amend
 [color]
     ui = auto
 [merge]
