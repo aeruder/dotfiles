@@ -115,3 +115,6 @@
 [submodule "submodules/neomru-vim.Shougo.github.com"]
 	path = submodules/neomru-vim.Shougo.github.com
 	url = https://github.com/Shougo/neomru.vim
+[submodule "submodules/vim-gnupg.jamessan.github.com"]
+	path = submodules/vim-gnupg.jamessan.github.com
+	url = https://github.com/jamessan/vim-gnupg
