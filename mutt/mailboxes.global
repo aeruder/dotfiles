@@ -1,14 +1,12 @@
 # vim:ft=muttrc
 
 source ~/.mutt/imap_auth
-set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
 set imap_check_subscribed
-set hostname = gmail.com
 set mail_check = 120
 set timeout = 300
 set imap_keepalive = 300
-set postponed = "+[GMail]/Drafts"
+set postponed = "+Drafts"
 set record = ""
 set move = no
 set copy= yes

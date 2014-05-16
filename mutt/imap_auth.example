@@ -1,3 +1,7 @@
-set imap_user=andy@aeruder.net
-set imap_pass=yourmom
-set smtp_url=smtps://andy@aeruder.net:yourmom@smtp.gmail.com
+# vim:ft=muttrc
+
+set folder = "imaps://mail.messagingengine.com:993"
+set imap_user = "EMAIL"
+set smtp_url = "smtps://EMAIL@mail.messagingengine.com:465/"
+set imap_pass = "PASS"
+set smtp_pass = "PASS"
