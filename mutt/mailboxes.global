@@ -6,8 +6,8 @@ set imap_check_subscribed
 set mail_check = 120
 set timeout = 300
 set imap_keepalive = 300
-set postponed = "+Drafts"
-set record = ""
+set postponed = "+INBOX.Drafts"
+set record = "+INBOX.Sent Items"
 set move = no
 set copy= yes
 set confirmappend=no
