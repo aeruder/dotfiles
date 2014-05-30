@@ -2,6 +2,7 @@ source ~/.mutt/aliases
 source ~/.mutt/colors
 source ~/.mutt/macros
 source ~/.mutt/global
+source ~/.mutt/gpg
 source ~/.mutt/hooks
 source ~/.mutt/mailboxes.global
 source ~/.mutt/mailboxes
