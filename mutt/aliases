@@ -8,3 +8,4 @@ alias git              git@vger.kernel.org
 alias linux-gpio       linux-gpio@vger.kernel.org
 alias linux-arm-kernel linux-arm-kernel@lists.infradead.org
 alias linux-arm        linux-arm-kernel@lists.infradead.org
+alias les.pingel Les Pingel <les.pingel@gmail.com>
