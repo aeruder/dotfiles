@@ -1,40 +1,40 @@
 [user]
-    name = Andrew Ruder
-    email = andy@aeruder.net
+	name = Andrew Ruder
+	email = andy@aeruder.net
 [alias]
-    stat = status
-    st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
-    co = checkout
-    cia = commit -a
-    cpick = cherry-pick
-    fl = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    fla = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
-    l = log --abbrev-commit
+	stat = status
+	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
+	co = checkout
+	cia = commit -a
+	cpick = cherry-pick
+	fl = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	fla = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	l = log --abbrev-commit
 	root = rev-parse --show-toplevel
 	amend = commit --amend
 [color]
-    ui = auto
+	ui = auto
 [merge]
-    log = True
-    conflictstyle = diff3
+	log = True
+	conflictstyle = diff3
 [push]
-    default = tracking
+	default = upstream
 [log]
-    decorate = True
+	decorate = True
 [diff]
-    renames = copy
+	renames = copy
 [am]
-    keepcr = True
+	keepcr = True
 [core]
-    preloadindex = True
-    excludesfile = ~/.gitignore
+	preloadindex = True
+	excludesfile = ~/.gitignore
 [pull]
 	rebase = true
 [sendemail]
-    smtpencryption = tls
-    smtpserver = smtp.gmail.com
-    smtpuser = andy@aeruder.net
-    smtpserverport = 587
+	smtpencryption = tls
+	smtpserver = smtp.gmail.com
+	smtpuser = andy@aeruder.net
+	smtpserverport = 587
 	confirm = always
 [url "https://github.com/"]
 	pushInsteadOf = git://github.com/
