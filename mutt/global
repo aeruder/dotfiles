@@ -41,7 +41,7 @@ set quit=ask-yes
 set pipe_decode=no
 set pipe_sep=yes
 set ascii_chars=yes
-set alias_file=~/.homefiles/mutt/aliases
+set alias_file=~/.mutt/aliases
 
 alternative_order text/plain text/html *
 auto_view text/html
