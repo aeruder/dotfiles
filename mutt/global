@@ -8,6 +8,7 @@ set read_inc=50
 set write_inc=50
 
 set delete=yes
+set delete_untag=no
 set editor='vim + -c "BeginMailMessage"'
 set weed=yes
 
