@@ -88,9 +88,6 @@
 [submodule "submodules/tabular.godlygeek.github.com"]
 	path = submodules/tabular.godlygeek.github.com
 	url = https://github.com/godlygeek/tabular
-[submodule "submodules/vim-notes.xolox.github.com"]
-	path = submodules/vim-notes.xolox.github.com
-	url = https://github.com/aeruder/vim-notes
 [submodule "submodules/vim-misc.xolox.github.com"]
 	path = submodules/vim-misc.xolox.github.com
 	url = https://github.com/xolox/vim-misc
