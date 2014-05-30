@@ -10,6 +10,7 @@ set postponed = "+Drafts"
 set record = ""
 set move = no
 set copy= yes
+set confirmappend=no
 
 set header_cache=~/.mutt/cache/headers
 set message_cachedir=~/.mutt/cache/bodies
