@@ -478,6 +478,9 @@ au BufNewFile,BufRead *.il              set ft=ilasm
 au FileType make
     \ Usetabs 8
 
+au FileType gitcommit
+    \ set tw=72
+
 " This is used when editing a mutt mail message
 comm! -nargs=0 BeginMailMessage call BeginMailMessage()
 function! BeginMailMessage()
