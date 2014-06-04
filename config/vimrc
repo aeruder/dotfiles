@@ -208,7 +208,8 @@ set foldnestmax=2
 
 """"""""""""""""""""""""
 " When using vimdiff, ignore white-space changes
-set diffopt=iwhite,filler
+" set diffopt=iwhite,filler
+set diffopt=filler
 
 """"""""""""""""""""""""
 " Show tabs, trailing spaces, etc..
