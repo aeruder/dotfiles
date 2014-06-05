@@ -48,4 +48,12 @@ auto_view text/html
 set pager_index_lines=6
 
 ignore *
-unignore Subject From To Bcc Cc Reply-To List-Id User-Agent X-Mailer Organization Date Message-ID My-Message-ID
+unignore Subject From To Bcc Cc Reply-To Date
+unignore List-Id
+unignore User-Agent
+unignore X-Mailer
+unignore Organization
+unignore Message-Id
+unignore In-Reply-To
+unignore References
+unignore Sender
