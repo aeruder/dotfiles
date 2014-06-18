@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+
+ignores=()
+while test $# != 0; do
+  case "$1" in
+    --ignore)
+      shift; ignores=( "${ignores[@]}" "$1" );;
+    --)
+      break ;;
+    *)
+      break ;;
+  esac
+  shift
+done
+
+if ! [ -d "$1" ] || ! [ -d "$2" ]; then
+  echo "USAGE: $0 [--ignore <path>] [--ignore <path>] <dira> <dirb>" >&2
+  exit 1
+fi
+
+echo "${ignores[@]}"
+dira="$1"
+dirb="$2"
+
+alist="`mktemp`"
+blist="`mktemp`"
+commonlist="`mktemp`"
+
+cleanup() {
+  echo "Cleaning up" >&2
+  rm -f "$alist"
+  rm -f "$blist"
+  rm -f "$commonlist"
+}
+
+filemod() {
+  dir="$1"
+  file="$2"
+
+  t="$dir"/"$file"
+  if test -h "$t" ; then   # symlink
+    echo "${file}(h)"
+  elif test -f "$t" ; then # file
+    echo "${file}(f)"
+  elif test -d "$t" ; then # dir
+    echo "${file}(/)"
+  elif test -b "$t" ; then # block special
+    echo "${file}(b)"
+  elif test -c "$t" ; then # character special
+    echo "${file}(c)"
+  elif test -p "$t" ; then # pipe
+    echo "${file}(p)"
+  elif test -S "$t" ; then # socket
+    echo "${file}(S)"
+  else                     # no idea
+    echo "${file}(?)"
+  fi
+}
+
+trap "cleanup" EXIT
+
+echo "Scanning $dira" >&2
+(cd "$dira" && find) > "$alist" || exit 1
+echo "Scanning $dirb" >&2
+(cd "$dirb" && find) > "$blist" || exit 1
+
+echo "Processing ignores"
+for i in "${ignores[@]}" ; do
+  grep -v -- "$i" "$alist" | sponge "$alist"
+  grep -v -- "$i" "$blist" | sponge "$blist"
+done
+
+echo "Finding common files" >&2
+cat "$alist" "$blist" | sort | uniq -d > "$commonlist"
+echo "Finding unique files to $dira" >&2
+cat "$alist" "$commonlist" | sort | uniq -u | sponge "$alist"
+echo "Finding unique files to $dirb" >&2
+cat "$blist" "$commonlist" | sort | uniq -u | sponge "$blist"
+
+echo "Analyzing differences" >&2
+while read line ; do
+  echo "onlya `filemod "$dira" "$line"`"
+done < "$alist"
+
+while read line ; do
+  echo "onlyb `filemod "$dirb" "$line"`"
+done < "$blist"
+
+# Now for file differences, this is the tricky part
+while read line ; do
+  at="$dira"/"$line"
+  bt="$dirb"/"$line"
+  atype="`filemod "$dira" "$line"`"
+  btype="`filemod "$dira" "$line"`"
+  if [[ "$atype" != "$btype" ]]; then
+    echo "filetype $atype $btype"
+  else
+    if [[ -h "$at" ]]; then
+      alink="`readlink "$at"`"
+      blink="`readlink "$bt"`"
+      if [[ "$alink" != "$blink" ]]; then
+        echo "link $atype"
+        echo "  a: $alink"
+        echo "  b: $blink"
+      fi
+    elif [[ -f "$at" ]]; then
+      asha1="`sha1sum < "$at"`"
+      bsha1="`sha1sum < "$bt"`"
+      if [[ "$asha1" != "$bsha1" ]]; then
+        echo "modified $atype"
+      fi
+      aperm="`(cd "$dira" ; getfacl "$line" 2>&1)`"
+      bperm="`(cd "$dirb" ; getfacl "$line" 2>&1)`"
+      if [[ "$aperm" != "$bperm" ]]; then
+        echo "perms $atype"
+        echo " a:"
+        echo "$aperm" | sed -e 's/^/   /'
+        echo " b:"
+        echo "$bperm" | sed -e 's/^/   /'
+      fi
+      aattr="`(cd "$dira" ; lsattr -d "$line" 2>&1)`"
+      battr="`(cd "$dirb" ; lsattr -d "$line" 2>&1)`"
+      if [[ "$aattr" != "$battr" ]]; then
+        echo "attr $atype"
+        echo " a:"
+        echo "$aattr" | sed -e 's/^/   /'
+        echo " b:"
+        echo "$battr" | sed -e 's/^/   /'
+      fi
+    fi
+  fi
+done < "$commonlist"
+
+
