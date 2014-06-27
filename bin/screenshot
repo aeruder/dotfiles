@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+ROOTDIR=$HOME/Screenshots
+
+mkdir -p $ROOTDIR || exit
+cd $ROOTDIR || exit
+
+filename() {
+    local date i fn
+
+    date="`date +"%Y-%m-%d"`"
+    i=0
+    while ((i < 200)); do
+        fn="`printf "%s-%03d.png" "$date" "$i"`"
+        if ! [ -e "$fn" ]; then
+            echo "$fn"
+            return
+        fi
+        i=$((i+1))
+    done
+    exit 1
+}
+
+fn="`filename`"
+if [ "$1" = "full" ]; then
+    import -window root "$fn"
+else
+    import "$fn"
+fi
+
+
