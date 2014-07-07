@@ -4,4 +4,12 @@ root = ssh://thegorn//home/andy/unison
 path = org
 ignore = Name #*#
 ignore = Name *~
+ignore = Name .*
 backup = Name *
+
+auto=true
+batch=true
+confirmbigdel=true
+fastcheck=true
+silent=true
+times=true
