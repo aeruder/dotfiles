@@ -79,6 +79,13 @@ re-downloaded in order to locate PACKAGE."
 ;;               ("h" "Habit" entry (file "~/git/org/refile.org")
 ;;                "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
 
+; org agenda -- leave in emacs mode but add j & k
+
+(add-hook 'org-agenda-mode-hook
+   (lambda ()
+     (define-key org-agenda-mode-map "j" 'evil-next-line)
+     (define-key org-agenda-mode-map "k" 'evil-previous-line)))
+
 ;;;
 ;;; Evil mode
 ;;;
@@ -117,9 +124,9 @@ re-downloaded in order to locate PACKAGE."
        (t (setq unread-command-events (append unread-command-events
                           (list evt))))))))
 
-; org agenda -- leave in emacs mode but add j & k
-
-(add-hook 'org-agenda-mode-hook
-   (lambda ()
-     (define-key org-agenda-mode-map "j" 'evil-next-line)
-     (define-key org-agenda-mode-map "k" 'evil-previous-line)))
+(require-package 'whitespace)
+(global-linum-mode t)
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(defvaralias 'c-basic-offset 'tab-width)
+(defvaralias 'cperl-indent-level 'tab-width)
