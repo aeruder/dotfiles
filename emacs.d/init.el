@@ -97,7 +97,7 @@ re-downloaded in order to locate PACKAGE."
       evil-want-C-w-in-emacs-state t)
 (setq evil-want-C-i-jump nil)
 (require 'evil)
-(evil-mode t)
+(define-key evil-normal-state-map (kbd ";") 'evil-ex)
 
 (require-package 'evil-matchit)
 (global-evil-matchit-mode 1)
@@ -123,6 +123,38 @@ re-downloaded in order to locate PACKAGE."
     (push 'escape unread-command-events))
        (t (setq unread-command-events (append unread-command-events
                           (list evt))))))))
+;; Remap org-mode meta keys for convenience
+(mapcar (lambda (state)
+            (evil-declare-key state org-mode-map
+                (kbd "M-l") 'org-metaright
+                (kbd "M-h") 'org-metaleft
+                (kbd "M-k") 'org-metaup
+                (kbd "M-j") 'org-metadown
+                (kbd "M-L") 'org-shiftmetaright
+                (kbd "M-H") 'org-shiftmetaleft
+                (kbd "M-K") 'org-shiftmetaup
+                (kbd "M-J") 'org-shiftmetadown))
+        '(normal insert))
+ 
+;;Make evil-mode up/down operate in screen lines instead of logical lines
+(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+;;;
+;;; Ace jump
+;;;
+(require-package 'ace-jump-mode)
+(define-key evil-normal-state-map (kbd "SPC") 'ace-jump-char-mode)
+(setq ace-jump-mode-scope 'window)
+
+;;;
+;;; Yasnippet
+;;;
+(require-package 'yasnippet)
+(yas-global-mode 1)
+;;Allow quick manual triggering of snippets
+(define-key evil-normal-state-map (kbd "C-c s") 'yas-insert-snippet)
+(define-key evil-insert-state-map (kbd "C-c s") 'yas-insert-snippet)
 
 (require-package 'whitespace)
 (global-linum-mode t)
@@ -130,3 +162,34 @@ re-downloaded in order to locate PACKAGE."
 (setq tab-width 4)
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+
+;;;
+;;; Git modes
+;;;
+(require-package 'git-commit-mode)
+(require-package 'gitconfig-mode)
+(require-package 'git-rebase-mode)
+(require-package 'gitignore-mode)
+(require-package 'gitattributes-mode)
+
+;;;
+;;; Buffer switching
+;;;
+(require-package 'flx)
+(require-package 'flx-ido)
+(ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
+(require-package 'ido-vertical-mode)
+(ido-vertical-mode 1)
+
+;;;
+;;; Miscellaneous
+;;;
+(setq gc-cons-threshold 20000000)
+
+
+(evil-mode t)
+
