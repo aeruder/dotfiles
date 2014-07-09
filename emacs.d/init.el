@@ -164,6 +164,12 @@ re-downloaded in order to locate PACKAGE."
 (defvaralias 'cperl-indent-level 'tab-width)
 
 ;;;
+;;; ag
+;;;
+(require-package 'ag)
+
+
+;;;
 ;;; Git modes
 ;;;
 (require-package 'git-commit-mode)
