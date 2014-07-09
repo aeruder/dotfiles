@@ -174,7 +174,7 @@ re-downloaded in order to locate PACKAGE."
 ;;;
 (require-package 'git-commit-mode)
 (require-package 'gitconfig-mode)
-(require-package 'git-rebase-mode)
+;;(require-package 'git-rebase-mode)
 (require-package 'gitignore-mode)
 (require-package 'gitattributes-mode)
 
