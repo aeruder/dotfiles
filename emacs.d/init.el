@@ -3,7 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tsdh-dark)))
+ '(custom-enabled-themes (quote (tango-dark)))
  '(org-agenda-files (quote ("~/org/z4.org" "~/org/todo.org" "~/org/redilink.org" "~/org/gitlab.org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -140,6 +140,7 @@ re-downloaded in order to locate PACKAGE."
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
+(evil-mode t)
 ;;;
 ;;; Ace jump
 ;;;
@@ -168,7 +169,6 @@ re-downloaded in order to locate PACKAGE."
 ;;;
 (require-package 'ag)
 
-
 ;;;
 ;;; Git modes
 ;;;
@@ -194,8 +194,25 @@ re-downloaded in order to locate PACKAGE."
 ;;;
 ;;; Miscellaneous
 ;;;
-(setq gc-cons-threshold 20000000)
+(setq gc-cons-threshold 20000000)    
 
+;;;
+;;; Rainbow Mode
+;;;
+(require-package 'rainbow-mode)
 
-(evil-mode t)
-
+;;;
+;;; WhiteSpace
+;;;
+(require-package 'whitespace)
+(custom-set-faces
+  '(whitespace-empty ((t (:foreground "black" :background "#800"))))
+  '(whitespace-line ((t (:foreground "black" :background "#aa0"))))
+  '(whitespace-space-before-tab ((t (:foreground "black" :background "#800"))))
+  '(whitespace-tab ((t (:foreground "#aa0" :background "#333"))))
+  '(whitespace-trailing ((t (:foreground "#800" :background "#aa0"))))   
+  )
+(setq whitespace-line-column 80)
+(setq whitespace-style
+  '(empty face lines-tail space-before-tab tabs tab-mark trailing))
+(global-whitespace-mode t)
