@@ -4,13 +4,18 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (tango-dark)))
+ '(inhibit-startup-screen t)
  '(org-agenda-files (quote ("~/org/z4.org" "~/org/todo.org" "~/org/redilink.org" "~/org/gitlab.org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(whitespace-empty ((t (:foreground "black" :background "#800"))))
+ '(whitespace-line ((t (:foreground "black" :background "#aa0"))))
+ '(whitespace-space-before-tab ((t (:foreground "black" :background "#800"))))
+ '(whitespace-tab ((t (:foreground "#aa0" :background "#333"))))
+ '(whitespace-trailing ((t (:foreground "#800" :background "#aa0")))))
 
 (require 'package)
 (add-to-list 'package-archives
@@ -135,10 +140,12 @@ re-downloaded in order to locate PACKAGE."
                 (kbd "M-K") 'org-shiftmetaup
                 (kbd "M-J") 'org-shiftmetadown))
         '(normal insert))
- 
+
 ;;Make evil-mode up/down operate in screen lines instead of logical lines
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+(define-key evil-normal-state-map (kbd ",fa") 'ag)
 
 (evil-mode t)
 ;;;
@@ -205,14 +212,12 @@ re-downloaded in order to locate PACKAGE."
 ;;; WhiteSpace
 ;;;
 (require-package 'whitespace)
-(custom-set-faces
-  '(whitespace-empty ((t (:foreground "black" :background "#800"))))
-  '(whitespace-line ((t (:foreground "black" :background "#aa0"))))
-  '(whitespace-space-before-tab ((t (:foreground "black" :background "#800"))))
-  '(whitespace-tab ((t (:foreground "#aa0" :background "#333"))))
-  '(whitespace-trailing ((t (:foreground "#800" :background "#aa0"))))   
-  )
+
 (setq whitespace-line-column 80)
 (setq whitespace-style
   '(empty face lines-tail space-before-tab tabs tab-mark trailing))
 (global-whitespace-mode t)
+
+;;;
+;;;
+;;;
