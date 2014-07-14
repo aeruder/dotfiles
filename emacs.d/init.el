@@ -146,6 +146,7 @@ re-downloaded in order to locate PACKAGE."
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
 (define-key evil-normal-state-map (kbd ",fa") 'ag)
+(define-key evil-normal-state-map (kbd ",bf") 'projectile-find-file)
 
 (evil-mode t)
 ;;;
@@ -219,5 +220,13 @@ re-downloaded in order to locate PACKAGE."
 (global-whitespace-mode t)
 
 ;;;
+;;; Projectile
 ;;;
+
+(require-package 'projectile)
+
 ;;;
+;;; Magit
+;;;
+
+(require-package 'magit)

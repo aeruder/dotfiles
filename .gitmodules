@@ -1,0 +1,3 @@
+[submodule "emacs.d/lisp/projectile"]
+	path = emacs.d/lisp/projectile
+	url = https://github.com/bbatsov/projectile
