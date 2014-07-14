@@ -148,6 +148,10 @@ re-downloaded in order to locate PACKAGE."
 (define-key evil-normal-state-map (kbd ",fa") 'ag)
 (define-key evil-normal-state-map (kbd ",bf") 'projectile-find-file)
 
+(evil-define-command aeruder/findorg ()
+  (projectile-find-file-in-directory "~/org/"))
+(define-key evil-normal-state-map (kbd ",bo") #'aeruder/findorg)
+
 (evil-mode t)
 ;;;
 ;;; Ace jump
@@ -224,6 +228,7 @@ re-downloaded in order to locate PACKAGE."
 ;;;
 
 (require-package 'projectile)
+(projectile-global-mode)
 
 ;;;
 ;;; Magit
