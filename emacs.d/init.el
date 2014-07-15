@@ -11,6 +11,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "#2e3436" :foreground "#eeeeec" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "unknown" :family "Anka/Coder"))))
  '(whitespace-empty ((t (:foreground "black" :background "#800"))))
  '(whitespace-line ((t (:foreground "black" :background "#aa0"))))
  '(whitespace-space-before-tab ((t (:foreground "black" :background "#800"))))
@@ -162,12 +163,22 @@ If the new path's directories does not exist, create them."
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
-(define-key evil-normal-state-map (kbd ",fa") 'ag)
+;;,b is our prefix for searching through open files, opening new files,
+;;etc.
+(define-key evil-normal-state-map (kbd ",ba") 'org-agenda)
+(define-key evil-normal-state-map (kbd ",bb") 'ido-switch-buffer)
+(define-key evil-normal-state-map (kbd ",bc") 'ido-find-file)
+(define-key evil-normal-state-map (kbd ",bg") 'ag)
 (define-key evil-normal-state-map (kbd ",bf") 'projectile-find-file)
+(define-key evil-normal-state-map (kbd ",bo")
+  (lambda()
+    (interactive)
+    (projectile-find-file-in-directory "~/org/")))
 
-(evil-define-command aeruder/findorg ()
-  (projectile-find-file-in-directory "~/org/"))
-(define-key evil-normal-state-map (kbd ",bo") #'aeruder/findorg)
+(define-key evil-normal-state-map (kbd ",ei")
+  (lambda()
+    (interactive)
+    (find-file "~/.emacs.d/init.el")))
 
 (evil-mode t)
 ;;;
