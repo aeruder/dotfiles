@@ -180,6 +180,11 @@ If the new path's directories does not exist, create them."
     (interactive)
     (find-file "~/.emacs.d/init.el")))
 
+(define-key evil-normal-state-map (kbd ", SPC")
+  (lambda()
+    (interactive)
+    (evil-ex-nohighlight)))
+
 (evil-mode t)
 ;;;
 ;;; Ace jump
