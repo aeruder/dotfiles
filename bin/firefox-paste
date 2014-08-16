@@ -1,0 +1,3 @@
+#!/bin/sh
+
+firefox -new-tab "`xclip -1 -o`"
