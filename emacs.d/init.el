@@ -174,6 +174,10 @@ If the new path's directories does not exist, create them."
   (lambda()
     (interactive)
     (projectile-find-file-in-directory "~/org/")))
+(define-key evil-normal-state-map (kbd ",bs")
+  (lambda()
+    (interactive)
+    (projectile-find-file-in-directory "~/.emacs.d/snippets/")))
 
 (define-key evil-normal-state-map (kbd ",ei")
   (lambda()
