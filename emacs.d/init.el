@@ -278,3 +278,9 @@ If the new path's directories does not exist, create them."
 ;;;
 
 (require-package 'magit)
+
+;;;
+;;; WebDAV
+;;;
+(require 'url-dav)
+(require-package 'tramp)
