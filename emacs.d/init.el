@@ -224,9 +224,11 @@ If the new path's directories does not exist, create them."
 ;;;
 (require-package 'git-commit-mode)
 (require-package 'gitconfig-mode)
-;;(require-package 'git-rebase-mode)
+(require-package 'git-rebase-mode)
 (require-package 'gitignore-mode)
 (require-package 'gitattributes-mode)
+(setq auto-mode-alist (delete '("/git-rebase-todo\\'" . git-rebase-mode)
+                              auto-mode-alist))
 
 ;;;
 ;;; Buffer switching
