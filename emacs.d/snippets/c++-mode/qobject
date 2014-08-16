@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: qobject
+# key: qobject
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+#include ${2:$(if (or (string= yas-text "") (string= (substring yas-text 0 1) "Q")) (concat "<" yas-text ">") (concat "\\"" (downcase yas-text) ".h\\""))}
+
+class ${1:Name} : public ${2:QObject}
+{
+    Q_OBJECT
+
+public:
+    $1(${2:$(if (string= yas-text "QState") yas-text "QObject")} *parent = 0);
+    ~$1();
+};
