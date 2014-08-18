@@ -4,8 +4,10 @@
 [alias]
 	stat = status
 	s = status
-	sfegs = submodule foreach --recursive git status
-	sfegp = submodule foreach --recursive git push
+	smfer = submodule foreach --recursive
+	smfe = submodule foreach
+	smu = submodule update
+	smur = submodule update --recursive
 	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
 	co = checkout
 	cia = commit -a
