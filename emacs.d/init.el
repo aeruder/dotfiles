@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (tango-dark)))
  '(inhibit-startup-screen t)
- '(org-agenda-files (quote ("~/org/z4.org" "~/org/todo.org" "~/org/redilink.org" "~/org/gitlab.org"))))
+ '(org-agenda-files (quote ("~/org/todo.org" "~/org/work.org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -81,7 +81,7 @@ If the new path's directories does not exist, create them."
 (setq org-directory "~/org")
 ;; I use C-c c to start capture mode
 (global-set-key (kbd "C-c c") 'org-capture)
-(setq org-default-notes-file "~/org/refile.org")
+(setq org-default-notes-file "~/org/todo.org")
 
 ;; ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
 ;; (setq org-capture-templates
