@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <filename>" >&2
+  exit 1
+fi
+
+dir="`dirname "$1"`"
+file="`basename "$1"`"
+pwd="`cd "$dir" && pwd`"
+
+echo "${pwd}/${file}"
