@@ -170,6 +170,8 @@ If the new path's directories does not exist, create them."
 (define-key evil-normal-state-map (kbd ",bc") 'ido-find-file)
 (define-key evil-normal-state-map (kbd ",bg") 'ag)
 (define-key evil-normal-state-map (kbd ",bf") 'projectile-find-file)
+(define-key evil-normal-state-map (kbd "]a") 'next-buffer)
+(define-key evil-normal-state-map (kbd "[a") 'previous-buffer)
 (define-key evil-normal-state-map (kbd ",bo")
   (lambda()
     (interactive)
@@ -315,7 +317,7 @@ If the new path's directories does not exist, create them."
 
 ;;; Indentation settings
 (add-hook 'c-mode-common-hook
-    '(c-mode-default))
+    '(lambda () (c-mode-default)))
 (defun c-mode-linux()
     "Linux/u-boot indent settings"
     (interactive)
