@@ -2,6 +2,7 @@
 (setq whitespace-style
   '(empty face lines-tail space-before-tab tabs tab-mark trailing))
 (global-whitespace-mode t)
+(provide 'init-whitespace)
 
 ; (setq whitespace-empty (:foreground "black" :background "#800"))))
 ; (setq whitespace-line ((t (:foreground "black" :background "#aa0"))))

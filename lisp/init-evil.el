@@ -31,18 +31,6 @@
     (push 'escape unread-command-events))
        (t (setq unread-command-events (append unread-command-events
                           (list evt))))))))
-;; Remap org-mode meta keys for convenience
-(mapcar (lambda (state)
-            (evil-declare-key state org-mode-map
-                (kbd "M-l") 'org-metaright
-                (kbd "M-h") 'org-metaleft
-                (kbd "M-k") 'org-metaup
-                (kbd "M-j") 'org-metadown
-                (kbd "M-L") 'org-shiftmetaright
-                (kbd "M-H") 'org-shiftmetaleft
-                (kbd "M-K") 'org-shiftmetaup
-                (kbd "M-J") 'org-shiftmetadown))
-        '(normal insert))
 
 ;;Make evil-mode up/down operate in screen lines instead of logical lines
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
