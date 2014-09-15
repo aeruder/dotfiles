@@ -1,3 +1,7 @@
+GPATH
+GRTAGS
+GSYMS
+GTAGS
 .vimrc
 .*.swp
 .*.swo
