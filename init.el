@@ -8,6 +8,7 @@
 (require-packages
   '(ace-jump-mode
     ag
+    company
     evil
     evil-matchit
     evil-numbers
@@ -20,8 +21,10 @@
     gitignore-mode
     git-rebase-mode
     helm
+    helm-gtags
     ido-vertical-mode
     magit
+    nyan-mode
     projectile
     rainbow-mode
     whitespace
@@ -29,14 +32,15 @@
     zenburn-theme))
 
 (require 'init-evil)
+(require 'init-helm)
 (require 'init-ace)
 (require 'init-ag)
 (require 'init-appearance)
 (require 'init-backup)
 (require 'init-c-mode)
+(require 'init-company)
 (require 'init-flx)
 (require 'init-git)
-(require 'init-helm)
 (require 'init-linenums)
 (require 'init-misc)
 (require 'init-org)
