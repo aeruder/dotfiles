@@ -3,7 +3,6 @@
 (require 'helm-eshell)
 (require 'helm-files)
 (require 'helm-grep)
-(require 'helm-gtags)
 
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-unset-key (kbd "C-x c"))
@@ -38,6 +37,7 @@
  )
 
 ;; Enable helm-gtags-mode
+(require 'helm-gtags)
 (add-hook 'dired-mode-hook 'helm-gtags-mode)
 (add-hook 'eshell-mode-hook 'helm-gtags-mode)
 (add-hook 'c-mode-hook 'helm-gtags-mode)
