@@ -2,6 +2,10 @@
 ;;; Evil mode
 ;;;
 
+(require-package 'evil)
+(require-package 'evil-matchit)
+(require-package 'evil-numbers)
+
 (setq evil-search-module 'evil-search
       evil-want-C-u-scroll t
       evil-want-C-w-in-emacs-state t)

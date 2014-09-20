@@ -1,3 +1,4 @@
+(require-package 'yasnippet)
 (yas-global-mode 1)
 ;;Allow quick manual triggering of snippets
 (define-key evil-normal-state-map (kbd "C-c s") 'yas-insert-snippet)

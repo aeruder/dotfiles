@@ -4,33 +4,6 @@
 ;; load files
 
 (require 'init-package)
-
-(require-packages
-  '(ace-jump-mode
-    ag
-    company
-    evil
-    evil-matchit
-    evil-numbers
-    flx
-    flx-ido
-    ggtags
-    gitattributes-mode
-    git-commit-mode
-    gitconfig-mode
-    gitignore-mode
-    git-rebase-mode
-    helm
-    helm-gtags
-    ido-vertical-mode
-    magit
-    nyan-mode
-    projectile
-    rainbow-mode
-    whitespace
-    yasnippet
-    zenburn-theme))
-
 (require 'init-evil)
 (require 'init-helm)
 (require 'init-ace)
@@ -41,6 +14,7 @@
 (require 'init-company)
 (require 'init-flx)
 (require 'init-git)
+(require 'init-ido)
 (require 'init-linenums)
 (require 'init-misc)
 (require 'init-org)
