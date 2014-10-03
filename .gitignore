@@ -39,3 +39,5 @@ backups/
 /projectile-bookmarks.eld
 /projectile.cache
 /ede-projects.el
+# places
+/places

@@ -14,7 +14,6 @@
 (require 'init-company)
 (require 'init-flx)
 (require 'init-git)
-(require 'init-ido)
 (require 'init-linenums)
 (require 'init-misc)
 (require 'init-org)
