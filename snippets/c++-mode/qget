@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: qget
+# key: qget
+# --
+${1:QString} ${2:property}() { return $2_; }

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: qset
+# key: qset
+# --
+void set${2:$(concat (upcase (substring yas-text 0 1)) (substring yas-text 1))}(${1:$(if (let (case-fold-search) (string-match "^[A-Z]" yas-text)) "const " "")}${1:QString}${1:$(if (let (case-fold-search) (string-match "^[A-Z]" yas-text)) "&" "")} ${2:property}) { $2_ = $2; }
