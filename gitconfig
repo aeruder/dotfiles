@@ -17,6 +17,7 @@
 	l = log --abbrev-commit
 	root = rev-parse --show-toplevel
 	amend = commit --amend
+	commit-rnd = !sh -c \"git commit -m \\\"FIXME `curl -s http://whatthecommit.com/index.txt`\\\"\"
 [color]
 	ui = auto
 [merge]
