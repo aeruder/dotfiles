@@ -1,0 +1,541 @@
+" File mappings
+
+
+" runtime submodules/vim-pathogen.tpope.github.com/autoload/pathogen.vim
+" if has('vim_starting')
+"     let config=pathogen#split(&runtimepath)[0]
+"     execute pathogen#infect('submodules/{}')
+"     call dirsettings#Install()
+" endif
+
+let &directory=expand("<sfile>:p:h:h")."/swp"
+let &undodir=expand("<sfile>:p:h:h")."/undo"
+
+if has("win32")
+    let $PATH=$PATH.";".expand("<sfile>:p:h:h")."\\bin"
+endif
+
+""""""""""""""""""""""""
+" Turn off fuf data file
+let g:fuf_dataDir = ''
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Lots and lots of settings
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+
+syntax on
+
+""""""""""""""""""""""""
+" Color scheme
+if has ("gui") && &guifont == ""
+    set guifontset=
+    if has("gui_win32")
+        set guifont=Anka/Coder:h12,Terminus:h12,Inconsolata:h12,ProFont:h12,Terminal:h12
+    else
+        set guifont=Anka/Coder\ 12,Terminus\ 12,Inconsolata\ 12,ProFont\ 12,Bitstream\ Vera\ Sans\ Mono\ 12,Terminal\ 12,Monospace\ 12
+    endif
+endif
+
+if $TERM == "linux"
+    set background=dark
+    colors elflord
+elseif has("win32") && !has("gui")
+    set background=dark
+    colors elflord
+else
+    if $COLORTERM == "gnome-terminal" || $KONSOLE_PROFILE_NAME != ""
+        set t_Co=256
+    endif
+    if $TERM == "screen"
+      set t_Co=256
+    endif
+    set background=dark
+    colors jellybeans
+endif
+
+""""""""""""""""""""""""
+" Use with :Usespaces <num> and we
+" are configured with indentation of <num>
+" using spaces.
+com! -nargs=1 Usespaces
+            \ setlocal tabstop=<args> |
+            \ setlocal expandtab |
+            \ setlocal shiftwidth=<args> |
+            \ setlocal softtabstop=<args> |
+            \ setlocal nocopyindent
+
+""""""""""""""""""""""""
+" Use with :Usetabs <num> and we are
+" configured with indentation of <num> using
+" tabs.
+com! -nargs=1 Usetabs
+            \ setlocal tabstop=<args> |
+            \ setlocal noexpandtab |
+            \ setlocal shiftwidth=<args> |
+            \ setlocal softtabstop=<args> |
+            \ setlocal copyindent
+
+""""""""""""""""""""""""
+" GNU indentation style is a mess
+com! -nargs=0 Gnuindent
+            \ setlocal tabstop=8 |
+            \ setlocal shiftwidth=2 |
+            \ setlocal softtabstop=2 |
+            \ setlocal noexpandtab |
+            \ setlocal nocopyindent
+
+""""""""""""""""""""""""
+" If we use special characters, ensure we are doing so with
+" utf-8
+set encoding=utf-8
+
+""""""""""""""""""""""""
+" Line wrap settings
+set nowrap
+set textwidth=79
+set formatoptions=qrn1
+set colorcolumn=
+
+""""""""""""""""""""""""
+" Default split directions
+set splitbelow
+set splitright
+
+""""""""""""""""""""""""
+" Give us some context around the cursor when scrolling
+set sidescroll=10 sidescrolloff=10
+set scrolloff=4
+
+""""""""""""""""""""""""
+" Set how we indent new lines, autoindent seems most
+" sane to me (except when filetype indent is available)
+set nosmartindent
+set nocindent
+set autoindent
+set shiftround
+filetype plugin indent on
+
+""""""""""""""""""""""""
+" Set up our status bar with lots of good information
+set showmode
+set showcmd
+set ruler
+
+""""""""""""""""""""""""
+" Make our backspace sane (we want to be able to backspace over everything)
+set backspace=indent,eol,start
+
+""""""""""""""""""""""""
+" Tab completion in command mode
+set wildmenu
+set wildmode=list:longest
+
+""""""""""""""""""""""""
+" When beeping, do it visually not audibly (which half the time
+" doesn't work anyway)
+set visualbell t_vb=
+
+""""""""""""""""""""""""
+" Highlight the entire line we are on
+set cursorline
+
+""""""""""""""""""""""""
+" Always enable the status line for the window, even if there is just
+" one window.
+set laststatus=2
+
+""""""""""""""""""""""""
+" Display the line numbers relative to the current line
+set relativenumber
+set number
+
+""""""""""""""""""""""""
+" Persistent undo even if we quit vim.
+set undofile
+
+""""""""""""""""""""""""
+" Search settings
+" If we search for Abc, it is case-sensitive, abc is case-insensitive
+set ignorecase
+set smartcase
+" Search as we type
+set incsearch
+" Highlight our searches
+set hlsearch
+" Wrap at the end
+set nowrapscan
+
+""""""""""""""""""""""""
+" When we type a bracket, quickly jump to the matching bracket
+set showmatch
+
+""""""""""""""""""""""""
+" CScope settings
+set cscopequickfix=s-,c-,d-,i-,t-,e-,g-
+set cscopetag
+
+""""""""""""""""""""""""
+" Allow us to switch away from an unsaved buffer
+set hidden
+
+""""""""""""""""""""""""
+" When we yank text into the unnamed register, automatically put
+" it on the clipboard.
+set clipboard=unnamed
+
+""""""""""""""""""""""""
+" When doing folds, base it on the syntax
+set foldmethod=syntax
+set foldnestmax=2
+
+""""""""""""""""""""""""
+" When using vimdiff, ignore white-space changes
+" set diffopt=iwhite,filler
+set diffopt=filler
+
+""""""""""""""""""""""""
+" Show tabs, trailing spaces, etc..
+set list listchars=tab:»·,trail:·,extends:>,precedes:<
+
+
+
+
+
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Key bindings
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+
+" Change our leader key to , rather than \
+let mapleader = ","
+let g:EasyMotion_leader_key = '<Space>'
+
+" Align comma'd lists like
+"
+" a, b, c, d
+" foo, bar, blah, baz
+"
+" to this when selected and ran through this command:
+"
+" a,   b,   c,    d
+" foo, bar, blah, baz
+"
+vnoremap <leader>A, :Tab /[;,]<CR>gv:s/\v(\s+)([,;])\s?/\2\1/g<CR>gv:s/\v\s+$//<CR>:let @/=""<CR>
+
+" Helps debug making syntax files, displays the syntax of the
+" character underneath the cursor.
+nnoremap <leader>S :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+            \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+            \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" Clear the highlighted search
+nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <leader>D :%s/<C-R>///g<CR>
+nnoremap <leader>gD :%g/<C-R>//d<CR>
+nnoremap <leader>g!D :%g!/<C-R>//d<CR>
+vnoremap <leader>D :s/<C-R>///g<CR>
+vnoremap <leader>gD :g/<C-R>//d<CR>
+vnoremap <leader>g!D :g!/<C-R>//d<CR>
+
+" Highlight spacing errors
+nnoremap <leader>f<space> /\v(\s+$)\|(<space>\ze<tab>)<CR>
+
+" Highlight tabs
+nnoremap <leader>f<Tab> /<Tab><CR>
+
+" Highlight just pasted text
+nnoremap <leader>v V`]
+
+" Highlight the current word
+nnoremap <leader>yiw yiw:set hlsearch<Cr>:let @/="\\V\\<" . escape(@", "\\") . "\\>"<Cr>
+
+" Highlight the current line
+nnoremap <leader>yy ^y$:set hlsearch<Cr>:let @/="\\V\\^" . escape(@", "\\") . "\\$"<Cr>
+
+" Open vimrc
+nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
+
+" Open vertical split and switch to it
+nnoremap <leader>w <C-w>v<C-w>l
+
+" Open undotree
+nnoremap <leader>u :UndotreeToggle<Cr>
+
+" Make j and k go through wrapped lines
+nnoremap j gj
+nnoremap k gk
+
+" Let us use ; instead of : for command mode
+nnoremap ; :
+
+" Use 'jk' instead of ESC
+inoremap jk <ESC>
+
+" Toggle in and out of hex dump mode
+nnoremap <leader>h :Hexmode<Cr>
+
+" Open a scratch buffer
+nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
+
+" grep utilities
+nnoremap <leader>fa yiw:Ag <C-R>"
+nnoremap <leader>fg yiw:Ggrep <C-R>"
+nnoremap <leader>fb yiw:Bgrep <C-R>"
+
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" " => Unite
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 
+" let g:unite_enable_ignore_case = 0
+" let g:unite_enable_smart_case = 0
+" let g:unite_source_history_yank_enable = 1
+" let g:unite_source_rec_max_cache_files = 10000
+" let g:unite_source_file_mru_long_limit = 10000
+" let g:unite_enable_start_insert = 1
+" let g:unite_split_rule = "botright"
+" let g:unite_force_overwrite_statusline = 0
+" let g:unite_winheight = 10
+" 
+" call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+"       \ 'ignore_pattern', join([
+"       \ '\.git/',
+"       \ 'git5/.*/review/',
+"       \ 'google/obj/',
+"       \ ], '\|'))
+" call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_length')
+" call unite#custom#source('file_mru', 'max_candidates', 20)
+" call unite#custom#source('file_rec', 'max_candidates', 0)
+" 
+" " Use the glob matcher for everything
+" call unite#filters#matcher_default#use(['matcher_glob'])
+" 
+" " Use the rank sorter for everything
+" call unite#filters#sorter_default#use(['sorter_rank'])
+" 
+" " call unite#custom#source('tag', 'matchers', 'matcher_exact')
+" " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+" 
+" nnoremap <leader>bF :Unite file_rec/async:!<cr>
+" nnoremap <leader>bf :Unite file_rec/async:.<cr>
+" 
+" nnoremap <leader>bc :Go %:h<Cr>
+" nnoremap <leader>bo :Unite outline<cr>
+" nnoremap <leader>be :<C-u>Unite buffer<cr>
+" nnoremap <leader>br :<C-u>Unite file_mru:all<cr>
+" 
+" nnoremap <leader>b/ :Unite grep:.<cr>
+" nnoremap <leader>by :Unite history/yank<cr>
+" nnoremap <leader>bC :Unite colorscheme -auto-preview<cr>
+" 
+" comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnameescape(substitute(fnamemodify(<q-args>, ':p:~:.'), '\\', '\\\\', 'g'))
+" 
+" " Some custom directory searches
+" if (isdirectory("/usr/include/qt"))
+"   nnoremap <leader>bq :Go /usr/include/qt<Cr>
+" elseif (isdirectory("/usr/include/qt4"))
+"   nnoremap <leader>bq :Go /usr/include/qt4<Cr>
+" endif
+" 
+" let g:unite_source_grep_max_candidates = 200
+" 
+" if executable('ag')
+"   " Use ag in unite grep source.
+"   let g:unite_source_grep_command = 'ag'
+"   let g:unite_source_grep_default_opts =
+"   \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+"   \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+"   let g:unite_source_grep_recursive_opt = ''
+" elseif executable('pt')
+"   " Use pt in unite grep source.
+"   " https://github.com/monochromegane/the_platinum_searcher
+"   let g:unite_source_grep_command = 'pt'
+"   let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+"   let g:unite_source_grep_recursive_opt = ''
+" elseif executable('ack-grep')
+"   " Use ack in unite grep source.
+"   let g:unite_source_grep_command = 'ack-grep'
+"   let g:unite_source_grep_default_opts =
+"   \ '--no-heading --no-color -a -H'
+"   let g:unite_source_grep_recursive_opt = ''
+" endif
+" 
+" autocmd FileType unite call s:unite_settings()
+" 
+" function! s:unite_settings()
+"   let b:SuperTabDisabled=1
+" "imap <buffer> <C-j> <NOP>
+"   imap <buffer> <C-j> <Plug>(unite_select_next_line)
+"   imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+"   imap <silent><buffer><expr> <C-x> unite#do_action('split')
+"   imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+"   imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+" 
+"   nmap <buffer> <ESC> <Plug>(unite_exit)
+"   nmap <buffer> jk <Plug>(unite_exit)
+" endfunction
+" 
+" 
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" "                                 neocomplete                                 "
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 
+" let g:neocomplete#enable_at_startup = 1
+" let g:neocomplete#force_overwrite_completefunc = 1
+" 
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" "                                Insertlessly                                 "
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 
+" let g:insertlessly_cleanup_trailing_ws = 0
+" let g:insertlessly_cleanup_all_ws = 0
+" 
+" 
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" "                                  vim-notes                                  "
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 
+" """""
+" " Default notes directory
+" if !exists("g:notes_directories")
+"     let g:notes_directories = [ '~/.notes' ]
+" endif
+" 
+" let g:notes_smart_quotes = 0
+" 
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" "                                  ultisnips                                  "
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:UltiSnipsJumpForwardTrigger = "<tab>"
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Our active abbreviations
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+abbreviate teh the
+abbreviate sl std_logic
+abbreviate slv std_logic_vector
+
+
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+" Misc custom commands, etc.
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+""""""""""""""""""""""""
+
+" This makes % work for a lot more than just
+" {(<, it also works on html, etc..
+runtime macros/matchit.vim
+
+" This makes :Man open manpages in a split with syntax highlighting
+runtime ftplugin/man.vim
+
+" Set our ack path (which we store in our vim directory)
+let s:ackexes = split(globpath(&rtp, 'bin/ack'), "\n")
+if (len(s:ackexes) > 0)
+    let g:ackprg="perl " . s:ackexes[0] . " -H --nocolor --nogroup --column"
+endif
+
+" Some filesystems that are mounted in /tmp (particularly on OS X), cause
+" problems with backup files
+autocmd BufRead /tmp/*
+    \ setlocal nobackup |
+    \ setlocal nowritebackup
+
+" Some custom filetypes
+au BufNewFile,BufRead build_log.txt     setf changelog
+au BufNewFile,BufRead *.phys            setf cmphys
+au BufNewFile,BufRead *.vb              set ft=vbnet
+au BufNewFile,BufRead *.il              set ft=ilasm
+
+au BufNewFile,BufRead *                 Usespaces 4
+
+" Space/tab settings for different filetypes
+au FileType make
+    \ Usetabs 8
+
+au FileType gitcommit
+    \ set tw=72
+
+" This is used when editing a mutt mail message
+comm! -nargs=0 BeginMailMessage call BeginMailMessage()
+function! BeginMailMessage()
+    set tw=72
+    set wrap
+    set expandtab
+    set ft=mail
+    silent! g/^Message-Id: <.*@.*>/d
+    silent! %s/^My-\(Message-Id: <.*@.*>\)$/\1/
+    normal 1G
+endfunction
+
+" Hex editing support (from http://vim.wikia.com/wiki/Improved_hex_editing)
+comm! -bar Hexmode call ToggleHex()
+
+" helper function to toggle hex mode
+function! ToggleHex()
+  " hex mode should be considered a read-only operation
+  " save values for modified and read-only for restoration later,
+  " and clear the read-only flag for now
+  let l:modified=&mod
+  let l:oldreadonly=&readonly
+  let &readonly=0
+  let l:oldmodifiable=&modifiable
+  let &modifiable=1
+  if !exists("b:editHex") || !b:editHex
+    " save old options
+    let b:oldft=&ft
+    let b:oldbin=&bin
+    " set new options
+    setlocal binary " make sure it overrides any textwidth, etc.
+    let &ft="xxd"
+    " set status
+    let b:editHex=1
+    " switch to hex editor
+    %!xxd
+  else
+    " restore old options
+    let &ft=b:oldft
+    if !b:oldbin
+      setlocal nobinary
+    endif
+    " set status
+    let b:editHex=0
+    " return to normal editing
+    %!xxd -r
+  endif
+  " restore values for modified and read only state
+  let &mod=l:modified
+  let &readonly=l:oldreadonly
+  let &modifiable=l:oldmodifiable
+endfunction
+
+" Pull in our zsh special directories
+function! PullInZshNamedDirectories()
+    if (exists("$HOME"))
+        let l:namedirs = $HOME . "/.znameddirs"
+        if (filereadable(l:namedirs))
+            let l:lines = readfile(l:namedirs)
+            for l:a in l:lines
+                let l:splitdir = split(l:a, " ")
+                if (len(l:splitdir) == 2 && match(l:splitdir[0], '[^a-z0-9_A-Z]') == -1)
+                    exec "let $" . l:splitdir[0] . " = '" . fnameescape(l:splitdir[1]) ."'"
+                endif
+            endfor
+        endif
+    endif
+endfunction
+
+call PullInZshNamedDirectories()
