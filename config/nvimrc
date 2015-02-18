@@ -1,19 +1,47 @@
 " File mappings
 
-
 " runtime submodules/vim-pathogen.tpope.github.com/autoload/pathogen.vim
 " if has('vim_starting')
 "     let config=pathogen#split(&runtimepath)[0]
 "     execute pathogen#infect('submodules/{}')
 "     call dirsettings#Install()
 " endif
+if has("win32")
+    let s:sep="\\"
+else
+    let s:sep="/"
+endif
 
-let &directory=expand("<sfile>:p:h:h")."/swp"
-let &undodir=expand("<sfile>:p:h:h")."/undo"
+let &directory=expand("<sfile>:p:h:h").s:sep."swp"
+let &undodir=expand("<sfile>:p:h:h").s:sep."undo"
+
+
+if len($PYTHONPATH) > 0
+    let $PYTHONPATH=expand("<sfile>:p:h:h").s:sep."python-client:".$PYTHONPATH
+else
+    let $PYTHONPATH=expand("<sfile>:p:h:h").s:sep."python-client"
+endif
 
 if has("win32")
-    let $PATH=$PATH.";".expand("<sfile>:p:h:h")."\\bin"
+    let $PATH=$PATH.";".expand("<sfile>:p:h:h").s:sep."bin"
 endif
+
+" Install plugins with plug
+runtime vim-plug/plug.vim
+
+call plug#begin(expand("<sfile>:p:h:h").s:sep."plugged")
+
+Plug 'https://github.com/nanotech/jellybeans.vim'
+Plug 'https://github.com/tpope/vim-eunuch'
+Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'https://github.com/tpope/vim-surround'
+Plug 'https://github.com/tpope/vim-repeat'
+Plug 'https://github.com/tpope/vim-speeddating'
+Plug 'https://github.com/tpope/vim-abolish'
+Plug 'https://github.com/tpope/vim-commentary'
+Plug 'https://github.com/tpope/vim-unimpaired'
+
+call plug#end()
 
 """"""""""""""""""""""""
 " Turn off fuf data file
