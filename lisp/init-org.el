@@ -2,9 +2,9 @@
 (require 'org)
 
 ;; Standard key bindings
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-col" 'org-store-link)
+(global-set-key "\C-coa" 'org-agenda)
+(global-set-key "\C-cob" 'org-iswitchb)
 
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
@@ -20,7 +20,7 @@
 
 (setq org-directory "~/org")
 ;; I use C-c c to start capture mode
-(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "\C-coc") 'org-capture)
 (setq org-default-notes-file "~/org/todo.org")
 
 ;; ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
@@ -41,25 +41,5 @@
 ;;                "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
 ;;               ("h" "Habit" entry (file "~/git/org/refile.org")
 ;;                "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
-
-; org agenda -- leave in emacs mode but add j & k
-
-(add-hook 'org-agenda-mode-hook
-   (lambda ()
-     (define-key org-agenda-mode-map "j" 'evil-next-line)
-     (define-key org-agenda-mode-map "k" 'evil-previous-line)))
-
-;; Remap org-mode meta keys for convenience
-(mapcar (lambda (state)
-            (evil-declare-key state org-mode-map
-                (kbd "M-l") 'org-metaright
-                (kbd "M-h") 'org-metaleft
-                (kbd "M-k") 'org-metaup
-                (kbd "M-j") 'org-metadown
-                (kbd "M-L") 'org-shiftmetaright
-                (kbd "M-H") 'org-shiftmetaleft
-                (kbd "M-K") 'org-shiftmetaup
-                (kbd "M-J") 'org-shiftmetadown))
-        '(normal insert))
 
 (provide 'init-org)

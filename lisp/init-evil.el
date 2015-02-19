@@ -3,6 +3,7 @@
 ;;;
 
 (require-package 'evil)
+(require 'evil-rebellion)
 (require-package 'evil-matchit)
 (require-package 'evil-numbers)
 
@@ -42,26 +43,30 @@
 
 ;;,b is our prefix for searching through open files, opening new files,
 ;;etc.
-(define-key evil-normal-state-map (kbd ",ba") 'org-agenda)
-(define-key evil-normal-state-map (kbd ",bb") 'ido-switch-buffer)
-(define-key evil-normal-state-map (kbd ",bc") 'ido-find-file)
-(define-key evil-normal-state-map (kbd ",bg") 'ag)
-(define-key evil-normal-state-map (kbd ",bf") 'projectile-find-file)
-(define-key evil-normal-state-map (kbd "]a") 'next-buffer)
-(define-key evil-normal-state-map (kbd "[a") 'previous-buffer)
-(define-key evil-normal-state-map (kbd ",bo")
+(global-set-key (kbd "C-c b a") 'org-agenda)
+(global-set-key (kbd "C-c b b") 'ido-switch-buffer)
+(global-set-key (kbd "C-c b c") 'ido-find-file)
+(global-set-key (kbd "C-c b g") 'ag)
+(global-set-key (kbd "C-c b f") 'projectile-find-file)
+(global-set-key (kbd "C-c b o")
   (lambda()
     (interactive)
     (projectile-find-file-in-directory "~/org/")))
-(define-key evil-normal-state-map (kbd ",bs")
+(global-set-key (kbd "C-c b s")
   (lambda()
     (interactive)
     (projectile-find-file-in-directory "~/.emacs.d/snippets/")))
-
-(define-key evil-normal-state-map (kbd ",ei")
+(global-set-key (kbd "C-c b i")
   (lambda()
     (interactive)
-    (find-file "~/.emacs.d/init.el")))
+    (projectile-find-file-in-directory "~/.emacs.d/")))
+(global-set-key (kbd "C-c b R R R")
+  (lambda()
+    (interactive)
+    (revert-buffer)))
+
+(define-key evil-normal-state-map (kbd "]a") 'next-buffer)
+(define-key evil-normal-state-map (kbd "[a") 'previous-buffer)
 
 (define-key evil-normal-state-map (kbd ", SPC")
   (lambda()

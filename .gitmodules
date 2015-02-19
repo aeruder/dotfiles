@@ -1,0 +1,3 @@
+[submodule "evil-rebellion"]
+	path = evil-rebellion
+	url = https://github.com/aeruder/evil-rebellion.git

@@ -1,7 +1,7 @@
-(require-package 'zenburn-theme)
+(require-package 'solarized-theme)
 (require-package 'rainbow-mode)
 (require-package 'nyan-mode)
 (nyan-mode 1)
-(load-theme 'zenburn t)
+(load-theme 'solarized-light t)
 
 (provide 'init-appearance)
