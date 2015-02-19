@@ -2,5 +2,5 @@
 	path = emacs.d/lisp/projectile
 	url = https://github.com/bbatsov/projectile
 [submodule "antigen"]
-	path = antigen
+	path = .misc/antigen
 	url = git://github.com/zsh-users/antigen.git
