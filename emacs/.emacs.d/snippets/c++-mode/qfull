@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: qfull
-# key: qfull
-# --
-Q_PROPERTY(${1:QString} ${2:property} READ $2 WRITE set${2:$(concat (upcase (substring yas-text 0 1)) (substring yas-text 1))})
-$1 $2() { return $2_; }
-void set${2:$(concat (upcase (substring yas-text 0 1)) (substring yas-text 1))}(${1:$(if (let (case-fold-search) (string-match "^[A-Z]" yas-text)) "const " "")}$1${1:$(if (let (case-fold-search) (string-match "^[A-Z]" yas-text)) "&" "")} $2) { $2_ = $2; }
