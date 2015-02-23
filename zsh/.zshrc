@@ -8,6 +8,10 @@ antigen bundle https://github.com/aeruder/zsh-prompt-aeruder.git modules/diskspa
 antigen bundle https://github.com/aeruder/zsh-prompt-aeruder.git modules/vimode
 antigen apply
 
+function is-callable {
+  (( $+commands[$1] )) || (( $+functions[$1] )) || (( $+aliases[$1] ))
+}
+
 # Automatically push directory onto the directory stack
 setopt autopushd
 
@@ -390,6 +394,7 @@ alias irb='irb --readline -r irb/completion'
 alias dh='dirs -v'
 alias vim='e'
 alias emacs='e'
+alias ls='ls --color=auto'
 
 alias -g CA="2>&1 | cat -A"
 alias -g CNT='| wc -l'
