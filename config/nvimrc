@@ -31,16 +31,70 @@ runtime vim-plug/plug.vim
 
 call plug#begin(expand("<sfile>:p:h:h").s:sep."plugged")
 
+" My favorite color scheme
 Plug 'https://github.com/nanotech/jellybeans.vim'
+
+" UNIX helpers (rename file, sudo write file, so on)
 Plug 'https://github.com/tpope/vim-eunuch'
+
+" Best git plugin...ever?
 Plug 'https://github.com/tpope/vim-fugitive'
+
+" Bunch of extensions to allow surrounding text objects
 Plug 'https://github.com/tpope/vim-surround'
+
+" Lots of plugins use this to be able to hook into
+" being able to repeat with the . operator
 Plug 'https://github.com/tpope/vim-repeat'
+
+" Makes increment/decrement work on dates, etc..
 Plug 'https://github.com/tpope/vim-speeddating'
+
+" Case insensitive search/replace (:S)
 Plug 'https://github.com/tpope/vim-abolish'
+
+" Comment/uncommenting
 Plug 'https://github.com/tpope/vim-commentary'
+
+" Lots of bracket maps for going to next file, next buffer
+" and so on.
 Plug 'https://github.com/tpope/vim-unimpaired'
+
+" File/buffer explorer, FAST!
 Plug 'https://github.com/kien/ctrlp.vim'
+
+" Wrapper around AG for super-fast grep
+Plug 'https://github.com/rking/ag.vim'
+
+" Nerdtree, a little bit better file explorer
+Plug 'https://github.com/scrooloose/nerdtree'
+
+" Tabular, line up text
+Plug 'https://github.com/godlygeek/tabular'
+
+" Ultisnips - snippet support
+Plug 'https://github.com/SirVer/ultisnips'
+
+" Undotree, browse vim's infinite undo
+Plug 'https://github.com/mbbill/undotree'
+
+" Better status line
+Plug 'https://github.com/bling/vim-airline'
+
+" Read/write to gpg encrypted files
+Plug 'https://github.com/jamessan/vim-gnupg'
+
+" Quickly make functions from prototypes in matching .h file
+Plug 'https://github.com/derekwyatt/vim-protodef'
+
+" Mark adds/subtracts/etc.. from git-tracked files
+Plug 'https://github.com/mhinz/vim-signify'
+
+" some vim snippets
+Plug 'https://github.com/honza/vim-snippets'
+
+" writable search (grep and then change!)
+Plug 'https://github.com/AndrewRadev/writable_search.vim'
 
 call plug#end()
 
@@ -56,6 +110,10 @@ let g:fuf_dataDir = ''
 """"""""""""""""""""""""
 """"""""""""""""""""""""
 
+if !has("nvim")
+    set nocompatible
+    set ttyfast
+endif
 syntax on
 
 """"""""""""""""""""""""
@@ -116,6 +174,13 @@ com! -nargs=0 Gnuindent
             \ setlocal softtabstop=2 |
             \ setlocal noexpandtab |
             \ setlocal nocopyindent
+
+" default indentation settings
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set nocopyindent
 
 """"""""""""""""""""""""
 " If we use special characters, ensure we are doing so with
@@ -320,129 +385,35 @@ nnoremap <leader>fg yiw:Ggrep <C-R>"
 nnoremap <leader>fb yiw:Bgrep <C-R>"
 
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" " => Unite
+" " => CtrlP
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 
-" let g:unite_enable_ignore_case = 0
-" let g:unite_enable_smart_case = 0
-" let g:unite_source_history_yank_enable = 1
-" let g:unite_source_rec_max_cache_files = 10000
-" let g:unite_source_file_mru_long_limit = 10000
-" let g:unite_enable_start_insert = 1
-" let g:unite_split_rule = "botright"
-" let g:unite_force_overwrite_statusline = 0
-" let g:unite_winheight = 10
-" 
-" call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
-"       \ 'ignore_pattern', join([
-"       \ '\.git/',
-"       \ 'git5/.*/review/',
-"       \ 'google/obj/',
-"       \ ], '\|'))
-" call unite#custom#source('buffer,file,file_mru,file_rec', 'sorters', 'sorter_length')
-" call unite#custom#source('file_mru', 'max_candidates', 20)
-" call unite#custom#source('file_rec', 'max_candidates', 0)
-" 
-" " Use the glob matcher for everything
-" call unite#filters#matcher_default#use(['matcher_glob'])
-" 
-" " Use the rank sorter for everything
-" call unite#filters#sorter_default#use(['sorter_rank'])
-" 
-" " call unite#custom#source('tag', 'matchers', 'matcher_exact')
-" " nnoremap <leader>bf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-" 
-" nnoremap <leader>bF :Unite file_rec/async:!<cr>
-" nnoremap <leader>bf :Unite file_rec/async:.<cr>
-" 
-" nnoremap <leader>bc :Go %:h<Cr>
-" nnoremap <leader>bo :Unite outline<cr>
-" nnoremap <leader>be :<C-u>Unite buffer<cr>
-" nnoremap <leader>br :<C-u>Unite file_mru:all<cr>
-" 
-" nnoremap <leader>b/ :Unite grep:.<cr>
-" nnoremap <leader>by :Unite history/yank<cr>
-" nnoremap <leader>bC :Unite colorscheme -auto-preview<cr>
-" 
-" comm! -nargs=1 -complete=dir Go execute "Unite -start-insert file_rec/async:" . fnameescape(substitute(fnamemodify(<q-args>, ':p:~:.'), '\\', '\\\\', 'g'))
-" 
-" " Some custom directory searches
-" if (isdirectory("/usr/include/qt"))
-"   nnoremap <leader>bq :Go /usr/include/qt<Cr>
-" elseif (isdirectory("/usr/include/qt4"))
-"   nnoremap <leader>bq :Go /usr/include/qt4<Cr>
-" endif
-" 
-" let g:unite_source_grep_max_candidates = 200
-" 
-" if executable('ag')
-"   " Use ag in unite grep source.
-"   let g:unite_source_grep_command = 'ag'
-"   let g:unite_source_grep_default_opts =
-"   \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
-"   \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-"   let g:unite_source_grep_recursive_opt = ''
-" elseif executable('pt')
-"   " Use pt in unite grep source.
-"   " https://github.com/monochromegane/the_platinum_searcher
-"   let g:unite_source_grep_command = 'pt'
-"   let g:unite_source_grep_default_opts = '--nogroup --nocolor'
-"   let g:unite_source_grep_recursive_opt = ''
-" elseif executable('ack-grep')
-"   " Use ack in unite grep source.
-"   let g:unite_source_grep_command = 'ack-grep'
-"   let g:unite_source_grep_default_opts =
-"   \ '--no-heading --no-color -a -H'
-"   let g:unite_source_grep_recursive_opt = ''
-" endif
-" 
-" autocmd FileType unite call s:unite_settings()
-" 
-" function! s:unite_settings()
-"   let b:SuperTabDisabled=1
-" "imap <buffer> <C-j> <NOP>
-"   imap <buffer> <C-j> <Plug>(unite_select_next_line)
-"   imap <buffer> <C-k> <Plug>(unite_select_previous_line)
-"   imap <silent><buffer><expr> <C-x> unite#do_action('split')
-"   imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-"   imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
-" 
-"   nmap <buffer> <ESC> <Plug>(unite_exit)
-"   nmap <buffer> jk <Plug>(unite_exit)
-" endfunction
-" 
-" 
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" "                                 neocomplete                                 "
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 
-" let g:neocomplete#enable_at_startup = 1
-" let g:neocomplete#force_overwrite_completefunc = 1
-" 
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" "                                Insertlessly                                 "
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 
-" let g:insertlessly_cleanup_trailing_ws = 0
-" let g:insertlessly_cleanup_all_ws = 0
-" 
-" 
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" "                                  vim-notes                                  "
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 
-" """""
-" " Default notes directory
-" if !exists("g:notes_directories")
-"     let g:notes_directories = [ '~/.notes' ]
-" endif
-" 
-" let g:notes_smart_quotes = 0
-" 
+
+" Buffer list
+nnoremap <leader>bb :CtrlPBuffer<Cr>
+
+" Most-recently-used ctrlp files
+nnoremap <leader>br :CtrlPMRU<Cr>
+
+" Find qt headers
+if isdirectory("/usr/local/qt")
+    nnoremap <leader>bq :CtrlP /usr/include/qt<Cr>
+elseif isdirectory("/usr/include/qt4")
+    nnoremap <leader>bq :CtrlP /usr/include/qt4<Cr>
+endif
+
+" Search for files in current directory of current file
+nnoremap <leader>bc :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p:h"))<Cr>
+
+" Search for files in parent directory of current file
+nnoremap <leader>bp :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p:h:h"))<Cr>
+
+" Normal CtrlP
+nnoremap <leader>bf :<c-u>CtrlP<cr>
+
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " "                                  ultisnips                                  "
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
@@ -471,32 +442,27 @@ runtime macros/matchit.vim
 " This makes :Man open manpages in a split with syntax highlighting
 runtime ftplugin/man.vim
 
-" Set our ack path (which we store in our vim directory)
-let s:ackexes = split(globpath(&rtp, 'bin/ack'), "\n")
-if (len(s:ackexes) > 0)
-    let g:ackprg="perl " . s:ackexes[0] . " -H --nocolor --nogroup --column"
-endif
-
 " Some filesystems that are mounted in /tmp (particularly on OS X), cause
 " problems with backup files
-autocmd BufRead /tmp/*
-    \ setlocal nobackup |
-    \ setlocal nowritebackup
+augroup customchanges
+    au!
+    autocmd BufRead /tmp/*
+        \ setlocal nobackup |
+        \ setlocal nowritebackup
 
-" Some custom filetypes
-au BufNewFile,BufRead build_log.txt     setf changelog
-au BufNewFile,BufRead *.phys            setf cmphys
-au BufNewFile,BufRead *.vb              set ft=vbnet
-au BufNewFile,BufRead *.il              set ft=ilasm
+    " Some custom filetypes
+    au BufNewFile,BufRead build_log.txt     setf changelog
+    au BufNewFile,BufRead *.phys            setf cmphys
+    au BufNewFile,BufRead *.vb              set ft=vbnet
+    au BufNewFile,BufRead *.il              set ft=ilasm
 
-au BufNewFile,BufRead *                 Usespaces 4
+    " Space/tab settings for different filetypes
+    au FileType make
+        \ Usetabs 8
 
-" Space/tab settings for different filetypes
-au FileType make
-    \ Usetabs 8
-
-au FileType gitcommit
-    \ set tw=72
+    au FileType gitcommit
+        \ set tw=72
+augroup END
 
 " This is used when editing a mutt mail message
 comm! -nargs=0 BeginMailMessage call BeginMailMessage()
