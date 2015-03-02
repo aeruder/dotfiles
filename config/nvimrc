@@ -412,10 +412,12 @@ nnoremap <leader>bp :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p
 " Normal CtrlP
 nnoremap <leader>bf :<c-u>CtrlP<cr>
 
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" "                                  ultisnips                                  "
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  ultisnips                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsExpandTrigger = ",ue"
+let g:UltiSnipsJumpForwardTrigger = ",un"
+let g:UltiSnipsJumpBackwardTrigger = ",up"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                youcompleteme                                "
@@ -427,7 +429,7 @@ let g:ycm_global_ycm_extra_conf = expand("<sfile>:p:h").s:sep."ycm_extra_conf.py
 """"""""""""""""""""""""
 " Our active abbreviations
 """"""""""""""""""""""""
-""""""""""""""""""""""""
+"""""""""""""""""""""""
 """"""""""""""""""""""""
 abbreviate teh the
 abbreviate sl std_logic
