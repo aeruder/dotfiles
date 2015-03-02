@@ -93,8 +93,6 @@ Plug 'https://github.com/mhinz/vim-signify'
 " some vim snippets
 Plug 'https://github.com/honza/vim-snippets'
 
-" writable search (grep and then change!)
-Plug 'https://github.com/AndrewRadev/writable_search.vim'
 
 call plug#end()
 
