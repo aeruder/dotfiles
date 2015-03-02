@@ -93,6 +93,8 @@ Plug 'https://github.com/mhinz/vim-signify'
 " some vim snippets
 Plug 'https://github.com/honza/vim-snippets'
 
+" easymotion, let's you jump to spots on the screen super fast
+Plug 'https://github.com/Lokaltog/vim-easymotion'
 
 call plug#end()
 
@@ -308,7 +310,6 @@ set list listchars=tab:»·,trail:·,extends:>,precedes:<
 
 " Change our leader key to , rather than \
 let mapleader = ","
-let g:EasyMotion_leader_key = '<Space>'
 
 " Align comma'd lists like
 "
@@ -424,6 +425,13 @@ abbreviate teh the
 abbreviate sl std_logic
 abbreviate slv std_logic_vector
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 easymotion                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:EasyMotion_do_mapping = 0
+map <Space> <Plug>(easymotion-s)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
