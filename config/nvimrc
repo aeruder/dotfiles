@@ -93,6 +93,9 @@ Plug 'https://github.com/mhinz/vim-signify'
 " some vim snippets
 Plug 'https://github.com/honza/vim-snippets'
 
+" youcompleteme
+Plug 'https://github.com/Valloric/YouCompleteMe'
+
 " easymotion, let's you jump to spots on the screen super fast
 Plug 'https://github.com/Lokaltog/vim-easymotion'
 
@@ -413,6 +416,11 @@ nnoremap <leader>bf :<c-u>CtrlP<cr>
 " "                                  ultisnips                                  "
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                youcompleteme                                "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ycm_global_ycm_extra_conf = expand("<sfile>:p:h").s:sep."ycm_extra_conf.py"
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
