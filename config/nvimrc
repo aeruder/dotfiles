@@ -366,7 +366,7 @@ nnoremap <leader>ev <C-w>v<C-w>l:e $MYVIMRC<Cr>
 nnoremap <leader>w <C-w>v<C-w>l
 
 " Open undotree
-nnoremap <leader>u :UndotreeToggle<Cr>
+nnoremap <leader>ut :UndotreeToggle<Cr>
 
 " Make j and k go through wrapped lines
 nnoremap j gj
