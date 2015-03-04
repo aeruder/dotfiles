@@ -99,6 +99,9 @@ Plug 'https://github.com/Valloric/YouCompleteMe'
 " easymotion, let's you jump to spots on the screen super fast
 Plug 'https://github.com/Lokaltog/vim-easymotion'
 
+" GNU global
+Plug 'https://github.com/vim-scripts/gtags.vim'
+
 call plug#end()
 
 """"""""""""""""""""""""
@@ -423,6 +426,17 @@ let g:UltiSnipsJumpBackwardTrigger = ",up"
 "                                youcompleteme                                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ycm_global_ycm_extra_conf = expand("<sfile>:p:h").s:sep."ycm_extra_conf.py"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                    gtags                                    "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>gt :<c-u>Gtags<Cr>
+nmap <leader>gr :<c-u>Gtags -r<Cr>
+
+let g:Gtags_OpenQuickfixWindow = 0
+let g:Gtags_VerticalWindow = 0
+let Gtags_Auto_Map = 0
+
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
