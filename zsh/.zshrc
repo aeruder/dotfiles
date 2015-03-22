@@ -1447,7 +1447,8 @@ function battery_percent() {
     echo "$(((a * 100) / b))%%"
 }
 
-if [ `hostname` = tanooki ]; then
+hostname="`hostname`"
+if [ "$hostname" = tanooki ] || [ "$hostname" = raptor ]; then
     PR_FLAGS+=(battery_percent)
 fi
 
