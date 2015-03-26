@@ -492,6 +492,12 @@ augroup customchanges
 
     au FileType gitcommit
         \ set tw=72
+
+    au FileType ruby
+        \ Usespaces 2
+
+    au FileType haml
+        \ Usespaces 2
 augroup END
 
 " This is used when editing a mutt mail message
