@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function cmd() {
+   echo "$@"
+   "$@"
+}
+
+(cd home || exit
+for a in * ; do
+    cmd stow -t ~ "$a"
+done)
+
+(cd config || exit
+mkdir -p ~/.config
+for a in * ; do
+    cmd stow -t ~/.config "$a"
+done)
