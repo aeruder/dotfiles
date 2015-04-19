@@ -1440,15 +1440,19 @@ zle -N self-insert url-quote-magic
 ##################################
 # add our battery to the prompt
 ##################################
+
 function battery_percent() {
     local a b
-    a=$(</sys/class/power_supply/BAT1/energy_now)
-    b=$(</sys/class/power_supply/BAT1/energy_full)
+    a=("$BATTERY"/*_now(Y1))
+    b=("$BATTERY"/*_full(Y1))
+    a=$(<$a)
+    b=$(<$b)
     echo "$(((a * 100) / b))%%"
 }
 
 hostname="`hostname`"
-if [ "$hostname" = tanooki ] || [ "$hostname" = raptor ]; then
+BATTERY=(/sys/class/power_supply/BAT*(Y1))
+if [ -d "$BATTERY" ]; then
     PR_FLAGS+=(battery_percent)
 fi
 
