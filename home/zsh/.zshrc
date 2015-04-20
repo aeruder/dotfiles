@@ -1443,8 +1443,8 @@ zle -N self-insert url-quote-magic
 
 function battery_percent() {
     local a b
-    a=("$BATTERY"/*_now(Y1))
-    b=("$BATTERY"/*_full(Y1))
+    a="$BATTERY_PREFIX"now
+    b="$BATTERY_PREFIX"full
     a=$(<$a)
     b=$(<$b)
     echo "$(((a * 100) / b))%%"
@@ -1452,8 +1452,16 @@ function battery_percent() {
 
 hostname="`hostname`"
 BATTERY=(/sys/class/power_supply/BAT*(Y1))
+BATTERY_PREFIX=""
 if [ -d "$BATTERY" ]; then
-    PR_FLAGS+=(battery_percent)
+    if [ -e "$BATTERY"/charge_now ] && [ -e "$BATTERY"/charge_full ]; then
+        BATTERY_PREFIX="$BATTERY"/charge_
+    elif [ -e "$BATTERY"/energy_now ] && [ -e "$BATTERY"/energy_full ]; then
+        BATTERY_PREFIX="$BATTERY"/energy_
+    fi
+    if ! [ -z "$BATTERY_PREFIX" ]; then
+        PR_FLAGS+=(battery_percent)
+    fi
 fi
 
 # Sets terminal window and tab titles.
