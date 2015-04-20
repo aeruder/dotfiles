@@ -75,7 +75,7 @@ super + ctrl + shift + space
 	bspc desktop -c
 
 super + {1-9,0}
-	bspc desktop -f ^{0-9}
+	bspc desktop -f ^{1-9,10}
 
 # Monitor commands
 super + shift + bracket{left,right}
