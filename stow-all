@@ -10,8 +10,8 @@ for a in * ; do
     cmd stow -t ~ "$a"
 done)
 
-rm -f ~/.gitignore
-ln -s ~/.dotfiles/home/git/.gitignore ~/.gitignore
+cmd rm -f ~/.gitignore
+cmd ln -s ~/.dotfiles/home/git/.gitignore ~/.gitignore
 
 (cd config || exit
 mkdir -p ~/.config
