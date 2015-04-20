@@ -75,7 +75,7 @@ super + ctrl + shift + space
 	bspc desktop -c
 
 super + {1-9,0}
-	bspc desktop -f ^{1-9,10}
+	bspc desktop -f ^{0-9}
 
 # Monitor commands
 super + shift + bracket{left,right}
@@ -105,14 +105,11 @@ super + Return
 super + space
 	dmenu_run
 
-super + q
-	dmenu_website
+super + alt + f
+	browser
 
-super + alt + q
-	dmenu_website -f
-
-super + alt + space
-	finder
+super + alt + shift + f
+	browser_paste
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -136,16 +133,10 @@ XF86AudioLowerVolume
 	ponymix decrease 5	
 
 XF86KbdBrightnessUp
-    sudo keyboard_led.sh up
+	sudo keyboard_led.sh up
 
 XF86KbdBrightnessDown
-    sudo keyboard_led.sh down
+	sudo keyboard_led.sh down
 
 XF86AudioMute
 	ponymix toggle
-
-alt + {minus,equal}
-    bspc config -d focused window_gap $((`bspc config -d focused window_gap` {+,-} 2 ))
-
-super + v
-	toggle_conky

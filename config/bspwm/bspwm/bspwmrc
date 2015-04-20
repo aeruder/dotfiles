@@ -1,9 +1,18 @@
-#! /bin/sh
+#! /bin/bash
+
+export PATH=/usr/local/bin:"$PATH"
+
+HOST="`hostname`"
+case "$HOST" in
+    andrewruder-hplin)
+        xrandr --output DVI-0 --left-of DVI-1
+        ;;
+esac
 
 bspc config border_width        2
-bspc config window_gap         12
+bspc config window_gap         8
 
-PADDING=13
+PADDING=10
 
 bspc config top_padding $PADDING
 bspc config bottom_padding $PADDING
@@ -22,9 +31,15 @@ bspc config focus_follows_pointer false
 bspc config normal_frame_opacity 0.0
 bspc config focused_frame_opacity 0.1
 
-bspc monitor eDP1 -d 1 2 3 4 5
-bspc monitor DP-2 -d 1 2 3 4 5
-bspc monitor HDMI-0 -d 6 7 8 9 0
+i=0
+bspc query -M | while read line ; do
+    bspc monitor "$line" -d $((i + 0)) \
+                            $((i + 1)) \
+                            $((i + 2)) \
+                            $((i + 3)) \
+                            $((i + 4))
+    i=$((i+5))
+done
 
 bspc rule -a Gimp follow=on floating=on
 bspc rule -a Nautilus border=off
