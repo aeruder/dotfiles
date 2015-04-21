@@ -109,7 +109,7 @@ super + alt + f
 	browser
 
 super + alt + shift + f
-	browser_paste
+	browser-paste
 
 super + v
 	toggle_conky
