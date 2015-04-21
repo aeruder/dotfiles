@@ -1,0 +1,28 @@
+#!/bin/sh
+
+HOST="`hostname`"
+case "$HOST" in
+    andrewruder-hplin)
+        ip="`dig +short andyproxy.dci.local`"
+        unset all_proxy
+        unset http_proxy
+        unset https_proxy
+        unset ftp_proxy
+        export no_proxy=elecsys-git,elecsys-web,10.63.\*,elecsys-\*
+        export SOCKS_SERVER="$ip:5555"
+        export SOCKS_VERSION=5
+        ;;
+esac
+
+if which google-chrome 2> /dev/null ; then
+    google-chrome "$@"
+elif which chromium 2> /dev/null ; then
+    chromium "$@"
+elif which firefox 2> /dev/null ; then
+    firefox --new-tab "$@"
+elif which iceweasel 2> /dev/null ; then
+    iceweasel --new-tab "$@"
+else
+    echo "No web browsers found"
+    exit 1
+fi
