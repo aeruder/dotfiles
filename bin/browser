@@ -14,14 +14,19 @@ case "$HOST" in
         ;;
 esac
 
+url="$1"
+if [ "$url" = "" ]; then
+    url=http://www.google.com
+fi
+
 if which google-chrome 2> /dev/null ; then
-    google-chrome "$@"
+    google-chrome "$url"
 elif which chromium 2> /dev/null ; then
-    chromium "$@"
+    chromium "$url"
 elif which firefox 2> /dev/null ; then
-    firefox --new-tab "$@"
+    firefox --new-tab "$url"
 elif which iceweasel 2> /dev/null ; then
-    iceweasel --new-tab "$@"
+    iceweasel --new-tab "$url"
 else
     echo "No web browsers found"
     exit 1
