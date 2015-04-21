@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ `xdotool search --onlyvisible --classname 'Conky'` ]; then
+	bspc config left_padding 13
+	pkill conky
+else
+	bspc config left_padding 168
+	conky -d
+fi

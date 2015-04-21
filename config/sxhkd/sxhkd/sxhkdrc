@@ -111,6 +111,9 @@ super + alt + f
 super + alt + shift + f
 	browser_paste
 
+super + v
+	toggle_conky
+
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -USR1 -x sxhkd
