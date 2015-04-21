@@ -1,4 +1,4 @@
-source ~/.dotfiles/.misc/antigen/antigen.zsh
+source ~/.dotfiles/antigen/antigen.zsh
 
 antigen bundle https://github.com/aeruder/zsh-namedir.git
 antigen theme  https://github.com/aeruder/zsh-prompt-aeruder.git aeruder
