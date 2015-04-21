@@ -1,8 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-ROOTDIR=$HOME/Screenshots
+setopt extendedglob
+ROOTDIR=($HOME/screenshots(#i)(/Y1))
+if ! [ -d "$ROOTDIR" ]; then
+    echo "~/screenshots does not exist" >&1
+    exit 1
+fi
 
-mkdir -p $ROOTDIR || exit
 cd $ROOTDIR || exit
 
 filename() {

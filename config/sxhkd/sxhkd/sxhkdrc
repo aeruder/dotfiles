@@ -114,6 +114,12 @@ super + alt + f
 super + alt + shift + f
 	browser-paste
 
+super + alt + s
+	screenshot
+
+super + alt + shift + s
+	screenshot full
+
 super + v
 	toggle_conky
 
