@@ -31,23 +31,23 @@ super + y
 super + m
 	bspc window -s biggest
 
+super + {_,shift + }r
+	bspc window -f {next,prev}
+
 super + {_,shift + }{h,j,k,l}
 	bspc window -{f,s} {left,down,up,right}
 
-super + {_,shift + }c
-	bspc window -f {next,prev}
-
 super + ctrl + {h,j,k,l}
 	bspc window -p {left,down,up,right}
-
-super + ctrl + space
-	bspc window -p cancel
 
 super + alt + {h,j,k,l}
 	bspc window -e {left -10,down +10,up -10,right +10}
 
 super + alt + shift + {h,j,k,l}
 	bspc window -e {right -10,up +10,down -10,left +10}
+
+super + ctrl + space
+	bspc window -p cancel
 
 super + ctrl + {1-9}
 	bspc window -r 0.{1-9}
@@ -76,6 +76,9 @@ super + ctrl + shift + space
 
 super + {1-9,0}
 	bspc desktop -f ^{1-9,10}
+
+super + e
+	bspc window -E
 
 # Monitor commands
 super + shift + bracket{left,right}
