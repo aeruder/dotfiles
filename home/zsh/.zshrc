@@ -1792,6 +1792,14 @@ HISTSIZE=900000000
 SAVEHIST=100000
 DIRSTACKSIZE=20
 
+function __no_hist_print() {
+    echo "NOHIST"
+}
+function nohist() {
+    PR_FLAGS+=(__no_hist_print)
+    HISTFILE=/dev/null
+}
+
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
