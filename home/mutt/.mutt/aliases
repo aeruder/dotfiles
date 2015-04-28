@@ -9,3 +9,4 @@ alias linux-gpio       linux-gpio@vger.kernel.org
 alias linux-arm-kernel linux-arm-kernel@lists.infradead.org
 alias linux-arm        linux-arm-kernel@lists.infradead.org
 alias les.pingel Les Pingel <les.pingel@gmail.com>
+alias u-boot           u-boot@lists.denx.de
