@@ -602,7 +602,7 @@ setopt HIST_VERIFY
 #         SHARE_HISTORY are turned off.  The three options should be considered
 #         mutually exclusive.
 
-# setopt SHARE_HISTORY
+setopt SHARE_HISTORY
 #        SHARE_HISTORY <K>
 #         This option both imports new commands from the history file, and also
 #         causes your typed commands to be appended to the history file (the

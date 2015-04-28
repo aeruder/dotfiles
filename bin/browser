@@ -3,7 +3,7 @@
 HOST="`hostname`"
 case "$HOST" in
     andrewruder-hplin)
-        ip="`dig +short andyproxy.dci.local`"
+        ip="10.63.192.31"
         unset all_proxy
         unset http_proxy
         unset https_proxy
