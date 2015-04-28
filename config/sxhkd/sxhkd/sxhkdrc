@@ -109,10 +109,13 @@ super + space
 	dmenu_run
 
 super + alt + f
-	browser
+	launch-browser
 
 super + alt + shift + f
-	browser-paste
+	launch-browser-paste
+
+super + alt + m
+    launch-mail
 
 super + alt + s
 	screenshot

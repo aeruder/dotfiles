@@ -1,0 +1,62 @@
+#!/bin/sh
+
+DEFAULT_URL=http://www.google.com
+HOST="`hostname`"
+case "$HOST" in
+    andrewruder-hplin)
+        ip="10.63.192.31"
+        unset all_proxy
+        unset http_proxy
+        unset https_proxy
+        unset ftp_proxy
+        export no_proxy=elecsys-git,elecsys-web,10.63.\*,elecsys-\*
+        export SOCKS_SERVER="$ip:5555"
+        export SOCKS_VERSION=5
+        ;;
+esac
+
+url="$1"
+
+browser=
+for a in google-chrome chromium firefox iceweasel ; do
+    if which "$a"; then
+        browser="$a"
+        break
+    fi
+done
+if [ -z "$browser" ]; then
+    echo "No web browsers found"
+    exit 1
+fi
+
+case "$browser" in
+    google-chrome)
+        if [ -z "$url" ]; then
+            wininfo="`xdotool search --limit 1 --classname '^Google-chrome$'`"
+            if [ "$?" = 0 ]; then
+                exec xdotool windowactivate "$wininfo"
+            else
+                url="$DEFAULT_URL"
+            fi
+        fi
+        exec google-chrome "$url"
+        ;;
+    chromium)
+        if [ -z "$url" ]; then
+            url="$DEFAULT_URL"
+        fi
+        exec chromium "$url"
+        ;;
+    firefox)
+        if [ -z "$url" ]; then
+            url="$DEFAULT_URL"
+        fi
+        exec firefox --new-tab "$url"
+        ;;
+    iceweasel)
+        if [ -z "$url" ]; then
+            url="$DEFAULT_URL"
+        fi
+        exec iceweasel --new-tab "$url"
+        ;;
+esac

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if which icedove > /dev/null; then
+    icedovewin="`xdotool search --limit 1 --classname '^Mail$'`"
+    if [ "$?" != 0 ]; then
+        exec icedove
+    else
+        xdotool windowactivate "$icedovewin"
+    fi
+fi
+

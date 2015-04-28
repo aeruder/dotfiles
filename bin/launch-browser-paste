@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec launch-browser "`xclip -1 -o`"
