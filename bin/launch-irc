@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ "$1" = inner ]; then
+    if [[ "$TERM" == screen* ]]; then
+        title_format="\ek%s\e\\"
+    else
+        title_format="\e]2;%s\a"
+    fi
+    printf "$title_format" "weechat"
+    exec ssh -t andy@og3k.com tmux attach-session -t weechat
+else
+    ircwin="`xdotool search --limit 1 --name 'weechat .*– Konsole$'`"
+    if [ "$?" = 0 ]; then
+        exec xdotool windowactivate "$ircwin"
+    else
+        exec konsole -e launch-irc inner
+    fi
+fi

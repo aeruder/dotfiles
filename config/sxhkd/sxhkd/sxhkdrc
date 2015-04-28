@@ -123,6 +123,9 @@ super + alt + s
 super + alt + shift + s
 	screenshot full
 
+super + alt + i
+	launch-irc
+
 super + v
 	toggle_conky
 
