@@ -43,7 +43,12 @@ case "$browser" in
         ;;
     chromium)
         if [ -z "$url" ]; then
-            url="$DEFAULT_URL"
+            wininfo="`xdotool search --limit 1 --classname '^Chromium$'`"
+            if [ "$?" = 0 ]; then
+                exec xdotool windowactivate "$wininfo"
+            else
+                url="$DEFAULT_URL"
+            fi
         fi
         exec chromium "$url"
         ;;
