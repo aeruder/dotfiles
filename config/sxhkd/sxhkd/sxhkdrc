@@ -108,6 +108,9 @@ super + Return
 super + space
 	dmenu_run
 
+super + shift + space
+	dmenu-windows
+
 super + alt + f
 	launch-browser
 
