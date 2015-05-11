@@ -1768,6 +1768,9 @@ bindkey '^R' history-incremental-search-backward
 bindkey -M viins 'jk' vi-cmd-mode
 bindkey -M isearch 'jk' "accept-search ; vi-cmd-mode"
 bindkey "^?" backward-delete-char
+bindkey -M viins "^Q" push-input
+bindkey -M viins "^A" accept-and-hold
+bindkey -M viins "^O" accept-line-and-down-history
 
 ##################################
 # sudo vim -> sudoedit
