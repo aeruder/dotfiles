@@ -4,7 +4,7 @@ DEFAULT_URL=http://www.google.com
 HOST="`hostname`"
 case "$HOST" in
     andrewruder-hplin)
-        ip="10.63.192.31"
+        ip="`dig +short andyproxy.dci.local`"
         unset all_proxy
         unset http_proxy
         unset https_proxy
