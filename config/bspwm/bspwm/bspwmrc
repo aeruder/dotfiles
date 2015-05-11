@@ -47,4 +47,5 @@ bspc rule -a Nautilus border=off
 
 feh --bg-fill ~/.wallpaper
 setxkbmap -option caps:super -option compose:lwin
+start-pulseaudio-x11
 sxhkd &
