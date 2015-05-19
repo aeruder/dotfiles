@@ -29,10 +29,21 @@ if [ -z "$browser" ]; then
     exit 1
 fi
 
+find_class() {
+    class="$1"
+    xdotool search --classname "$class" | while read line ; do
+        if xprop -id "$line" | grep -q '^_NET_WM_DESKTOP('; then
+            echo "$line"
+            return
+        fi
+    done
+    echo "$line"
+}
+
 case "$browser" in
     google-chrome)
         if [ -z "$url" ]; then
-            wininfo="`xdotool search --limit 1 --classname '^Google-chrome$'`"
+            wininfo="`find_class '^Google-chrome$'`"
             if [ "$?" = 0 ]; then
                 exec xdotool windowactivate "$wininfo"
             else
@@ -43,7 +54,7 @@ case "$browser" in
         ;;
     chromium)
         if [ -z "$url" ]; then
-            wininfo="`xdotool search --limit 1 --classname '^Chromium$'`"
+            wininfo="`find_class '^Chromium$'`"
             if [ "$?" = 0 ]; then
                 exec xdotool windowactivate "$wininfo"
             else
