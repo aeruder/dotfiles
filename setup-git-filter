@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git config --bool filter.remove_channels_passwords.required true
+git config filter.remove_channels_passwords.clean ~/.dotfiles/bin/remove_channels_passwords
+git config filter.remove_channels_passwords.smudge cat
