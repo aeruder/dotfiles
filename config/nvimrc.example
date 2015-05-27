@@ -1,0 +1,3 @@
+set t_Co=256
+set guifont=Anka/Coder\ 10,Terminus\ 10,Inconsolata\ 10,ProFont\ 10,Bitstream\ Vera\ Sans\ Mono\ 10,Terminal\ 10,Monospace\ 10
+source ~/.nvim/config/nvimrc
