@@ -45,7 +45,7 @@ done
 bspc rule -a Gimp follow=on floating=on
 bspc rule -a Nautilus border=off
 
-feh --bg-fill ~/.wallpaper
 setxkbmap -option caps:super -option compose:lwin
 start-pulseaudio-x11
+feh --bg-fill ~/.wallpaper
 sxhkd &
