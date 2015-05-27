@@ -9,7 +9,7 @@ if [ "$1" = inner ]; then
     printf "$title_format" "weechat"
     exec ssh -t andy@og3k.com tmux attach-session -t weechat
 else
-    ircwin="`xdotool search --limit 1 --name 'weechat .*– Konsole$'`"
+    ircwin="`xdotool search --limit 1 --name '^weechat( - Konsole){0,1}$'`"
     if [ "$?" = 0 ]; then
         exec xdotool windowactivate "$ircwin"
     else
