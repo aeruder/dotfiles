@@ -1465,11 +1465,6 @@ if [ -d "$BATTERY" ]; then
 fi
 
 # Sets terminal window and tab titles.
-# Return if requirements are not found.
-if [[ "$TERM" == (dumb|linux|*bsd*) ]]; then
-  return 1
-fi
-
 # Sets the terminal or terminal multiplexer window title.
 function set-window-title {
   local title_format{,ted}
@@ -1546,8 +1541,11 @@ function _terminal-set-terminal-app-proxy-icon {
 # Do not override precmd/preexec; append to the hook array.
 autoload -Uz add-zsh-hook
 
+# Return if requirements are not found.
+if [[ "$TERM" == (dumb|linux|*bsd*) ]]; then
+    :
 # Set up the Apple Terminal.
-if [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]] \
+elif [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]] \
   && ( ! [[ -n "$STY" || -n "$TMUX" || -n "$DVTM" ]] )
 then
   # Sets the Terminal.app current working directory before the prompt is
@@ -1569,10 +1567,8 @@ then
   # title to the currently running process by default and the current working
   # directory is set separately.
   return
-fi
-
 # Set up non-Apple terminals.
-if ( ! [[ -n "$STY" || -n "$TMUX" ]] )
+elif ( ! [[ -n "$STY" || -n "$TMUX" ]] )
 then
   # Sets the tab and window titles before the prompt is displayed.
   add-zsh-hook precmd _terminal-set-titles-with-path
@@ -1796,6 +1792,7 @@ function nohist() {
     PR_FLAGS+=(__no_hist_print)
     HISTFILE=/dev/null
 }
+alias nohist=' nohist'
 
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
