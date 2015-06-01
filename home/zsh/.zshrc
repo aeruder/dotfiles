@@ -1722,9 +1722,11 @@ alias rm='rm -i'
 alias mv='mv -i'
 
 if [ "`uname`" != "Darwin" ]; then
-  alias cp='cp -i --reflink=auto'
+    alias cp='cp -i --reflink=auto'
+    alias ls='ls --color=auto'
 else
-  alias cp='cp -i'
+    alias cp='cp -i'
+    alias ls='ls -G'
 fi
 
 alias grep='grep --color=auto'
@@ -1734,7 +1736,6 @@ alias irb='irb --readline -r irb/completion'
 alias dh='dirs -v'
 alias vim='e'
 alias emacs='e'
-alias ls='ls --color=auto'
 
 alias -g CA="2>&1 | cat -A"
 alias -g CNT='| wc -l'
