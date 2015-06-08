@@ -482,6 +482,7 @@ augroup customchanges
     au BufNewFile,BufRead *.phys            setf cmphys
     au BufNewFile,BufRead *.vb              set ft=vbnet
     au BufNewFile,BufRead *.il              set ft=ilasm
+    au BufNewFile,BufRead *.adoc            set ft=asciidoc
 
     " Space/tab settings for different filetypes
     au FileType make
