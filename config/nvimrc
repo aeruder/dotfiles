@@ -34,6 +34,8 @@ call plug#begin(expand("<sfile>:p:h:h").s:sep."plugged")
 " My favorite color scheme
 Plug 'https://github.com/nanotech/jellybeans.vim'
 
+Plug 'https://github.com/altercation/vim-colors-solarized'
+
 " UNIX helpers (rename file, sudo write file, so on)
 Plug 'https://github.com/tpope/vim-eunuch'
 
@@ -143,9 +145,17 @@ else
     if $TERM == "screen"
       set t_Co=256
     endif
-    set background=dark
-    colors jellybeans
+    if $KONSOLE_PROFILE_NAME =~ "Solarized.*"
+        set background=light
+        colors solarized
+    else
+        set background=dark
+        colors jellybeans
+    endif
 endif
+com! -nargs=0 Solarized
+            \ set background=light
+            \ colors solarized
 
 """"""""""""""""""""""""
 " Use with :Usespaces <num> and we
