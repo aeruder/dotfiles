@@ -138,6 +138,9 @@ if $TERM == "linux"
 elseif has("win32") && !has("gui")
     set background=dark
     colors elflord
+elseif has("gui")
+    set background=light
+    colors solarized
 else
     if $COLORTERM == "gnome-terminal" || $KONSOLE_PROFILE_NAME != ""
         set t_Co=256
@@ -145,7 +148,7 @@ else
     if $TERM == "screen"
       set t_Co=256
     endif
-    if $KONSOLE_PROFILE_NAME =~ "Solarized.*"
+    if $SOLARIZED_THEME == "1"
         set background=light
         colors solarized
     else
