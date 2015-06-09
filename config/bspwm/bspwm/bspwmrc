@@ -45,6 +45,9 @@ done
 bspc rule -a Gimp follow=on floating=on
 bspc rule -a Nautilus border=off
 
+xinput --set-prop "CyPS/2 Cypress Trackpad" "libinput Natural Scrolling Enabled" 1
+xinput --set-prop "CyPS/2 Cypress Trackpad" "libinput Tapping Enabled" 1
+
 setxkbmap -option caps:super -option compose:lwin
 start-pulseaudio-x11
 feh --bg-fill ~/.wallpaper
