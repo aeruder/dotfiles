@@ -78,7 +78,10 @@ super + {1-9,0}
 	bspc desktop -f {0-9}
 
 super + e
-	bspc window -E
+	bspc desktop -E
+
+super + n
+	bspc desktop -F vertical
 
 # Monitor commands
 super + shift + bracket{left,right}
