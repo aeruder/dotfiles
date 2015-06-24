@@ -149,7 +149,7 @@ else
       set t_Co=256
     endif
     if $SOLARIZED_THEME == "1"
-        set background=light
+        set background=dark
         colors solarized
     else
         set background=dark
