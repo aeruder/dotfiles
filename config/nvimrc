@@ -101,6 +101,12 @@ Plug 'https://github.com/Lokaltog/vim-easymotion'
 " GNU global
 Plug 'https://github.com/vim-scripts/gtags.vim'
 
+" Deoplete
+Plug 'https://github.com/Shougo/deoplete.nvim'
+
+" neco-vim
+Plug 'https://github.com/Shougo/neco-vim'
+
 call plug#end()
 
 """"""""""""""""""""""""
@@ -466,6 +472,11 @@ let g:EasyMotion_do_mapping = 0
 map <Space> <Plug>(easymotion-s)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  deoplete                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:deoplete#enable_at_startup = 1
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
