@@ -36,6 +36,8 @@ Plug 'https://github.com/nanotech/jellybeans.vim'
 
 Plug 'https://github.com/altercation/vim-colors-solarized'
 
+Plug 'https://github.com/shawncplus/skittles_berry'
+
 " UNIX helpers (rename file, sudo write file, so on)
 Plug 'https://github.com/tpope/vim-eunuch'
 
@@ -159,7 +161,7 @@ else
         colors solarized
     else
         set background=dark
-        colors jellybeans
+        colors skittles_berry
     endif
 endif
 com! -nargs=0 Solarized
