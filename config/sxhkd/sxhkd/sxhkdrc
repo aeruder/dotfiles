@@ -114,6 +114,9 @@ super + space
 super + shift + space
 	dmenu-windows
 
+super + alt + d
+	dmenu-datasheets
+
 super + alt + f
 	launch-browser
 

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+opentool=xdg-open
+grepfilter=.
+while [[ $# > 0 ]]; do
+    case $1 in
+        -o)
+            opentool="$2"
+            shift
+            ;;
+        -f)
+            grepfilter="$2"
+            shift
+            ;;
+        *)
+            directory="$1"
+    esac
+    shift
+done
+
+if [ -z "$directory" ] || ! [ -d "$directory" ]; then
+    echo "Usage: $0 [-o <opentool>] [-f <grepfilter>] <directory>" >&2
+    exit 1
+fi
+
+cd "$directory"
+
+selection=$(
+for a in * ; do
+    echo "$a"
+done | grep "$grepfilter" | dmenu -i
+)
+
+if [ "$?" = 0 ]; then
+    chronic "$opentool" "$selection"
+fi
