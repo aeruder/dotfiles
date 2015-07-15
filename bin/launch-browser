@@ -9,7 +9,7 @@ case "$HOST" in
         unset http_proxy
         unset https_proxy
         unset ftp_proxy
-        export no_proxy=elecsys-git,elecsys-web,10.63.\*,elecsys-\*
+        export no_proxy=127.\*,elecsys-epsilon,elecsys-git,elecsys-web,10.63.\*,elecsys-\*
         export SOCKS_SERVER="$ip:5555"
         export SOCKS_VERSION=5
         ;;
