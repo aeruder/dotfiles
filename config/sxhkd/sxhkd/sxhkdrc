@@ -167,3 +167,15 @@ XF86KbdBrightnessDown
 
 XF86AudioMute
 	ponymix toggle
+
+XF86AudioNext
+	cmus-remote --next
+
+XF86AudioPrev
+	cmus-remote --prev
+
+XF86AudioPlay
+	cmus-remote --pause
+
+#XF86AudioStop
+#	cmus-remote --stop
