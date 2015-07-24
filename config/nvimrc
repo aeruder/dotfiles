@@ -327,11 +327,7 @@ set diffopt=filler
 """"""""""""""""""""""""
 " Show tabs, trailing spaces, etc..
 set list listchars=tab:»·,trail:·,extends:>,precedes:<
-
-
-
-
-
+let &colorcolumn="80,".join(range(120,999),",")
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
