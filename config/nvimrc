@@ -422,6 +422,10 @@ tnoremap <M-j> <C-\><C-n><C-w>j
 tnoremap <M-k> <C-\><C-n><C-w>k
 tnoremap <M-l> <C-\><C-n><C-w>l
 
+" executing lines
+nnoremap <leader>Ve :exe getline(".")<CR>
+vnoremap <leader>Ve :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
+
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " " => CtrlP
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
