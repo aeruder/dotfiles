@@ -450,7 +450,9 @@ nnoremap <leader>bc :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p
 nnoremap <leader>bp :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p:h:h"))<Cr>
 
 " Normal CtrlP
-nnoremap <leader>bf :<c-u>CtrlP<cr>
+nnoremap <leader>bf :<c-u>CtrlP .<cr>
+
+let g:ctrlp_max_files = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  ultisnips                                  "
