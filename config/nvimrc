@@ -412,6 +412,16 @@ nnoremap <leader>fa yiw:Ag <C-R>"
 nnoremap <leader>fg yiw:Ggrep <C-R>"
 nnoremap <leader>fb yiw:Bgrep <C-R>"
 
+" window movement
+nnoremap <M-h> <C-w>h
+nnoremap <M-j> <C-w>j
+nnoremap <M-k> <C-w>k
+nnoremap <M-l> <C-w>l
+tnoremap <M-h> <C-\><C-n><C-w>h
+tnoremap <M-j> <C-\><C-n><C-w>j
+tnoremap <M-k> <C-\><C-n><C-w>k
+tnoremap <M-l> <C-\><C-n><C-w>l
+
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " " => CtrlP
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
