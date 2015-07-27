@@ -65,7 +65,7 @@ Plug 'https://github.com/tpope/vim-commentary'
 Plug 'https://github.com/tpope/vim-unimpaired'
 
 " File/buffer explorer, FAST!
-Plug 'https://github.com/kien/ctrlp.vim'
+Plug 'https://github.com/aeruder/ctrlp.vim'
 
 " Wrapper around AG for super-fast grep
 Plug 'https://github.com/Numkil/ag.vim'
