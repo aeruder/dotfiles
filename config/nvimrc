@@ -298,7 +298,7 @@ set nowrapscan
 
 """"""""""""""""""""""""
 " When we type a bracket, quickly jump to the matching bracket
-set showmatch
+" set showmatch
 
 """"""""""""""""""""""""
 " CScope settings
