@@ -478,6 +478,17 @@ let g:Gtags_OpenQuickfixWindow = 0
 let g:Gtags_VerticalWindow = 0
 let Gtags_Auto_Map = 0
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               fugitive                               "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>Gs :<c-u>Gstatus<Cr>
+nmap <leader>Gl :<c-u>Glog<Cr>
+nmap <leader>Gd :<c-u>Gdiff<Cr>
+nmap <leader>Gb :<c-u>Gblame<Cr>
+nmap <leader>Gr :<c-u>Gread<Cr>
+nmap <leader>Gw :<c-u>Gwrite<Cr>
+nmap <leader>Gc :<c-u>Gcommit<Cr>
+nmap <leader>Ga :<c-u>Gamend<Cr>
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
