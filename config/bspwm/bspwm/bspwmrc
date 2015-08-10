@@ -9,10 +9,10 @@ case "$HOST" in
         ;;
 esac
 
-bspc config border_width        2
-bspc config window_gap         8
+bspc config border_width        4
+bspc config window_gap         2
 
-PADDING=10
+PADDING=0
 
 bspc config top_padding $PADDING
 bspc config bottom_padding $PADDING
@@ -20,14 +20,15 @@ bspc config left_padding $PADDING
 bspc config right_padding $PADDING
 
 #HOLO
-bspc config focused_border_color "#33B5E5"
-bspc config normal_border_color "#333333"
+bspc config focused_border_color "#ff00ff"
+bspc config normal_border_color "#440044"
 
 bspc config split_ratio         0.5
-bspc config borderless_monocle  true
+bspc config borderless_monocle  false
 bspc config gapless_monocle     true
 bspc config focus_by_distance   true
 bspc config focus_follows_pointer false
+bspc config pointer_follows_focus true
 bspc config normal_frame_opacity 0.0
 bspc config focused_frame_opacity 0.1
 
