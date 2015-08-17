@@ -515,6 +515,12 @@ map <Leader>k <Plug>(easymotion-k)
 let g:deoplete#enable_at_startup = 1
 set completeopt=menuone,noinsert,noselect,preview
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 test plugin                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:grep#prog = 'pt'
+let g:grep#args = '-U'
+
 """"""""""""""""""""""""
 """"""""""""""""""""""""
 """"""""""""""""""""""""
