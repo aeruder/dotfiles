@@ -1451,7 +1451,7 @@ function battery_percent() {
 }
 
 hostname="`hostname`"
-BATTERY=(/sys/class/power_supply/BAT*(Y1))
+BATTERY=(/sys/class/power_supply/BAT*(Y1)) 2> /dev/null
 BATTERY_PREFIX=""
 if [ -d "$BATTERY" ]; then
     if [ -e "$BATTERY"/charge_now ] && [ -e "$BATTERY"/charge_full ]; then
