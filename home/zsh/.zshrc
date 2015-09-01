@@ -1451,7 +1451,8 @@ function battery_percent() {
 }
 
 hostname="`hostname`"
-BATTERY=(/sys/class/power_supply/BAT*(Y1)) 2> /dev/null
+BATTERY=(/sys/class/power_supply/BAT*)
+BATTERY=${BATTERY[1]}
 BATTERY_PREFIX=""
 if [ -d "$BATTERY" ]; then
     if [ -e "$BATTERY"/charge_now ] && [ -e "$BATTERY"/charge_full ]; then
@@ -1562,11 +1563,6 @@ then
     fi
   }
   add-zsh-hook preexec _terminal-unset-terminal-app-proxy-icon
-
-  # Do not set the tab and window titles in Terminal.app since it sets the tab
-  # title to the currently running process by default and the current working
-  # directory is set separately.
-  return
 # Set up non-Apple terminals.
 elif ( ! [[ -n "$STY" || -n "$TMUX" ]] )
 then
