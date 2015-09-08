@@ -13,6 +13,6 @@ else
     if [ "$?" = 0 ]; then
         exec xdotool windowactivate "$ircwin"
     else
-        exec konsole -e launch-irc inner
+        exec launch-terminal launch-irc inner
     fi
 fi
