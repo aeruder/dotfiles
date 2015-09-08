@@ -138,6 +138,9 @@ super + alt + i
 super + alt + w
     launch-tmux work
 
+super + alt + shift + m
+    launch-tmux music
+
 super + v
 	toggle_conky
 
