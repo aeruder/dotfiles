@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if which termite > /dev/null 2> /dev/null ; then
+    exec termite "$@"
+else
+    exec konsole "$@"
+fi
