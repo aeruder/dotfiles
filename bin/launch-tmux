@@ -1,0 +1,35 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: launch-tmux <sessionname>" >&2
+    exit 1
+}
+
+if [ "$1" = inner ]; then
+    if [ "$#" -ne 2 ]; then
+        usage
+    fi
+elif [ "$#" -ne 1 ]; then
+    usage
+fi
+
+if [ "$1" = inner ]; then
+    if [[ "$TERM" == screen* ]]; then
+        title_format="\ek%s\e\\"
+    else
+        title_format="\e]2;%s\a"
+    fi
+    printf "$title_format" "tmux: $2"
+    if tmux list-sessions -F "#{session_name}" 2> /dev/null | grep -Fxq "$2" ; then
+        exec tmux attach-session -t "$2"
+    else
+        exec tmux new-session -s "$2"
+    fi
+else
+    ircwin="`xdotool search --limit 1 --name "^tmux: $1( - Konsole){0,1}\$"`"
+    if [ "$?" = 0 ]; then
+        exec xdotool windowactivate "$ircwin"
+    else
+        exec launch-terminal launch-tmux inner "$1"
+    fi
+fi

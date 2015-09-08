@@ -135,6 +135,9 @@ super + alt + shift + s
 super + alt + i
 	launch-irc
 
+super + alt + w
+    launch-tmux work
+
 super + v
 	toggle_conky
 
