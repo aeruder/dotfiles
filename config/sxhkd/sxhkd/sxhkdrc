@@ -1,3 +1,4 @@
+# vi:ts=8:sw=8:noet
 #
 # bspwm hotkeys
 #
@@ -8,98 +9,98 @@ super + alt + Escape
 
 # Window commands
 
-super + c
-	bspc window -c
+super + w
+	bspc window --close
+
+super + shift + w
+	bspc window --kill
 
 super + grave
-	bspc window -f last
+	bspc window last --focus
 
 super + {s,f,p}
-	bspc window -t {floating,fullscreen,private}
+	bspc window --toggle {floating,fullscreen,private}
 
 super + apostrophe
-	bspc window -s last
+	bspc window --swap last
 
 super + {o,i}
 	bspc control --record-history off; \
-	bspc window {older,newer} -f; \
+	bspc window {older,newer} --focus; \
 	bspc control --record-history on
 
 super + y
-	bspc window -w last.manual
+	bspc window --to-window last.manual
 
 super + m
-	bspc window -s biggest
+	bspc window --swap biggest
 
 super + {_,shift + }r
-	bspc window -f {next,prev}
+	bspc window {next,prev} --focus
 
 super + {_,shift + }{h,j,k,l}
-	bspc window -{f,s} {left,down,up,right}
+	bspc window --{focus,swap} {left,down,up,right}
 
 super + ctrl + {h,j,k,l}
-	bspc window -p {left,down,up,right}
+	bspc window --presel {left,down,up,right}
 
 super + alt + {h,j,k,l}
-	bspc window -e {left -10,down +10,up -10,right +10}
+	bspc window --edge {left -10,down +10,up -10,right +10}
 
 super + alt + shift + {h,j,k,l}
-	bspc window -e {right -10,up +10,down -10,left +10}
+	bspc window --edge {right -10,up +10,down -10,left +10}
 
 super + ctrl + space
-	bspc window -p cancel
+	bspc window --presel cancel
 
 super + ctrl + {1-9}
-	bspc window -r 0.{1-9}
+	bspc window --ratio 0.{1-9}
 
 super + shift + {1-9,0}
-	bspc window -d {0-9}
+	bspc window --to-desktop {0-9}
 
 # Desktop commands
 super + t
-	bspc desktop -l next
+	bspc desktop --layout next
 
 super + b
-	bspc desktop -B
+	bspc desktop --balance
 
 super + Tab
-	bspc desktop -f last
+	bspc desktop --focus last
 
 super + {comma,period}
-	bspc desktop -C {backward,forward}
+	bspc desktop --circulate {backward,forward}
 
 super + bracket{left,right}
-	bspc desktop -f {prev,next}
-
-super + ctrl + shift + space
-	bspc desktop -c
+	bspc desktop --focus {prev,next}
 
 super + {1-9,0}
-	bspc desktop -f {0-9}
+	bspc desktop --focus {0-9}
 
 super + e
-	bspc desktop -E
+	bspc desktop --equalize
 
 super + n
-	bspc desktop -F vertical
+	bspc desktop --flip vertical
 
 # Monitor commands
 super + shift + bracket{left,right}
-	bspc monitor -f {prev,next}
+	bspc monitor --focus {prev,next}
 
 # Mouse stuff
 
 ~button1
-	bspc pointer -g focus
+	bspc pointer --grab focus
 
 super + button{1-3}
-	bspc pointer -g {move,resize_side,resize_corner}
+	bspc pointer --grab {move,resize_side,resize_corner}
 
 super + !button{1-3}
-	bspc pointer -t %i %i
+	bspc pointer --track %i %i
 
 super + @button{1-3}
-	bspc pointer -u
+	bspc pointer --ungrab
 
 #
 # wm independent hotkeys
@@ -163,7 +164,7 @@ XF86AudioRaiseVolume
 	ponymix increase 5
 
 XF86AudioLowerVolume
-	ponymix decrease 5	
+	ponymix decrease 5
 
 XF86KbdBrightnessUp
 	sudo keyboard_led.sh up
