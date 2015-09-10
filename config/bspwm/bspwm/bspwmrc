@@ -35,12 +35,9 @@ bspc config focused_frame_opacity 0.1
 nummons=$(bspc query -M | wc -l)
 mon=0
 bspc query -M | while read line ; do
-    bspc monitor "$line" -d $((0 * nummons + mon)) \
-                            $((1 * nummons + mon)) \
-                            $((2 * nummons + mon)) \
-                            $((3 * nummons + mon)) \
-                            $((4 * nummons + mon))
-    mon=$((mon+1))
+    bspc monitor "$line" -d $((0 + mon)) \
+                            $((1 + mon))
+    mon=$((mon+2))
 done
 
 bspc rule -a Gimp follow=on floating=on
