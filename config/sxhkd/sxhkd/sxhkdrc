@@ -73,7 +73,11 @@ super + {comma,period}
 	bspc desktop --circulate {backward,forward}
 
 super + bracket{left,right}
-	bspc desktop --focus {prev,next}
+	mon="`bspc query -M -m focused`"; \
+	bspc query -M | while read line ; do \
+	  bspc monitor --focus "$line" ; \
+	  bspc desktop --focus {prev,next} ; \
+	done ; bspc monitor --focus "$mon"
 
 super + {1-9,0}
 	bspc desktop --focus {0-9}
