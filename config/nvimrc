@@ -412,6 +412,7 @@ nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 nnoremap <leader>fa yiw:Ag <C-R>"
 nnoremap <leader>fg yiw:Ggrep <C-R>"
 nnoremap <leader>fb yiw:Bgrep <C-R>"
+nnoremap <leader>fG yiw:Grep <C-R>"
 
 " window movement
 nnoremap <M-h> <C-w>h

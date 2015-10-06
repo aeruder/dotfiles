@@ -9,6 +9,8 @@ import selectors
 import sys
 import logging
 
+DEBUG = False
+
 try:
     from Queue import Queue, Empty
 except ImportError:
@@ -19,7 +21,8 @@ def debug(vim, s):
     s = re.sub('\n', '\\n', s)
     s = re.sub('\r', '\\r', s)
 
-    vim.session.threadsafe_call(lambda: vim.command('echomsg "%s"' % s))
+    if DEBUG:
+        vim.session.threadsafe_call(lambda: vim.command('echomsg "%s"' % s))
 
 class LineToExpression(threading.Thread):
     def __init__(self, f, q, vim):
@@ -37,7 +40,7 @@ class LineToExpression(threading.Thread):
                 debug(self.vim, "Got a line - %s" % repr(l))
                 l = l.decode(encoding='utf-8', errors='ignore')
                 # Handle vim escaping (\ and ")
-                l = re.sub('(["\\\\])', lambda x: '\\' + x.group(1), l)
+                l = re.sub('(["\\\\|])', lambda x: '\\' + x.group(1), l)
                 l = re.sub("\n", '\\\\n', l)
                 l = re.sub("\r", '\\\\r', l)
                 self.q.put(l)
@@ -121,14 +124,18 @@ class Searcher(threading.Thread):
                 lines = []
                 try:
                     start = time.clock()
-                    lines.append(q.get(True, 0.25))
-                    while (time.clock() - start) < 0.25:
-                        lines.append(q.get(False))
+                    loop_time = 0.25
+                    while True:
+                        wait_time = loop_time - (time.clock() - start)
+                        if (wait_time > 0.0):
+                            lines.append(q.get(True, wait_time))
+                        else:
+                            break
                 except Empty:
                     pass
                 if len(lines) > 0:
                     self.process_lines(lines)
-                if self.quit.wait(0.1):
+                if self.quit.wait(1):
                     break
         debug(self.vim, 'done?')
 
