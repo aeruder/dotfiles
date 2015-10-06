@@ -107,6 +107,9 @@ Plug 'https://github.com/Shougo/deoplete.nvim'
 " neco-vim
 Plug 'https://github.com/Shougo/neco-vim'
 
+" fswitch (switch between .c and .h files)
+Plug 'https://github.com/derekwyatt/vim-fswitch'
+
 call plug#end()
 
 """"""""""""""""""""""""
@@ -513,6 +516,11 @@ map <Leader>k <Plug>(easymotion-k)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:deoplete#enable_at_startup = 1
 set completeopt=menuone,noinsert,noselect,preview
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 vim-fswitch                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <Leader>ba :FSHere<Cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                 test plugin                                 "
