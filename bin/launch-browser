@@ -4,12 +4,12 @@ DEFAULT_URL=http://www.google.com
 HOST="`hostname`"
 case "$HOST" in
     andrewruder-hplin)
-        ip="`dig +short andyproxy.dci.local`"
+        ip="`dig +short kberry-pi.dci.local`"
         unset all_proxy
         unset http_proxy
         unset https_proxy
         unset ftp_proxy
-        export no_proxy=127.\*,elecsys-epsilon,elecsys-git,elecsys-web,10.63.\*,elecsys-\*
+        export no_proxy=127.\*,elecsys-epsilon,127.0.0.1,elecsys-git,elecsys-web,10.63.\*,10.63.199.37,kberry-pi,chat,elecsys-\*
         export SOCKS_SERVER="$ip:5555"
         export SOCKS_VERSION=5
         ;;
