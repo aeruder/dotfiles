@@ -99,10 +99,10 @@ Plug 'https://github.com/honza/vim-snippets'
 Plug 'https://github.com/Lokaltog/vim-easymotion'
 
 " GNU global
-Plug 'https://github.com/vim-scripts/gtags.vim'
+Plug 'https://github.com/critiqjo/gtags.vim'
 
 " Deoplete
-Plug 'https://github.com/Shougo/deoplete.nvim'
+" Plug 'https://github.com/Shougo/deoplete.nvim'
 
 " neco-vim
 Plug 'https://github.com/Shougo/neco-vim'
@@ -475,6 +475,7 @@ let g:ycm_global_ycm_extra_conf = expand("<sfile>:p:h").s:sep."ycm_extra_conf.py
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>gt :<c-u>Gtags<Cr>
 nmap <leader>gr :<c-u>Gtags -r<Cr>
+nmap <leader>gf :<c-u>Gtags -P<Cr>
 
 let g:Gtags_OpenQuickfixWindow = 0
 let g:Gtags_VerticalWindow = 0
