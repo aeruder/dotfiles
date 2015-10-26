@@ -42,9 +42,11 @@ if ! [ -e "$incfile" ] || ! [ -e "$excfile" ]; then
     exit 1
 fi
 
+ret=0
 verbose "${cmd[@]}" --print-statistics --terminal-verbosity 2 \
     --exclude-globbing-filelist "$excfile" \
     --include-globbing-filelist "$incfile" \
-    --exclude / backup-"$host"::/ "$destdir"
-verbose "${cmd[@]}" --remove-older-than "$remove_older" "$destdir"
+    --exclude / backup-"$host"::/ "$destdir" || ret=1
+verbose "${cmd[@]}" --remove-older-than "$remove_older" "$destdir" || ret=1
 
+exit "$ret"
