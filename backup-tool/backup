@@ -1,0 +1,50 @@
+#!/bin/bash
+
+verbose() {
+   echo CMD: "$@" >&2
+   "$@"
+}
+
+host="$1"
+
+if [ -z "$host" ]; then
+	echo "Usage: $0 <host>" >&2
+	exit 1
+fi
+
+remove_older=30D
+dir="`dirname "$0"`"
+incfile="$dir"/"$host".inc
+excfile="$dir"/"$host".exc
+destdir=/external/backups/"$host"
+
+if ! [ -d "$destdir" ]; then
+	echo "$destdir doesn't exist" >&2
+	exit 1
+fi
+if ! [ -e "$incfile" ]; then
+	incfile="$dir"/std.inc
+fi
+if ! [ -e "$excfile" ]; then
+	excfile="$dir"/std.exc
+fi
+
+uid="`id -u`"
+
+if [ "$uid" = 0 ]; then
+    cmd=(rdiff-backup)
+else
+    cmd=(sudo rdiff-backup)
+fi
+
+if ! [ -e "$incfile" ] || ! [ -e "$excfile" ]; then
+    echo "$incfile and $excfile don't exist!" >&2
+    exit 1
+fi
+
+verbose "${cmd[@]}" --print-statistics --terminal-verbosity 2 \
+    --exclude-globbing-filelist "$excfile" \
+    --include-globbing-filelist "$incfile" \
+    --exclude / backup-"$host"::/ "$destdir"
+verbose "${cmd[@]}" --remove-older-than "$remove_older" "$destdir"
+
