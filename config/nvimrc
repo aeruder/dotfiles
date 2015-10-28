@@ -65,17 +65,11 @@ Plug 'https://github.com/tpope/vim-unimpaired'
 " File/buffer explorer, FAST!
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
-" Wrapper around AG for super-fast grep
-Plug 'https://github.com/Numkil/ag.vim'
-
 " Nerdtree, a little bit better file explorer
 Plug 'https://github.com/scrooloose/nerdtree'
 
 " Tabular, line up text
 Plug 'https://github.com/godlygeek/tabular'
-
-" Ultisnips - snippet support
-Plug 'https://github.com/SirVer/ultisnips'
 
 " Undotree, browse vim's infinite undo
 Plug 'https://github.com/mbbill/undotree'
@@ -92,20 +86,25 @@ Plug 'https://github.com/derekwyatt/vim-protodef'
 " Mark adds/subtracts/etc.. from git-tracked files
 Plug 'https://github.com/mhinz/vim-signify'
 
-" some vim snippets
-Plug 'https://github.com/honza/vim-snippets'
-
 " easymotion, let's you jump to spots on the screen super fast
 Plug 'https://github.com/Lokaltog/vim-easymotion'
 
 " GNU global
 Plug 'https://github.com/critiqjo/gtags.vim'
 
-" Deoplete
-" Plug 'https://github.com/Shougo/deoplete.nvim'
+if !exists('g:python_nope') || g:python_nope == 0
+	" Deoplete
+	" Plug 'https://github.com/Shougo/deoplete.nvim'
 
-" neco-vim
-Plug 'https://github.com/Shougo/neco-vim'
+	" Ultisnips - snippet support
+	Plug 'https://github.com/SirVer/ultisnips'
+
+	" neco-vim
+	Plug 'https://github.com/Shougo/neco-vim'
+
+	" some vim snippets
+	Plug 'https://github.com/honza/vim-snippets'
+endif
 
 " fswitch (switch between .c and .h files)
 Plug 'https://github.com/derekwyatt/vim-fswitch'

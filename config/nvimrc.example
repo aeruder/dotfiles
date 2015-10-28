@@ -6,4 +6,6 @@ set guifont=Anka/Coder\ 10,Terminus\ 10,Inconsolata\ 10,ProFont\ 10,Bitstream\ V
 " Python 2.7
 " let g:python_host_skip_check=1
 " let g:loaded_python3_provider=1
+" No python
+let g:python_nope=1
 source ~/.nvim/config/nvimrc
