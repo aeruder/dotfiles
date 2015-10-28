@@ -17,6 +17,8 @@ dir="`dirname "$0"`"
 incfile="$dir"/"$host".inc
 excfile="$dir"/"$host".exc
 destdir=/external/backups/"$host"
+verbosity=5
+extra_options=(--force --no-hard-links --backup-mode --no-acls --no-eas)
 
 if ! [ -d "$destdir" ]; then
 	echo "$destdir doesn't exist" >&2
@@ -43,10 +45,10 @@ if ! [ -e "$incfile" ] || ! [ -e "$excfile" ]; then
 fi
 
 ret=0
-verbose "${cmd[@]}" --print-statistics --terminal-verbosity 2 \
+verbose "${cmd[@]}" "${extra_options[@]}" --print-statistics -v${verbosity} \
     --exclude-globbing-filelist "$excfile" \
     --include-globbing-filelist "$incfile" \
     --exclude / backup-"$host"::/ "$destdir" || ret=1
-verbose "${cmd[@]}" --remove-older-than "$remove_older" "$destdir" || ret=1
+verbose "${cmd[@]}" -v${verbosity} --remove-older-than "$remove_older" "$destdir" || ret=1
 
 exit "$ret"
