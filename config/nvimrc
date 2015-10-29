@@ -65,6 +65,9 @@ Plug 'https://github.com/tpope/vim-unimpaired'
 " File/buffer explorer, FAST!
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
+" Ags
+Plug 'https://github.com/gabesoft/vim-ags'
+
 " Nerdtree, a little bit better file explorer
 Plug 'https://github.com/scrooloose/nerdtree'
 
@@ -260,6 +263,7 @@ set backspace=indent,eol,start
 " Tab completion in command mode
 set wildmenu
 set wildmode=list:longest
+set wildignore=*.o,*.obj,*.d,*.P,GTAGS,GPATH,GRTAGS
 
 """"""""""""""""""""""""
 " When beeping, do it visually not audibly (which half the time
@@ -409,10 +413,7 @@ nnoremap <leader>h :Hexmode<Cr>
 nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
 
 " grep utilities
-nnoremap <leader>fa yiw:Ag <C-R>"
-nnoremap <leader>fg yiw:Ggrep <C-R>"
-nnoremap <leader>fb yiw:Bgrep <C-R>"
-nnoremap <leader>fG yiw:Grep <C-R>"
+nnoremap <leader>fa yiw:Ags <C-R>"
 
 " window movement
 nnoremap <M-h> <C-w>h
