@@ -180,13 +180,13 @@ XF86AudioMute
 	ponymix toggle
 
 XF86AudioNext
-	cmus-remote --next
+	mpc next
 
 XF86AudioPrev
-	cmus-remote --prev
+	mpc cdprev
 
 XF86AudioPlay
-	cmus-remote --pause
+	mpc toggle
 
 #XF86AudioStop
 #	cmus-remote --stop
