@@ -8,4 +8,4 @@ set guifont=Anka/Coder\ 10,Terminus\ 10,Inconsolata\ 10,ProFont\ 10,Bitstream\ V
 " let g:loaded_python3_provider=1
 " No python
 let g:python_nope=1
-source ~/.nvim/config/nvimrc
+exe "source ".expand("<sfile>:p:h")."/config/nvimrc"
