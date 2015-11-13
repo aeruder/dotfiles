@@ -46,4 +46,4 @@ set history filename ~/.gdbhistory
 set output-radix 16
 
 add-auto-load-safe-path ~/projs
-
+add-auto-load-safe-path /projects
