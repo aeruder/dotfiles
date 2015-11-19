@@ -26,7 +26,7 @@ if [ "$1" = inner ]; then
         exec tmux new-session -s "$2"
     fi
 else
-    ircwin="`xdotool search --limit 1 --name "^tmux: $1( - Konsole){0,1}\$"`"
+    ircwin="`xdotool search --limit 1 --name "^tmux:$1:"`"
     if [ "$?" = 0 ]; then
         exec xdotool windowactivate "$ircwin"
     else

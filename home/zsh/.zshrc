@@ -1473,12 +1473,14 @@ function set-window-title {
   zformat -f title_formatted "$title_format" "s:$argv"
 
   if [[ "$TERM" == screen* ]]; then
-    title_format="\ek%s\e\\"
+    title_format=("\ek%s\e\\" "\e]2;%s\a")
   else
-    title_format="\e]2;%s\a"
+    title_format=("\e]2;%s\a")
   fi
 
-  printf "$title_format" "${(V%)title_formatted}"
+  for a in "${title_format[@]}" ; do
+    printf "$a" "${(V%)title_formatted}"
+  done
 }
 
 # Sets the terminal tab title.
@@ -1564,7 +1566,7 @@ then
   }
   add-zsh-hook preexec _terminal-unset-terminal-app-proxy-icon
 # Set up non-Apple terminals.
-elif ( ! [[ -n "$STY" || -n "$TMUX" ]] )
+elif ( ! [[ -n "$STY" ]] )
 then
   # Sets the tab and window titles before the prompt is displayed.
   add-zsh-hook precmd _terminal-set-titles-with-path
