@@ -10,6 +10,7 @@ fi
 # Editors
 #
 
+export SUDO_EDITOR=e
 export EDITOR=e
 export VISUAL=e
 export LESS=-FmqXR
