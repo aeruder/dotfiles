@@ -7,8 +7,9 @@ case "$HOST" in
     andrewruder-hplin)
         xrandr --setprovideroutputsource 1 0
         xrandr --output DVI-0 --primary --mode 1680x1050
-        xrandr --output DVI-1 --mode 1680x1050 --right-of DVI-0
-        xrandr --output VGA1 --mode 1680x1050 --left-of DVI-0
+        xrandr --output DVI-1 --mode 1680x1050 --left-of DVI-0
+        xrandr --output VGA1 --mode 1680x1050 --right-of DVI-0
+        xset dpms force on
         ;;
 esac
 
