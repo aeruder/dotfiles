@@ -18,8 +18,23 @@ super + shift + w
 super + grave
 	bspc window last --focus
 
-super + {s,f,p}
-	bspc window --toggle {floating,fullscreen,private}
+super + p
+	bspc window --flag private
+
+super + shift + p
+	bspc window --flag locked
+
+super + t
+	bspc window --state tiled
+
+super + s
+	bspc window --state floating
+
+super + shift + s
+	bspc window --state pseudo_tiled
+
+super + f
+	bspc window --state fullscreen
 
 super + apostrophe
 	bspc window --swap last
@@ -60,7 +75,7 @@ super + shift + {1-9,0}
 	bspc window --to-desktop {0-9}
 
 # Desktop commands
-super + t
+super + shift + t
 	bspc desktop --layout next
 
 super + b
