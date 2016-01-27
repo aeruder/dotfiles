@@ -10,69 +10,63 @@ super + alt + Escape
 # Window commands
 
 super + w
-	bspc window --close
+	bspc node --close
 
 super + shift + w
-	bspc window --kill
+	bspc node --kill
 
 super + grave
-	bspc window last --focus
+	bspc node last --focus
 
 super + p
-	bspc window --flag private
+	bspc node --flag private
 
 super + shift + p
-	bspc window --flag locked
+	bspc node --flag locked
 
 super + t
-	bspc window --state tiled
+	bspc node --state tiled
 
 super + s
-	bspc window --state floating
+	bspc node --state floating
 
 super + shift + s
-	bspc window --state pseudo_tiled
+	bspc node --state pseudo_tiled
 
 super + f
-	bspc window --state fullscreen
+	bspc node --state fullscreen
 
 super + apostrophe
-	bspc window --swap last
+	bspc node --swap last
 
 super + {o,i}
 	bspc control --record-history off; \
-	bspc window {older,newer} --focus; \
+	bspc node {older,newer} --focus; \
 	bspc control --record-history on
 
 super + y
-	bspc window --to-window last.manual
+	bspc node --to-node last.manual
 
 super + m
-	bspc window --swap biggest
+	bspc node --swap biggest
 
 super + {_,shift + }r
-	bspc window {next,prev} --focus
+	bspc node {next,prev} --focus
 
 super + {_,shift + }{h,j,k,l}
-	bspc window --{focus,swap} {left,down,up,right}
+	bspc node --{focus,swap} {west,south,north,east}
 
 super + ctrl + {h,j,k,l}
-	bspc window --presel {left,down,up,right}
+	bspc node --presel-dir \~{west,south,north,east}
 
-super + alt + {h,j,k,l}
-	bspc window --edge {left -10,down +10,up -10,right +10}
-
-super + alt + shift + {h,j,k,l}
-	bspc window --edge {right -10,up +10,down -10,left +10}
-
-super + ctrl + space
-	bspc window --presel cancel
+# super + ctrl + {minus,}
+# 	bspc node --ratio {-10,+10}
 
 super + ctrl + {1-9}
-	bspc window --ratio 0.{1-9}
+	bspc node --presel-ratio 0.{1-9}
 
 super + shift + {1-9,0}
-	bspc window --to-desktop {0-9}
+	bspc node --to-desktop {0-9}
 
 # Desktop commands
 super + shift + t
@@ -115,7 +109,7 @@ super + shift + bracket{left,right}
 super + button{1-3}
 	bspc pointer --grab {move,resize_side,resize_corner}
 
-super + !button{1-3}
+super + @button{1-3}
 	bspc pointer --track %i %i
 
 super + @button{1-3}
