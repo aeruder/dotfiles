@@ -508,9 +508,10 @@ abbreviate slv std_logic_vector
 "                                 easymotion                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:EasyMotion_do_mapping = 0
-map <Space> <Plug>(easymotion-s)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+nmap <leader>s <Plug>(easymotion-overwin-f)
+nmap <Space> <Plug>(easymotion-s)
+vmap <Space> <Plug>(easymotion-s)
+omap <Space> <Plug>(easymotion-s)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  deoplete                                   "
