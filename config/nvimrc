@@ -441,9 +441,9 @@ nnoremap <leader>br :CtrlPMRU<Cr>
 
 " Find qt headers
 if isdirectory("/usr/local/qt")
-    nnoremap <leader>bq :CtrlP /usr/include/qt<Cr>
+    nnoremap <leader>bQ :CtrlP /usr/include/qt<Cr>
 elseif isdirectory("/usr/include/qt4")
-    nnoremap <leader>bq :CtrlP /usr/include/qt4<Cr>
+    nnoremap <leader>bQ :CtrlP /usr/include/qt4<Cr>
 endif
 
 " Search for files in current directory of current file
