@@ -90,7 +90,7 @@ Plug 'https://github.com/derekwyatt/vim-protodef'
 Plug 'https://github.com/mhinz/vim-signify'
 
 " easymotion, let's you jump to spots on the screen super fast
-Plug 'https://github.com/Lokaltog/vim-easymotion'
+Plug 'https://github.com/easymotion/vim-easymotion'
 
 " GNU global
 Plug 'https://github.com/critiqjo/gtags.vim'
