@@ -112,6 +112,9 @@ endif
 " fswitch (switch between .c and .h files)
 Plug 'https://github.com/derekwyatt/vim-fswitch'
 
+" vim-localrc - .local.vimrc gets sourced
+Plug 'https://github.com/inkarkat/vim-localrc'
+
 call plug#end()
 
 """"""""""""""""""""""""
