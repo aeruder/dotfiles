@@ -457,6 +457,7 @@ nnoremap <leader>bp :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p
 
 " Normal CtrlP
 nnoremap <leader>bf :<c-u>CtrlP .<cr>
+nnoremap <leader>bC :<c-u>CtrlPClearAllCaches<cr>
 
 let g:ctrlp_max_files = 0
 let g:ctrlp_switch_buffer = 0
@@ -527,6 +528,7 @@ set completeopt=menuone,noinsert,noselect,preview
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <Leader>ba :FSHere<Cr>
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                 test plugin                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -575,6 +577,32 @@ augroup customchanges
 
     au FileType haml
         \ Usespaces 2
+augroup END
+
+augroup fswitch_c
+    au!
+    au BufEnter *.c    let b:fswitchdst = 'h' |
+                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
+    au BufEnter *.cc   let b:fswitchdst = 'hh' |
+                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
+    au BufEnter *.cpp  let b:fswitchdst = 'hpp,h' |
+                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
+    au BufEnter *.cxx  let b:fswitchdst = 'hxx' |
+                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
+    au BufEnter *.C    let b:fswitchdst = 'H' |
+                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
+    au BufEnter *.m    let b:fswitchdst = 'h' |
+                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
+    au BufEnter *.h    let b:fswitchdst = 'c,cpp,m' |
+                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
+    au BufEnter *.hh   let b:fswitchdst = 'cc' |
+                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
+    au BufEnter *.hpp  let b:fswitchdst = 'cpp' |
+                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
+    au BufEnter *.hxx  let b:fswitchdst = 'cxx' |
+                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
+    au BufEnter *.H    let b:fswitchdst = 'C' |
+                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
 augroup END
 
 " This is used when editing a mutt mail message
