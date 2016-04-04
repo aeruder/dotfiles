@@ -4,14 +4,13 @@ DEFAULT_URL=http://www.google.com
 HOST="`hostname`"
 case "$HOST" in
     andrewruder-hplin)
-        ip="`dig +short kberry-pi.dci.local`"
-        unset all_proxy
-        unset http_proxy
-        unset https_proxy
-        unset ftp_proxy
-        export no_proxy=127.\*,elecsys-epsilon,127.0.0.1,elecsys-git,elecsys-web,10.63.\*,10.63.199.37,kberry-pi,chat,elecsys-\*
-        export SOCKS_SERVER="$ip:5555"
-        export SOCKS_VERSION=5
+        export all_proxy=10.63.199.199:5559
+        export http_proxy=$all_proxy
+        export https_proxy=$all_proxy
+        export ftp_proxy=$all_proxy
+        unset SOCKS_SERVER
+        unset SOCKS_VERSION
+        unset no_proxy
         ;;
 esac
 
