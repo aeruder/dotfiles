@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+
+import sys
+import tmuxp
+import re
+import os
+import datetime
+
+if len(sys.argv) == 3 and sys.argv[1] == "seropen_logging_child":
+    port = sys.argv[2]
+    logfile = "log" + re.sub(r'/', '_', port)
+    logdir = os.path.join(os.path.expanduser("~"), ".cache", "seropen")
+    if not os.path.isdir(logdir):
+        os.makedirs(logdir)
+    sys.stdin = sys.stdin.detach()
+    with open(os.path.join(logdir, logfile), 'ab', 0) as outfile:
+        for line in sys.stdin:
+            now = "[%s] " % datetime.datetime.today().isoformat(' ')
+            outfile.write(now.encode('utf-8') + line)
+elif len(sys.argv) != 2:
+    print("Usage: %s <device>" % sys.argv[0])
+    sys.exit(1)
+else:
+    port = sys.argv[1]
+    os.chdir(os.path.expanduser("~"))
+
+    server = tmuxp.Server()
+    session = server.findWhere({ "session_name" : "seropen" })
+
+    new_window = None
+    if session == None:
+        session = server.new_session(session_name='seropen', attach=False)
+        new_window = session.attached_window()
+    else:
+        try:
+            session.select_window(port)
+        except tmuxp.exc.TmuxpException:
+            new_window = session.new_window()
+
+    if new_window != None:
+        new_window.select_window()
+        new_window.rename_window(port)
+        new_window.set_window_option('automatic-rename', False)
+        new_window.set_window_option('allow-rename', False)
+        pane = new_window.attached_pane()
+        pane.cmd('pipe-pane', '%s seropen_logging_child %s' % (sys.argv[0], port))
+        pane.send_keys("exec minicom -b115200 -D%s" % port)
+
+    session.attach_session()

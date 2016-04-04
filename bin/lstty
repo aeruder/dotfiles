@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+
+import pyudev
+
+context = pyudev.Context()
+devices = context.list_devices()
+
+devices = devices.match_subsystem("tty").match_property("ID_BUS", "usb")
+devices = sorted(devices, key=lambda k: k.time_since_initialized, reverse=True)
+for d in devices:
+    seconds = d.time_since_initialized.total_seconds()
+    if seconds < 60:
+        age = "%d seconds ago" % seconds
+    elif seconds < (2 * 60 * 60):
+        age = "%d minutes ago" % (seconds / 60)
+    elif seconds < (2 * 24 * 60 * 60):
+        age = "%d hours ago" % (seconds / (60 * 60))
+    else:
+        age = "%d days ago" % (seconds / 86400)
+    print("%15s %s (%s)" % (d['DEVNAME'], d['ID_MODEL'], age))
+
