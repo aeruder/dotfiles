@@ -1,0 +1,10 @@
+#!/bin/sh
+
+while true ; do
+    if ponymix is-muted ; then
+        echo "Vmuted"
+    else
+        echo "V`ponymix get-volume`%"
+    fi
+    sleep 1
+done

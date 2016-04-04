@@ -19,3 +19,4 @@ tags
 *.dSYM
 \#*#
 .\#*
+.local.vimrc

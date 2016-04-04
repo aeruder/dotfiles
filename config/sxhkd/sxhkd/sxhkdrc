@@ -1,13 +1,16 @@
 # vi:ts=8:sw=8:noet
-#
-# bspwm hotkeys
-#
 
 super + alt + Escape
 	bspc quit
 	pkill panel
 
-# Window commands
+super + Escape
+	pkill -USR1 -x sxhkd
+
+#
+# bspwm hotkeys
+#
+# Node commands
 
 super + w
 	bspc node --close
@@ -57,49 +60,51 @@ super + {_,shift + }{h,j,k,l}
 	bspc node --{focus,swap} {west,south,north,east}
 
 super + ctrl + {h,j,k,l}
-	bspc node --presel-dir \~{west,south,north,east}
+	bspc node --presel-dir {west,south,north,east}
 
-# super + ctrl + {minus,}
-# 	bspc node --ratio {-10,+10}
+super + alt + {h,j,k,l}
+	bspc node --edge {west -10,south +10,north -10,east +10}
+
+super + alt + shift + {h,j,k,l}
+	bspc node --edge {east -10,north +10,south -10,west +10}
+
+super + ctrl + space
+	bspc node --presel-dir cancel
 
 super + ctrl + {1-9}
-	bspc node --presel-ratio 0.{1-9}
+	bspc node --ratio 0.{1-9}
 
 super + shift + {1-9,0}
-	bspc node --to-desktop {0-9}
+	bspc node --to-desktop {1-9,10}
 
 # Desktop commands
 super + shift + t
 	bspc desktop --layout next
 
 super + b
-	bspc desktop --balance
+	bspc node --balance
 
 super + Tab
 	bspc desktop --focus last
 
 super + {comma,period}
-	bspc desktop --circulate {backward,forward}
+	bspc node --circulate {backward,forward}
 
 super + bracket{left,right}
-	mon="`bspc query -M -m focused`"; \
-	bspc query -M | while read line ; do \
-	  bspc monitor --focus "$line" ; \
-	  bspc desktop --focus {prev,next} ; \
-	done ; bspc monitor --focus "$mon"
+	bspc desktop --focus {prev,next}
 
 super + {1-9,0}
-	bspc desktop --focus {0-9}
+	bspc desktop --focus {1-9,10}
 
 super + e
-	bspc desktop --equalize
+	bspc node --equalize
 
 super + n
 	bspc desktop --flip vertical
 
 # Monitor commands
 super + shift + bracket{left,right}
-	bspc monitor --focus {prev,next}
+	bspc monitor --focus {west,east}
 
 # Mouse stuff
 
@@ -109,8 +114,8 @@ super + shift + bracket{left,right}
 super + button{1-3}
 	bspc pointer --grab {move,resize_side,resize_corner}
 
-super + @button{1-3}
-	bspc pointer --track %i %i
+# super + !button{1-3}
+# 	bspc pointer --track %i %i
 
 super + @button{1-3}
 	bspc pointer --ungrab
@@ -158,10 +163,6 @@ super + alt + shift + m
 super + v
 	toggle_conky
 
-# make sxhkd reload its configuration files:
-super + Escape
-	pkill -USR1 -x sxhkd
-
 # Misc
 
 XF86MonBrightnessUp
@@ -195,6 +196,12 @@ XF86AudioPrev
 	mpc cdprev
 
 XF86AudioPlay
+	mpc toggle
+
+super + alt + bracket{left,right}
+	mpc {cdprev,next}
+
+super + alt + o
 	mpc toggle
 
 #XF86AudioStop

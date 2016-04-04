@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+has_mpc=1
+if ! which mpc > /dev/null ; then
+    has_mpc=0
+fi
+
+has_skroll=0
+if ! which skroll > /dev/null ; then
+    has_skroll=0
+fi
+
+if [ "$has_mpc" = 0 ]; then
+    exit 1
+fi
+
+MOST_CHARS=30
+
+while true ; do
+    mpc idle > /dev/null 2>/dev/null &
+    idlejob="$!"
+    cur="`mpc current`"
+    skrolljob=
+    if [ -n "$cur" ] && [ "$has_skroll" = 1 ]; then
+        {
+            set -m
+            trap "kill %%" EXIT
+            skroll -n "$MOST_CHARS" -r -d0.1 <<< "$cur" | sed --unbuffered -e 's/^/M/' &
+            wait
+            printf "M%-${MOST_CHARS}.${MOST_CHARS}s\\n" "$cur"
+        } &
+        skrolljob="$!"
+    else
+        if [ -z "$cur" ]; then
+            cur="- stopped -"
+        fi
+        printf "M%-${MOST_CHARS}.${MOST_CHARS}s\\n" "$cur"
+    fi
+    wait "$idlejob"
+    if [ ! -z "$skrolljob" ]; then
+        kill -0 "$skrolljob" && kill "$skrolljob"
+    fi
+done 2> /dev/null

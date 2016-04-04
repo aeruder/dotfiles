@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env zsh
 
 export PATH=/usr/local/bin:"$PATH"
 
@@ -6,10 +6,21 @@ HOST="`hostname`"
 case "$HOST" in
     andrewruder-hplin)
         xrandr --setprovideroutputsource 1 0
-        xrandr --output DVI-0 --primary --mode 1680x1050
-        xrandr --output DVI-1 --mode 1680x1050 --left-of DVI-0
-        xrandr --output VGA1 --mode 1680x1050 --right-of DVI-0
+        xrandr --output DVI-1 --primary --mode 1680x1050
+        xrandr --output DVI-0 --mode 1680x1050 --right-of DVI-1
+        xrandr --output VGA-1 --mode 1680x1050 --right-of DVI-0
+        bspc monitor DVI-1 -n m0
+        bspc monitor DVI-0 -n m1
+        bspc monitor VGA-1 -n m2
         xset dpms force on
+        ;;
+    *)
+        mon=0
+        bspc query -M | while read line ; do
+            bspc monitor "$line" -n "m${mon}"
+            mon=$((mon+1))
+        done
+        setxkbmap -option caps:super
         ;;
 esac
 
@@ -36,12 +47,20 @@ bspc config pointer_follows_focus false
 bspc config normal_frame_opacity 0.0
 bspc config focused_frame_opacity 0.1
 
-nummons=$(bspc query -M | wc -l)
-mon=0
-bspc query -M | while read line ; do
-    bspc monitor "$line" -d $((0 + mon)) \
-                            $((1 + mon))
-    mon=$((mon+2))
+desktop=1
+desktopspermon=3
+i=0
+while ((i < desktopspermon)); do
+    if [ "$i" = 0 ]; then
+        flag=-d
+    else
+        flag=-a
+    fi
+    bspc query -M | sort -n | while read line ; do
+        bspc monitor "$line" "$flag" "$desktop"
+        desktop=$((desktop+1))
+    done
+    i=$((i+1))
 done
 
 bspc rule -a Gimp follow=on floating=on
@@ -52,7 +71,7 @@ xinput --set-prop "CyPS/2 Cypress Trackpad" "libinput Tapping Enabled" 1
 xinput --set-button-map "Microsoft Microsoft 3-Button Mouse with IntelliEye(TM)" 1 2 3 5 4
 xinput --set-button-map "ETPS/2 Elantech Touchpad" 1 2 3 5 4 6 7 8 9 10 11 12
 
-setxkbmap -option caps:super -option compose:lwin
 start-pulseaudio-x11
 feh --bg-fill ~/.wallpaper
-sxhkd &
+~/.dotfiles/config/lemonbar/panel &
+tmux new-session -s sxhkd -d sxhkd

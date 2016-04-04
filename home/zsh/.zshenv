@@ -123,3 +123,4 @@ if [[ ! -d "$TMPPREFIX" ]]; then
   mkdir -p "$TMPPREFIX"
 fi
 
+export GTK_IM_MODULE="xim"
