@@ -1,8 +1,8 @@
 # vi:ts=8:sw=8:noet
 
 super + alt + Escape
+	pkill -x panel
 	bspc quit
-	pkill panel
 
 super + Escape
 	pkill -USR1 -x sxhkd
