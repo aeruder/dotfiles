@@ -74,4 +74,5 @@ xinput --set-button-map "ETPS/2 Elantech Touchpad" 1 2 3 5 4 6 7 8 9 10 11 12
 start-pulseaudio-x11
 feh --bg-fill ~/.wallpaper
 ~/.dotfiles/config/lemonbar/lemonbar/panel &
+tmux kill-session -t sxhkd
 tmux new-session -s sxhkd -d sxhkd
