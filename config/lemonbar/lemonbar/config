@@ -1,6 +1,5 @@
 PANEL_FIFO=~/.config/lemonbar.fifo
 PANEL_GEOM=x24
-bspc config top_padding $PANEL_HEIGHT
 PANEL_HEIGHT=24
 PANEL_FONT="-*-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
 PANEL_WM_NAME=bspwm_panel

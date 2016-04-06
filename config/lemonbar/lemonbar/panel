@@ -2,6 +2,7 @@
 
 export PANEL_DIR="`dirname "$0"`"
 . "$PANEL_DIR"/config
+bspc config top_padding $PANEL_HEIGHT
 
 if [ -e "$PANEL_DIR"/config.local ]; then
     . "$PANEL_DIR"/config.local
