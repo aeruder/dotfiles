@@ -1,7 +1,7 @@
 # vi:ts=8:sw=8:noet
 
 super + alt + Escape
-	pkill -x panel
+	pkill -x panel; \
 	bspc quit
 
 super + Escape
