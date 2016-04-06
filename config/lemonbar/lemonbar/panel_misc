@@ -1,4 +1,24 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+
+battery_percent() {
+    local a b
+    a="$BATTERY_PREFIX"now
+    b="$BATTERY_PREFIX"full
+    a=$(<$a)
+    b=$(<$b)
+    echo "B$(((a * 100) / b))"
+}
+
+BATTERY=(/sys/class/power_supply/BAT*)
+BATTERY=${BATTERY[1]}
+BATTERY_PREFIX=""
+if [ -d "$BATTERY" ]; then
+    if [ -e "$BATTERY"/charge_now ] && [ -e "$BATTERY"/charge_full ]; then
+        BATTERY_PREFIX="$BATTERY"/charge_
+    elif [ -e "$BATTERY"/energy_now ] && [ -e "$BATTERY"/energy_full ]; then
+        BATTERY_PREFIX="$BATTERY"/energy_
+    fi
+fi
 
 cpuload() {
     result="`mpstat 2 1 | tail -n 1 | awk '$12 ~ /[0-9.]+/ { print 100 - $12 }'`"
@@ -6,7 +26,7 @@ cpuload() {
 }
 
 memused() {
-    read t f <<< `grep -E 'Mem(Total|Available)' /proc/meminfo |awk '{print $2}'`
+    grep -E 'Mem(Total|Available)' /proc/meminfo |awk '{print $2}' | { read t ; read f }
     result="`bc <<< "scale=2; 100 - $f / $t * 100" | cut -d. -f1`"
     printf "U%s\n" "$result"
 }
@@ -14,5 +34,8 @@ memused() {
 while true ; do
     cpuload
     memused
+    if ! [ -z "$BATTERY_PREFIX" ]; then
+        battery_percent
+    fi
     sleep 1.5
 done
