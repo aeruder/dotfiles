@@ -108,17 +108,17 @@ super + shift + bracket{left,right}
 
 # Mouse stuff
 
-~button1
-	bspc pointer --grab focus
-
-super + button{1-3}
-	bspc pointer --grab {move,resize_side,resize_corner}
+# ~button1
+# 	bspc pointer --grab focus
+# 
+# super + button{1-3}
+# 	bspc pointer --grab {move,resize_side,resize_corner}
 
 # super + !button{1-3}
 # 	bspc pointer --track %i %i
 
-super + @button{1-3}
-	bspc pointer --ungrab
+# super + @button{1-3}
+# 	bspc pointer --ungrab
 
 #
 # wm independent hotkeys
