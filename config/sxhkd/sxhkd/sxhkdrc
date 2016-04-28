@@ -62,12 +62,6 @@ super + {_,shift + }{h,j,k,l}
 super + ctrl + {h,j,k,l}
 	bspc node --presel-dir {west,south,north,east}
 
-super + alt + {h,j,k,l}
-	bspc node --edge {west -10,south +10,north -10,east +10}
-
-super + alt + shift + {h,j,k,l}
-	bspc node --edge {east -10,north +10,south -10,west +10}
-
 super + ctrl + space
 	bspc node --presel-dir cancel
 
@@ -91,7 +85,10 @@ super + {comma,period}
 	bspc node --circulate {backward,forward}
 
 super + bracket{left,right}
-	bspc desktop --focus {prev,next}
+	bspc desktop --focus {prev,next}.local
+
+super + shift + bracket{left,right}
+	bspc node --to-desktop {prev,next}.local
 
 super + {1-9,0}
 	bspc desktop --focus {1-9,10}
@@ -103,8 +100,11 @@ super + n
 	bspc desktop --flip vertical
 
 # Monitor commands
-super + shift + bracket{left,right}
+super + alt + bracket{left,right}
 	bspc monitor --focus {west,east}
+
+super + alt + shift + bracket{left,right}
+	bspc node --to-monitor {west,east}
 
 # Mouse stuff
 
