@@ -100,10 +100,10 @@ super + n
 	bspc desktop --flip vertical
 
 # Monitor commands
-super + alt + bracket{left,right}
+super + alt + ctrl + bracket{left,right}
 	bspc monitor --focus {west,east}
 
-super + alt + shift + bracket{left,right}
+super + alt + ctrl + shift + bracket{left,right}
 	bspc node --to-monitor {west,east}
 
 # Mouse stuff
