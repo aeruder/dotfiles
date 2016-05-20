@@ -44,6 +44,6 @@ else:
         new_window.set_window_option('allow-rename', False)
         pane = new_window.attached_pane()
         pane.cmd('pipe-pane', '%s seropen_logging_child %s' % (sys.argv[0], port))
-        pane.send_keys("exec minicom -b115200 -D%s" % port)
+        pane.send_keys("exec minicom -m -c on -w -b115200 -D%s" % port)
 
     session.attach_session()
