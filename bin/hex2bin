@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+
+import sys
+import re
+
+out=bytearray()
+for a in sys.argv[1:]:
+    for b in re.findall(r'[a-fA-F0-9]{1,2}', a):
+        out.append(int(b, 16))
+print("Writing %d bytes to stdout" % len(out), file=sys.stderr)
+sys.stdout.buffer.write(out)
