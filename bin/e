@@ -4,4 +4,7 @@ exe=vim
 if which nvim 2> /dev/null > /dev/null; then
 	exe=nvim
 fi
+if which emacs 2> /dev/null > /dev/null; then
+    exe=emacsclient
+fi
 exec $exe "$@"
