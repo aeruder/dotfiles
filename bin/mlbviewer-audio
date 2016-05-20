@@ -1,0 +1,7 @@
+#!/bin/sh
+
+exec 3>> ~/mlbviewer.log
+
+echo AUDIO: "$@" >&3
+
+vlc -vvv - --sout '#transcode{vcodec=none,acodec=vorb,ab=128,}:rtp{mux=ts,dst=239.255.12.42,sdp=sap,name="TestStream"}'

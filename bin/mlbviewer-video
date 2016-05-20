@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo VIDEO: "$@" >&2
+
+while true ; do
+ffmpeg -loglevel 16 -i pipe:0 -codec:a libmp3lame -qscale:a 2 -vcodec libx264 -pix_fmt yuv420p -tune zerolatency -preset ultrafast -f mpegts udp://224.0.1.2:1234
+sleep 1
+done
