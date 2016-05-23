@@ -1798,8 +1798,8 @@ alias -g US='| sort -u'
 
 bindkey -v
 bindkey '^R' history-incremental-search-backward
-bindkey -M viins 'jk' vi-cmd-mode
-bindkey -M isearch 'jk' "accept-search ; vi-cmd-mode"
+bindkey -M viins 'jf' vi-cmd-mode
+bindkey -M isearch 'jf' "accept-search ; vi-cmd-mode"
 bindkey "^?" backward-delete-char
 bindkey -M viins "^Q" push-input
 bindkey -M viins "^A" accept-and-hold

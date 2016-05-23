@@ -288,7 +288,7 @@ you should place your code here."
       '(lambda () (c-mode-default)))
   (setq-default tab-width 8
                 indent-tabs-mode nil)
-  (setq-default evil-escape-key-sequence "df")
+  (setq-default evil-escape-key-sequence "jf")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
