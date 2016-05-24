@@ -1,11 +1,11 @@
 #!/bin/bash
 
-exe=vim
+exe=(vim)
 if which nvim 2> /dev/null > /dev/null; then
-	exe=nvim
+	exe=(nvim)
 fi
 if which emacs 2> /dev/null > /dev/null; then
-    exe=emacsclient
+    exe=(emacsclient -nw)
     export ALTERNATE_EDITOR=emacs EDITOR=emacsclient VISUAL=emacsclient
 fi
-$exe "$@"
+exec "${exe[@]}" "$@"
