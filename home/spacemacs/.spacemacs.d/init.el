@@ -23,7 +23,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      asciidoc
      c-c++
@@ -286,6 +286,9 @@ you should place your code here."
   ;;; Indentation settings
   (add-hook 'c-mode-common-hook
       '(lambda () (c-mode-default)))
+  ; make _ part of a word in C buffers
+  (add-hook 'c-mode-common-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
   (setq-default tab-width 8
                 indent-tabs-mode nil)
   (setq-default evil-escape-key-sequence "jf")
