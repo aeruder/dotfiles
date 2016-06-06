@@ -6,5 +6,6 @@ if which nvim 2> /dev/null > /dev/null; then
 fi
 if which emacs 2> /dev/null > /dev/null; then
     exe=emacsclient
+    export ALTERNATE_EDITOR=emacs EDITOR=emacsclient VISUAL=emacsclient
 fi
-exec $exe "$@"
+$exe "$@"
