@@ -293,6 +293,7 @@ you should place your code here."
   (setq-default tab-width 8
                 indent-tabs-mode nil)
   (setq-default evil-escape-key-sequence "jf")
+  (setq python-shell-interpreter "python3")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
