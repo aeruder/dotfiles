@@ -1770,8 +1770,6 @@ alias rgrep='grep --color=auto -r'
 alias egrep='grep --color=auto -E'
 alias irb='irb --readline -r irb/completion'
 alias dh='dirs -v'
-alias vim='e'
-alias emacs='e'
 
 alias -g CA="2>&1 | cat -A"
 alias -g CNT='| wc -l'
