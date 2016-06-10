@@ -289,11 +289,17 @@ you should place your code here."
       '(lambda () (c-mode-default)))
   ; make _ part of a word in C buffers
   (add-hook 'c-mode-common-hook #'(lambda () (modify-syntax-entry ?_ "w")))
-
   (setq-default tab-width 8
                 indent-tabs-mode nil)
   (setq-default evil-escape-key-sequence "jf")
   (setq python-shell-interpreter "python3")
+  (setq org-directory "/sshx:og3k.com:/home/andy/org")
+  (defun my-org-browse()
+      (interactive)
+      (helm-find-files-1 (concat org-directory "/")))
+  (spacemacs/set-leader-keys "oo" 'my-org-browse)
+  (setq org-default-notes-files (concat org-directory "/todo.org"))
+  (add-to-list 'auto-mode-alist '("\\.\\(org|org_archive\\|txt\\)$" . org-mode))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
