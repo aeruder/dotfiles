@@ -293,13 +293,11 @@ you should place your code here."
                 indent-tabs-mode nil)
   (setq-default evil-escape-key-sequence "jf")
   (setq python-shell-interpreter "python3")
-  (setq org-directory "/sshx:og3k.com:/home/andy/org")
-  (defun my-org-browse()
-      (interactive)
-      (helm-find-files-1 (concat org-directory "/")))
-  (spacemacs/set-leader-keys "oo" 'my-org-browse)
+  (setq org-directory "/og3k.com:/home/andy/org")
+  (spacemacs/set-leader-keys "oo" (lambda () (interactive) (helm-find-files-1 (concat org-directory "/"))))
   (setq org-default-notes-files (concat org-directory "/todo.org"))
   (add-to-list 'auto-mode-alist '("\\.\\(org|org_archive\\|txt\\)$" . org-mode))
+  (setq tramp-default-method "sshx")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
