@@ -5,7 +5,15 @@ if which nvim 2> /dev/null > /dev/null; then
 	exe=(nvim)
 fi
 if which emacs 2> /dev/null > /dev/null; then
-    exe=(emacsclient -nw)
+    if [ -t 1 ]; then
+        if [ -z "$1" ]; then
+            exe=(emacsclient -c)
+        else
+            exe=(emacsclient -nw)
+        fi
+    else
+        exe=(emacsclient -c)
+    fi
     export ALTERNATE_EDITOR=emacs EDITOR=emacsclient VISUAL=emacsclient
 fi
 exec "${exe[@]}" "$@"
