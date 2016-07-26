@@ -16,6 +16,11 @@ export VISUAL=e
 export LESS=-FmqXR
 export PAGER=less
 
+if [ -x /bin/systemctl ]; then
+export XDG_RUNTIME_DIR="/run/user/$UID"
+export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+fi
+
 #
 # Language
 #
