@@ -288,6 +288,13 @@ you should place your code here."
   ;;; Indentation settings
   (add-hook 'c-mode-common-hook
       '(lambda () (c-mode-default)))
+  (setq-default web-mode-code-indent-offset 2)
+  (setq-default web-mode-css-indent-offset 2)
+  (setq-default web-mode-markup-indent-offset 2)
+  (setq-default web-mode-attr-indent-offset 2)
+  (setq-default web-mode-sql-indent-offset 2)
+  (setq-default web-mode-attr-value-indent-offset 2)
+
   ; make _ part of a word in C buffers
   (add-hook 'c-mode-common-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   (setq-default tab-width 8
