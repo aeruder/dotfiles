@@ -274,6 +274,11 @@ before packages are loaded. If you are unsure, you should try in setting them in
         whitespace-tab-width 4
         indent-tabs-mode nil))
 
+(defun helm-user-org-files ()
+  "Open org files from server"
+  (interactive)
+  (helm-find-files-1 (concat org-directory "/")))
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -285,6 +290,8 @@ you should place your code here."
   (add-to-list 'auto-mode-alist
               '("\\.[h]\\'" . c++-mode))
 
+  (setq user-snippet-dir (expand-file-name "~/.spacemacs.d/snippets"))
+  (setq yas-snippet-dirs '(user-snippet-dir))
   ;;; Indentation settings
   (add-hook 'c-mode-common-hook
       '(lambda () (c-mode-default)))
@@ -302,7 +309,8 @@ you should place your code here."
   (setq-default evil-escape-key-sequence "jf")
   (setq python-shell-interpreter "python3")
   (setq org-directory "/og3k.com:/home/andy/org")
-  (spacemacs/set-leader-keys "oo" (lambda () (interactive) (helm-find-files-1 (concat org-directory "/"))))
+  (spacemacs/set-leader-keys
+    "oo" 'helm-user-org-files)
   (setq org-default-notes-files (concat org-directory "/todo.org"))
   (add-to-list 'auto-mode-alist '("\\.\\(org|org_archive\\|txt\\)$" . org-mode))
   (setq tramp-default-method "sshx")

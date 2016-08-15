@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# key: dimloop
+# name: for (size_t ...)
+# --
+for (${1:size_t} ${2:i} = 0; $2 < (sizeof(${3:arr})/sizeof($3[0])); $2++) {
+$0
+}
