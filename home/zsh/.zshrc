@@ -1846,4 +1846,3 @@ alias nohist=' nohist'
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
-eval "$(rbenv init -)"
