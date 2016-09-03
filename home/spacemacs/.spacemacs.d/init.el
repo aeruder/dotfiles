@@ -29,12 +29,16 @@ values."
      c-c++
      python
      emacs-lisp
+     erlang
      git
      gtags
+     haskell
      html
      unimpaired
      markdown
      org
+     rust
+     (ruby :variables ruby-enable-enh-ruby-mode t)
      semantic
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -314,6 +318,8 @@ you should place your code here."
   (setq org-default-notes-files (concat org-directory "/todo.org"))
   (add-to-list 'auto-mode-alist '("\\.\\(org|org_archive\\|txt\\)$" . org-mode))
   (setq tramp-default-method "sshx")
+  (setq projectile-indexing-method 'native)
+  (setq projectile-enable-caching t)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
