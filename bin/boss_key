@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-bspc query -M | while read mon ; do
-    first=$(bspc query -D -m "$mon" | head -n1)
-    last=$(bspc query -D -m "$mon" | tail -n1)
-    bspc query -N -d "$last" | while read node ; do
-        bspc node "$node" --to-desktop "$first"
-    done
-    bspc desktop --focus "$last"
+mon=m0
+first=$(bspc query -D -m "$mon" | head -n1)
+last=$(bspc query -D -m "$mon" | tail -n1)
+bspc query -N -d "$last" | while read node ; do
+    bspc node "$node" --to-desktop "$first"
 done
+bspc desktop --focus "$last"
