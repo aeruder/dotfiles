@@ -165,6 +165,9 @@ super + v
 
 # Misc
 
+XF86Tools
+   boss_key
+
 XF86MonBrightnessUp
 	xbacklight -inc 1
 
