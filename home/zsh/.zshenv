@@ -76,6 +76,10 @@ done
 manpath=( ${(u)manpath[@]} )
 export MANPATH="${(j%:%)manpath}"
 
+if [ "`uname`" = "Darwin" ]; then
+    eval `/usr/libexec/path_helper -s`
+fi
+
 # Read in from .zsh-pre-paths and .zsh-post-paths
 [ -e ~/.zsh-pre-paths ] || touch ~/.zsh-pre-paths
 [ -e ~/.zsh-post-paths ] || touch ~/.zsh-post-paths

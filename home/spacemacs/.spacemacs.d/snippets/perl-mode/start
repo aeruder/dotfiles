@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: start
+# key: start
+# --
+#!/usr/bin/env perl
+
+use feature ':5.14';
+use strict;
+use warnings;
+use Data::Dumper;
