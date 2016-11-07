@@ -21,3 +21,4 @@ tags
 .\#*
 .local.vimrc
 .projectile
+.byebug_history
