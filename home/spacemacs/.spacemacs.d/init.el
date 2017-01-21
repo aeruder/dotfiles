@@ -333,6 +333,7 @@ you should place your code here."
   (setq projectile-file-exists-remote-cache-expire nil)
   (setq explicit-shell-file-name "/bin/bash")
   (setq shell-file-name "/bin/bash")
+  (setq evil-magit-want-horizontal-movement t)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
