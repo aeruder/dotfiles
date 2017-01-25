@@ -337,6 +337,7 @@ you should place your code here."
   (setq evil-magit-want-horizontal-movement t)
   (setq cperl-hairy t)
   (setq cperl-indent-parens-as-block t)
+  (setq helm-buffer-skip-remote-checking t)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
