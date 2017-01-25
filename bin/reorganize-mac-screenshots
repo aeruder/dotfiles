@@ -1,0 +1,24 @@
+#!/bin/bash
+
+prefix="screenshot"
+loc="`defaults read com.apple.screencapture location`"
+if [ "$?" != 0 ]; then
+    loc="$HOME/Desktop"
+fi
+
+cd "$loc" || exit
+
+for a in "Screen Shot"* ; do
+    ext="${a##*.}"
+    date="`date -r "$a" "+%Y-%m-%d-%H%M"`"
+    idx=0
+    fullfile=
+    while true ; do
+        fullfile="`printf "%s-%s.%03d.%s" "$prefix" "$date" "$idx" "$ext"`"
+        if ! [ -e "$fullfile" ]; then
+            break
+        fi
+        idx=$((idx+1))
+    done
+    mv "$a" "$fullfile"
+done
