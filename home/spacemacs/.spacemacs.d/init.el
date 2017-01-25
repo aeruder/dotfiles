@@ -301,6 +301,7 @@ you should place your code here."
   (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
   (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
   (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
+  (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
 
 
   (setq user-snippet-dir (expand-file-name "~/.spacemacs.d/snippets"))
