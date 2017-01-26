@@ -340,6 +340,13 @@ you should place your code here."
   (setq cperl-indent-parens-as-block t)
   (setq helm-buffer-skip-remote-checking t)
   (setq tramp-use-ssh-controlmaster-options nil)
+  (defun my-recentf-keep-file (file)
+    "Returns non-nil if FILE is remote or readable
+    don't worry about existence if it is remote"
+    (cond
+     ((file-remote-p file))
+     ((file-readable-p file))))
+  (setq recentf-keep '(my-recentf-keep-file))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
