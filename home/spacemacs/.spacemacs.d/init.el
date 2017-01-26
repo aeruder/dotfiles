@@ -339,6 +339,7 @@ you should place your code here."
   (setq cperl-hairy t)
   (setq cperl-indent-parens-as-block t)
   (setq helm-buffer-skip-remote-checking t)
+  (setq tramp-use-ssh-controlmaster-options nil)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
