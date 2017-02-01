@@ -20,6 +20,7 @@
 	commit-rnd = !sh -c \"git commit -m \\\"FIXME `curl -s http://whatthecommit.com/index.txt`\\\"\"
 	rbc = rebase --continue
 	gud = push
+	pt = push -n -v
 [color]
 	ui = auto
 [merge]
