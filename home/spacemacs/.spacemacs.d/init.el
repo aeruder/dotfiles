@@ -57,6 +57,8 @@ values."
    dotspacemacs-additional-packages '(
                                       editorconfig
                                       (helm :location (recipe :fetcher github :repo "emacs-helm/helm"))
+                                      (helm-projectile :location (recipe :fetcher github :repo "aeruder/helm-projectile"))
+                                      (projectile :location (recipe :fetcher github :repo "aeruder/projectile"))
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '( smartparens )
