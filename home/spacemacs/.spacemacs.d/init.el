@@ -339,7 +339,6 @@ you should place your code here."
   (setq explicit-shell-file-name "/bin/bash")
   (setq shell-file-name "/bin/bash")
   (setq evil-magit-want-horizontal-movement t)
-  (setq cperl-hairy t)
   (setq cperl-indent-parens-as-block t)
   (setq helm-buffer-skip-remote-checking t)
   (setq tramp-use-ssh-controlmaster-options nil)
