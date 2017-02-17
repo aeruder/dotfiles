@@ -7,7 +7,7 @@ function cmd() {
 
 (cd home || exit
 for a in * ; do
-    cmd stow -t ~ "$a"
+    cmd ~/.dotfiles/bin/stow -t ~ "$a"
 done)
 
 cmd rm -f ~/.gitignore
@@ -16,5 +16,5 @@ cmd ln -s ~/.dotfiles/home/git/.gitignore ~/.gitignore
 (cd config || exit
 mkdir -p ~/.config
 for a in * ; do
-    cmd stow -t ~/.config "$a"
+    cmd ~/.dotfiles/bin/stow -t ~/.config "$a"
 done)
