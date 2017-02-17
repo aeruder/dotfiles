@@ -338,6 +338,7 @@ you should place your code here."
   (setq cperl-indent-parens-as-block t)
   (setq helm-buffer-skip-remote-checking t)
   (setq tramp-use-ssh-controlmaster-options nil)
+  (setq helm-input-idle-delay 0.25)
 
   (defun my-recentf-keep-file (file)
     "Returns non-nil if FILE is remote or readable
