@@ -115,12 +115,8 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light
-                         solarized-light
-                         solarized-dark
-                         leuven
-                         monokai
-                         zenburn)
+                         gruvbox
+                         tronesque)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -342,7 +338,6 @@ you should place your code here."
   (setq cperl-indent-parens-as-block t)
   (setq helm-buffer-skip-remote-checking t)
   (setq tramp-use-ssh-controlmaster-options nil)
-  (setq dotspacemacs-themes '(tronesque))
 
   (defun my-recentf-keep-file (file)
     "Returns non-nil if FILE is remote or readable
