@@ -340,6 +340,7 @@ you should place your code here."
   (setq helm-buffer-skip-remote-checking t)
   (setq tramp-use-ssh-controlmaster-options nil)
   (setq helm-input-idle-delay 0.25)
+  (fset 'evil-visual-update-x-selection 'ignore)
 
   (defun my-recentf-keep-file (file)
     "Returns non-nil if FILE is remote or readable
