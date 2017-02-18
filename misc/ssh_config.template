@@ -1,0 +1,15 @@
+AddKeysToAgent yes
+UseKeychain yes
+ControlPath ~/.ssh/tmp/ssh_%h_%p_%r
+CanonicalizeHostname yes
+ServerAliveInterval 15
+
+Host ssandbox
+	Hostname something2.example.com
+Host sandbox
+	Hostname something1.example.com
+Host *.example.com
+	ForwardAgent yes
+  ControlMaster auto
+  ControlPersist 60
+  ForwardX11 yes
