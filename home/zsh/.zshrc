@@ -1756,6 +1756,7 @@ alias damn='man'
 alias show='xdg-open'
 alias rm='rm -i'
 alias mv='mv -i'
+alias upenv='eval "`tmux show-environment -s`"'
 
 if [ "`uname`" != "Darwin" ]; then
     alias cp='cp -i --reflink=auto'
