@@ -43,6 +43,7 @@ do_app_maps = function()
     c = "com.github.communi.Communi",
     q = "com.googlecode.iterm2",
     f = "com.apple.finder",
+    s = "com.tinyspeck.slackmacgap"
   }
   for k, v in pairs(quick_switches) do
     bind_key(k, function() switch_app(v, true) end)
