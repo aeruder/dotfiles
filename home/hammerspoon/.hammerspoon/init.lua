@@ -29,6 +29,10 @@ switch_app = function(id, all)
   x = app and app:activate(all)
 end
 
+reorganize_screenshots = function()
+  os.execute("~/.dotfiles/bin/reorganize-mac-screenshots")
+end
+
 bind_key = function(k, func)
   if type(k) == "string" then
     k = hs.keycodes.map[k]
@@ -58,6 +62,7 @@ list_apps = function()
 end
 
 bind_key('b', switch_browser)
+bind_key('o', reorganize_screenshots)
 do_app_maps()
 
 hotkeyKeyPress = function(e)
