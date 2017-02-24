@@ -38,6 +38,6 @@ for (@members) {
 
 sub gen_root {
    my (undef, undef, $root) = File::Spec->splitpath($file);
-   $root =~ s/\.zip$//;
+   $root =~ s/[^.].*\K\.[^.]+$//;
    return $root;
 }
