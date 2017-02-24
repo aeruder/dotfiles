@@ -1,0 +1,4 @@
+#!/bin/sh
+
+launchctl bootstrap gui/`id -u` "$HOME"/.dotfiles/agents/"$1".plist ||
+    launchctl kickstart -k gui/`id -u`/"$1"

@@ -1,0 +1,1 @@
+do shell script "$HOME/.dotfiles/agents/helpers/my-start local.sandbox-agent"

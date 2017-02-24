@@ -1,5 +1,19 @@
 #!/bin/bash
 
+if [ "$1" = setup ]; then
+    mkdir -p ~/Documents/Screenshots
+    defaults write com.apple.screencapture location ~/Documents/Screenshots
+    cp -fv ~/.dotfiles/agents/local.reorganize-screenshots.plist ~/Library/LaunchAgents
+    launchctl bootstrap gui/`id -u` ~/Library/LaunchAgents/local.reorganize-screenshots.plist
+    exit 0
+fi
+
+# This is a bad hack, but trying to reduce any race conditions on using
+# the launch agent
+if [ "$1" = sleep ]; then
+    sleep 5
+fi
+
 prefix="screenshot"
 loc="`defaults read com.apple.screencapture location`"
 if [ "$?" != 0 ]; then

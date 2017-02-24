@@ -1,0 +1,3 @@
+#!/bin/sh
+
+launchctl bootout gui/`id -u`/"$1"
