@@ -1848,3 +1848,5 @@ alias nohist=' nohist'
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
+
+source ~/.zsh/iterm2_integration
