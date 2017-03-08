@@ -5,6 +5,8 @@ function cmd() {
    "$@"
 }
 
+git submodule update --init
+
 (cd home || exit
 for a in * ; do
     cmd ~/.dotfiles/bin/stow -t ~ "$a"
