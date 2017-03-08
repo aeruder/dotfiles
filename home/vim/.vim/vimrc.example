@@ -1,0 +1,11 @@
+set t_Co=256
+set guifont=Anka/Coder\ 10,Terminus\ 10,Inconsolata\ 10,ProFont\ 10,Bitstream\ Vera\ Sans\ Mono\ 10,Terminal\ 10,Monospace\ 10
+" Python 3.0
+" let g:python_host_skip_check=1
+" let g:loaded_python_provider=1
+" Python 2.7
+" let g:python_host_skip_check=1
+" let g:loaded_python3_provider=1
+" No python
+let g:python_nope=1
+exe "source ".$HOME."/.vim/config/vimrc"

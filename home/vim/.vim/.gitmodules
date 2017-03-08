@@ -1,0 +1,6 @@
+[submodule "bundles/vim-plug"]
+	path = vim-plug
+	url = https://github.com/junegunn/vim-plug.git
+[submodule "python-client"]
+	path = python-client
+	url = https://github.com/neovim/python-client

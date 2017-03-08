@@ -1,6 +1,63 @@
-[submodule "emacs.d/lisp/projectile"]
-	path = emacs.d/lisp/projectile
-	url = https://github.com/bbatsov/projectile
 [submodule "antigen"]
 	path = antigen
 	url = http://github.com/zsh-users/antigen.git
+[submodule "home/vim/.vim/submodules/vim-pathogen.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-pathogen.tpope.github.com
+	url = https://github.com/tpope/vim-pathogen
+[submodule "home/vim/.vim/submodules/vim-eunuch.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-eunuch.tpope.github.com
+	url = https://github.com/tpope/vim-eunuch
+[submodule "home/vim/.vim/submodules/vim-surround.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-surround.tpope.github.com
+	url = https://github.com/tpope/vim-surround
+[submodule "home/vim/.vim/submodules/vim-repeat.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-repeat.tpope.github.com
+	url = https://github.com/tpope/vim-repeat
+[submodule "home/vim/.vim/submodules/vim-speeddating.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-speeddating.tpope.github.com
+	url = https://github.com/tpope/vim-speeddating
+[submodule "home/vim/.vim/submodules/vim-commentary.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-commentary.tpope.github.com
+	url = https://github.com/tpope/vim-commentary
+[submodule "home/vim/.vim/submodules/vim-unimpaired.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-unimpaired.tpope.github.com
+	url = https://github.com/tpope/vim-unimpaired
+[submodule "home/vim/.vim/submodules/tabular.godlygeek.github.com"]
+	path = home/vim/.vim/submodules/tabular.godlygeek.github.com
+	url = https://github.com/godlygeek/tabular
+[submodule "home/vim/.vim/submodules/undotree.mbbill.github.com"]
+	path = home/vim/.vim/submodules/undotree.mbbill.github.com
+	url = https://github.com/mbbill/undotree
+[submodule "home/vim/.vim/submodules/vim-signify.mhinz.github.com"]
+	path = home/vim/.vim/submodules/vim-signify.mhinz.github.com
+	url = https://github.com/mhinz/vim-signify
+[submodule "home/vim/.vim/submodules/gtags-vim.critiqjo.github.com"]
+	path = home/vim/.vim/submodules/gtags-vim.critiqjo.github.com
+	url = https://github.com/critiqjo/gtags.vim
+[submodule "home/vim/.vim/submodules/denite-nvim.Shougo.github.com"]
+	path = home/vim/.vim/submodules/denite-nvim.Shougo.github.com
+	url = https://github.com/Shougo/denite.nvim
+[submodule "home/vim/.vim/submodules/vim-rails.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-rails.tpope.github.com
+	url = http://github.com/tpope/vim-rails
+[submodule "home/vim/.vim/submodules/vim-abolish.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-abolish.tpope.github.com
+	url = http://github.com/tpope/vim-abolish
+[submodule "home/vim/.vim/submodules/vim-markdown.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-markdown.tpope.github.com
+	url = http://github.com/tpope/vim-markdown
+[submodule "home/vim/.vim/submodules/vim-fugitive.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-fugitive.tpope.github.com
+	url = http://github.com/tpope/vim-fugitive
+[submodule "home/vim/.vim/submodules/vim-git.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-git.tpope.github.com
+	url = http://github.com/tpope/vim-git
+[submodule "home/vim/.vim/submodules/vim-projectionist.tpope.github.com"]
+	path = home/vim/.vim/submodules/vim-projectionist.tpope.github.com
+	url = https://github.com/tpope/vim-projectionist
+[submodule "home/vim/.vim/submodules/gruvbox.morhetz.github.com"]
+	path = home/vim/.vim/submodules/gruvbox.morhetz.github.com
+	url = https://github.com/morhetz/gruvbox
+[submodule "home/vim/.vim/submodules/vim-projectroot.dbakker.github.com"]
+	path = home/vim/.vim/submodules/vim-projectroot.dbakker.github.com
+	url = https://github.com/dbakker/vim-projectroot
