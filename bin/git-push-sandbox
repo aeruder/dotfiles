@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+ssh sandbox /bin/true > /dev/null 2>/dev/null
+branch="`git rev-parse HEAD`"
+
+git push -f --mirror --atomic sandbox
+ssh -q sandbox <<END
+  set -e
+  cd ziprecruiter
+  git checkout --detach "$branch"
+END
