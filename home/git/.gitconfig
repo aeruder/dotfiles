@@ -28,7 +28,7 @@
 	log = True
 	conflictstyle = diff3
 [push]
-	default = upstream
+	default = simple
 [log]
 	decorate = True
 [diff]
