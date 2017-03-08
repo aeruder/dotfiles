@@ -541,7 +541,7 @@ if !empty(globpath(&rtp, "autoload/grepper.vim"))
   let g:grepper.next_tool = '<C-n>'
   let g:grepper.switch    = 0
   let g:grepper.jump      = 0
-  let g:grepper.ag.grepprg .= ' --skip-vcs-ignores --'
+  let g:grepper.ag.grepprg .= ' --skip-vcs-ignores --hidden --'
   nmap gs <plug>(GrepperOperator)
   xmap gs <plug>(GrepperOperator)
 endif
