@@ -73,9 +73,9 @@ if g:vimrc_profile >= 0
     Plug 'mbbill/undotree'
     Plug 'mhinz/vim-grepper'
     Plug 'tpope/vim-markdown'
-    Plug 'honza/vim-snippets'
-    Plug 'SirVer/ultisnips'
     if has("python3")
+      Plug 'honza/vim-snippets'
+      Plug 'SirVer/ultisnips'
       Plug 'Shougo/denite.nvim'
       Plug 'Shougo/neomru.vim'
     end
