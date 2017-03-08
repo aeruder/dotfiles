@@ -21,6 +21,7 @@
 	rbc = rebase --continue
 	gud = push
 	pt = push -n -v
+	ps = push-sandbox
 [color]
 	ui = auto
 [merge]
