@@ -3,19 +3,17 @@
 let s:maindir=expand("<sfile>:p:h:h")
 
 if has("win32")
-    let s:sep="\\"
+  let s:sep="\\"
 else
-    let s:sep="/"
+  let s:sep="/"
 endif
-
 
 silent! runtime submodules/vim-pathogen.tpope.github.com/autoload/pathogen.vim
-silent! call pathogen#doesnt_exist()
 if has('vim_starting') && exists("*pathogen#split")
-    let config=pathogen#split(&runtimepath)[0]
-    execute pathogen#infect('submodules/{}')
+  let config=pathogen#split(&runtimepath)[0]
+  execute pathogen#infect('submodules/{}')
 endif
-silent! call plug#doesnt_exist()
+silent! runtime autoload/plug.vim
 
 if !exists("*pathogen#split") || !exists("*plug#begin")
   let g:vimrc_profile = "dead"
@@ -77,9 +75,13 @@ if g:vimrc_profile >= 0
     Plug 'tpope/vim-markdown'
     Plug 'honza/vim-snippets'
     Plug 'SirVer/ultisnips'
-    Plug 'Shougo/denite.nvim'
-    Plug 'Shougo/neocomplete.vim'
-    Plug 'Shougo/neomru.vim'
+    if has("python3")
+      Plug 'Shougo/denite.nvim'
+      Plug 'Shougo/neomru.vim'
+    end
+    if has("lua")
+      Plug 'Shougo/neocomplete.vim'
+    end
   endif
 
   call plug#end()
@@ -443,8 +445,8 @@ call s:push_leader("\<Space>")
 
   " FILE STUFF
   call s:push_leader("f")
-    nnoremap <leader>eD :vsplit $MYVIMRC<Cr>
-    execute "nnoremap <leader>ed :vsplit ".s:mainconfig."<Cr>"
+    nnoremap <leader>eD :n $MYVIMRC<Cr>
+    execute "nnoremap <leader>ed :n ".s:mainconfig."<Cr>"
     nnoremap <leader>S  :source %<Cr>
     " Open a scratch buffer
     nnoremap <leader>s <C-w>v<C-w>l:Scratch<Cr>
@@ -526,23 +528,25 @@ abbreviate slv std_logic_vector
 let g:deoplete#enable_at_startup = 1
 set completeopt=menuone,noinsert,noselect,preview
 
-if exists("*denite#custom#map")
+if !empty(globpath(&rtp, "autoload/denite.vim"))
   " denite
   call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
   call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
   call denite#custom#map('insert', '<C-g>', '<denite:quit>')
 endif
 
-" grepper
-let g:grepper           = {}
-let g:grepper.tools     = ['ag', 'git', 'grep']
-let g:grepper.next_tool = '<C-n>'
-let g:grepper.switch    = 0
-let g:grepper.jump      = 0
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
+if !empty(globpath(&rtp, "autoload/grepper.vim"))
+  runtime autoload/grepper.vim
+  let g:grepper.tools     = ['ag', 'git', 'grep']
+  let g:grepper.next_tool = '<C-n>'
+  let g:grepper.switch    = 0
+  let g:grepper.jump      = 0
+  let g:grepper.ag.grepprg .= ' --skip-vcs-ignores --'
+  nmap gs <plug>(GrepperOperator)
+  xmap gs <plug>(GrepperOperator)
+endif
 
-if exists("*neocomplete#smart_close_popup")
+if !empty(globpath(&rtp, "autoload/neocomplete.vim"))
   " Use neocomplete.
   let g:neocomplete#enable_at_startup = 1
   " Use smartcase.
@@ -764,18 +768,18 @@ endfunction
 
 " Pull in our zsh special directories
 function! PullInZshNamedDirectories()
-    if (exists("$HOME"))
-        let l:namedirs = $HOME . "/.znameddirs"
-        if (filereadable(l:namedirs))
-            let l:lines = readfile(l:namedirs)
-            for l:a in l:lines
-                let l:splitdir = split(l:a, " ")
-                if (len(l:splitdir) == 2 && match(l:splitdir[0], '[^a-z0-9_A-Z]') == -1)
-                    exec "let $" . l:splitdir[0] . " = '" . fnameescape(l:splitdir[1]) ."'"
-                endif
-            endfor
+  if (exists("$HOME"))
+    let l:namedirs = $HOME . "/.znameddirs"
+    if (filereadable(l:namedirs))
+      let l:lines = readfile(l:namedirs)
+      for l:a in l:lines
+        let l:splitdir = split(l:a, " ")
+        if (len(l:splitdir) == 2 && match(l:splitdir[0], '[^a-z0-9_A-Z]') == -1)
+          exec "let $" . l:splitdir[0] . " = '" . fnameescape(l:splitdir[1]) ."'"
         endif
+      endfor
     endif
+  endif
 endfunction
 
 call PullInZshNamedDirectories()
