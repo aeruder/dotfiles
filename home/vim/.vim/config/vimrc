@@ -281,15 +281,26 @@ call s:push_leader("\<Space>")
   call s:push_leader("b")
     " Buffer list
     nnoremap <leader>b :Denite buffer<Cr>
+    " Recent file list
+    nnoremap <leader>r :Denite file_mru<Cr>
     " Filetype
     nnoremap <leader>t :Denite filetype<Cr>
   call s:pop_leader()
 
+  " SEARCHING
+  call s:push_leader("s")
+    nnoremap <leader>. :Grepper -tool ag<Cr>
+    nnoremap <leader>g :Grepper -tool git<Cr>
+  call s:pop_leader()
+
   " PROJECT STUFF
   call s:push_leader("p")
+    " cd to project root
+    nnoremap <leader>c :execute "cd ".projectroot#get()<Cr>
+    nnoremap <leader>l :execute "lcd ".projectroot#get()<Cr>
     " Recursive from project
-    nnoremap <leader>f :call denite#start([{'name': 'file_rec', 'args': [projectionist#path()]}])<Cr>
-    " Recursive from current directory
+    nnoremap <leader>f :call denite#start([{'name': 'file_rec', 'args': [projectroot#get()]}])<Cr>
+    "r Recursive from current directory
     nnoremap <leader>. :Denite file_rec<Cr>
     " Recursive from directory of current file
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
@@ -338,9 +349,9 @@ call s:push_leader("\<Space>")
     vnoremap <leader>gD :g/<C-R>//d<CR>
     vnoremap <leader>g!D :g!/<C-R>//d<CR>
     " Highlight spacing errors
-    nnoremap <leader>f<space> /\v(\s+$)\|(<space>\ze<tab>)<CR>
+    nnoremap <leader><space> /\v(\s+$)\|(<space>\ze<tab>)<CR>
     " Highlight tabs
-    nnoremap <leader>f<Tab> /<Tab><CR>
+    nnoremap <leader><Tab> /<Tab><CR>
     " Highlight just pasted text
     nnoremap <leader>v V`]
 
@@ -360,56 +371,50 @@ call s:push_leader("\<Space>")
     nnoremap <leader>eD :vsplit $MYVIMRC<Cr>
     execute "nnoremap <leader>ed :vsplit ".s:mainconfig."<Cr>"
     nnoremap <leader>S  :source %<Cr>
+    " Open a scratch buffer
+    nnoremap <leader>s <C-w>v<C-w>l:Scratch<Cr>
   call s:pop_leader()
 
   " APPLICATIONY THINGS
   call s:push_leader("a")
     " Open undotree
     nnoremap <leader>u :UndotreeToggle<Cr>
+    " Toggle in and out of hex dump mode
+    nnoremap <leader>h :Hexmode<Cr>
+  call s:pop_leader()
+
+  " GIT
+  call s:push_leader("g")
+    nnoremap <leader>s :<c-u>Gstatus<Cr>
+    nnoremap <leader>l :<c-u>Glog<Cr>
+    nnoremap <leader>d :<c-u>Gdiff<Cr>
+    nnoremap <leader>b :<c-u>Gblame<Cr>
+    nnoremap <leader>r :<c-u>Gread<Cr>
+    nnoremap <leader>w :<c-u>Gwrite<Cr>
+    nnoremap <leader>c :<c-u>Gcommit<Cr>
+    nnoremap <leader>a :<c-u>Gamend<Cr>
+  call s:pop_leader()
+
+  " VIM
+  call s:push_leader("V")
+    " executing lines
+    nnoremap <leader>e :exe getline(".")<CR>
+    vnoremap <leader>e :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
+    nnoremap <leader>c :botr copen<Cr>
   call s:pop_leader()
 
 call s:pop_leader()
 
-" Toggle in and out of hex dump mode
-nnoremap <leader>h :Hexmode<Cr>
-
-" Open a scratch buffer
-nnoremap <leader>es <C-w>v<C-w>l:Scratch<Cr>
-
-" grep utilities
-nnoremap <leader>fa yiw:Ags <C-R>"
-
-
-" executing lines
-nnoremap <leader>Ve :exe getline(".")<CR>
-vnoremap <leader>Ve :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
-
 " Find qt headers
-if isdirectory("/usr/local/qt")
-    nnoremap <leader>bQ :CtrlP /usr/include/qt<Cr>
-elseif isdirectory("/usr/include/qt4")
-    nnoremap <leader>bQ :CtrlP /usr/include/qt4<Cr>
-endif
-
-" Search for files in current directory of current file
-nnoremap <leader>bc :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p:h"))<Cr>
-
-" Search for files in parent directory of current file
-nnoremap <leader>bp :execute "CtrlP " . fnameescape(fnamemodify(expand("%"), ":p:h:h"))<Cr>
-
-" Normal CtrlP
-nnoremap <leader>bf :<c-u>CtrlP .<cr>
-nnoremap <leader>bC :<c-u>CtrlPClearAllCaches<cr>
-
-let g:ctrlp_max_files = 0
-let g:ctrlp_switch_buffer = 0
+" if isdirectory("/usr/local/qt")
+"     nnoremap <leader>bQ :CtrlP /usr/include/qt<Cr>
+" elseif isdirectory("/usr/include/qt4")
+"     nnoremap <leader>bQ :CtrlP /usr/include/qt4<Cr>
+" endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  ultisnips                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger = ",ue"
-let g:UltiSnipsJumpForwardTrigger = ",un"
-let g:UltiSnipsJumpBackwardTrigger = ",up"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                youcompleteme                                "
@@ -419,25 +424,14 @@ let g:ycm_global_ycm_extra_conf = expand("<sfile>:p:h").s:sep."ycm_extra_conf.py
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                    gtags                                    "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>gt :<c-u>Gtags<Cr>
-nmap <leader>gr :<c-u>Gtags -r<Cr>
-nmap <leader>gf :<c-u>Gtags -P<Cr>
+" nmap <leader>gt :<c-u>Gtags<Cr>
+" nmap <leader>gr :<c-u>Gtags -r<Cr>
+" nmap <leader>gf :<c-u>Gtags -P<Cr>
 
 let g:Gtags_OpenQuickfixWindow = 0
 let g:Gtags_VerticalWindow = 0
 let Gtags_Auto_Map = 0
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               fugitive                               "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>Gs :<c-u>Gstatus<Cr>
-nmap <leader>Gl :<c-u>Glog<Cr>
-nmap <leader>Gd :<c-u>Gdiff<Cr>
-nmap <leader>Gb :<c-u>Gblame<Cr>
-nmap <leader>Gr :<c-u>Gread<Cr>
-nmap <leader>Gw :<c-u>Gwrite<Cr>
-nmap <leader>Gc :<c-u>Gcommit<Cr>
-nmap <leader>Ga :<c-u>Gamend<Cr>
 
 """"""""""""""""""""""""
 """"""""""""""""""""""""
@@ -450,14 +444,6 @@ abbreviate teh the
 abbreviate sl std_logic
 abbreviate slv std_logic_vector
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 easymotion                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:EasyMotion_do_mapping = 0
-nmap <leader>s <Plug>(easymotion-overwin-f)
-" nmap <Space> <Plug>(easymotion-s)
-" vmap <Space> <Plug>(easymotion-s)
-" omap <Space> <Plug>(easymotion-s)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  deoplete                                   "
@@ -465,17 +451,96 @@ nmap <leader>s <Plug>(easymotion-overwin-f)
 let g:deoplete#enable_at_startup = 1
 set completeopt=menuone,noinsert,noselect,preview
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 vim-fswitch                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <Leader>ba :FSHere<Cr>
+" denite
+call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
+call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
+call denite#custom#map('insert', '<C-g>', '<denite:quit>')
 
+" grepper
+let g:grepper           = {}
+let g:grepper.tools     = ['ag', 'git', 'grep']
+let g:grepper.next_tool = '<C-n>'
+let g:grepper.switch    = 0
+let g:grepper.jump      = 0
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                 test plugin                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:grep#prog = 'pt'
-let g:grep#args = '-U -e'
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ neocomplete#start_manual_complete()
+function! s:check_back_space() abort "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior (not recommended.)
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" :
+" \ neocomplete#start_manual_complete()
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php =
+"\ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+"let g:neocomplete#sources#omni#input_patterns.c =
+"\ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+"let g:neocomplete#sources#omni#input_patterns.cpp =
+"\ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+let g:neocomplete#sources#omni#input_patterns.perl =
+\ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+" For smart TAB completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+"        \ <SID>check_back_space() ? "\<TAB>" :
+"        \ neocomplete#start_manual_complete()
+"  function! s:check_back_space() "{{{
+"    let col = col('.') - 1
+"    return !col || getline('.')[col - 1]  =~ '\s'
+"  endfunction"}}}
 
 let g:projectionist_heuristics = {
         \ ".projectile": {

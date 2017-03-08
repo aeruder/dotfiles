@@ -61,3 +61,21 @@
 [submodule "home/vim/.vim/submodules/vim-projectroot.dbakker.github.com"]
 	path = home/vim/.vim/submodules/vim-projectroot.dbakker.github.com
 	url = https://github.com/dbakker/vim-projectroot
+[submodule "home/vim/.vim/submodules/vim-grepper.mhinz.github.com"]
+	path = home/vim/.vim/submodules/vim-grepper.mhinz.github.com
+	url = https://github.com/mhinz/vim-grepper
+[submodule "home/vim/.vim/submodules/ultisnips.SirVer.github.com"]
+	path = home/vim/.vim/submodules/ultisnips.SirVer.github.com
+	url = https://github.com/SirVer/ultisnips
+[submodule "home/vim/.vim/submodules/neocomplete-vim.Shougo.github.com"]
+	path = home/vim/.vim/submodules/neocomplete-vim.Shougo.github.com
+	url = https://github.com/Shougo/neocomplete.vim
+[submodule "home/vim/.vim/submodules/vim-snippets.honza.github.com"]
+	path = home/vim/.vim/submodules/vim-snippets.honza.github.com
+	url = https://github.com/honza/vim-snippets
+[submodule "home/vim/.vim/submodules/scratch-vim.mtth.github.com"]
+	path = home/vim/.vim/submodules/scratch-vim.mtth.github.com
+	url = https://github.com/mtth/scratch.vim
+[submodule "home/vim/.vim/submodules/neomru-vim.Shougo.github.com"]
+	path = home/vim/.vim/submodules/neomru-vim.Shougo.github.com
+	url = https://github.com/Shougo/neomru.vim
