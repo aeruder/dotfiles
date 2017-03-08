@@ -5,7 +5,7 @@ function cmd() {
    "$@"
 }
 
-git submodule update --init
+cmd git submodule update --init
 
 (cd home || exit
 for a in * ; do
@@ -20,3 +20,7 @@ mkdir -p ~/.config
 for a in * ; do
     cmd ~/.dotfiles/bin/stow -t ~/.config "$a"
 done)
+
+if ! [ -e ~/.vimrc ]; then
+    cmd cp home/vim/.vim/vimrc.example ~/.vimrc
+fi
