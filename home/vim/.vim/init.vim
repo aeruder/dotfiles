@@ -1,0 +1,1 @@
+execute "source ".$HOME."/.vimrc"
