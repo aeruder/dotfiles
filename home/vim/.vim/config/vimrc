@@ -348,9 +348,9 @@ function! s:push_leader(app)
   let g:mapleader = s:mapleaders[-1]
   let l:indentstr = repeat("\\ ", 2*(len(s:mapleaders)-1))
   if empty(l:indentstr)
-    execute "nnoremap <leader> :n +/^".l:indentstr."call\\ s:push_leader ".s:mainconfig."<Cr>"
+    execute "nnoremap <leader>? :n +/^".l:indentstr."call\\ s:push_leader ".s:mainconfig."<Cr>"
   else
-    execute "nnoremap <leader> :n +/^".l:indentstr."call\\ s:push_leader(\"".a:app."\") ".s:mainconfig."<Cr>"
+    execute "nnoremap <leader>? :n +/^".l:indentstr."call\\ s:push_leader(\"".a:app."\") ".s:mainconfig."<Cr>"
   endif
 endfunction
 
@@ -488,6 +488,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>w :<c-u>Gwrite<Cr>
     nnoremap <leader>c :<c-u>Gcommit<Cr>
     nnoremap <leader>a :<c-u>Gamend<Cr>
+    nnoremap <leader>P :<c-u>Git push-sandbox<Cr>
   call s:pop_leader()
 
   " VIM
@@ -584,7 +585,7 @@ if !empty(globpath(&rtp, "autoload/grepper.vim"))
   let g:grepper.next_tool = '<C-n>'
   let g:grepper.switch    = 0
   let g:grepper.jump      = 0
-  let g:grepper.ag.grepprg = s:grepper_ag_grepprg.' --smart-case --ignore .git --ignore .svn --skip-vcs-ignores --hidden --'
+  let g:grepper.ag.grepprg = s:grepper_ag_grepprg.' --smart-case --ignore .git --ignore .svn --skip-vcs-ignores --hidden '
   nmap gs <plug>(GrepperOperator)
   xmap gs <plug>(GrepperOperator)
 endif
