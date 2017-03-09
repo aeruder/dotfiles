@@ -332,6 +332,8 @@ inoremap jk <ESC>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                             hierarchy mappings                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let s:mapleaders = []
+
 function! s:push_leader(app)
   if len(s:mapleaders) == 0
     call add(s:mapleaders, a:app)
@@ -342,7 +344,7 @@ function! s:push_leader(app)
   let l:indentstr = repeat("\\ ", 2*(len(s:mapleaders)-1))
   if empty(l:indentstr)
     execute "nnoremap <leader> :n +/^".l:indentstr."call\\ s:push_leader ".s:mainconfig."<Cr>"
-  else 
+  else
     execute "nnoremap <leader> :n +/^".l:indentstr."call\\ s:push_leader(\"".a:app."\") ".s:mainconfig."<Cr>"
   endif
 endfunction
@@ -356,10 +358,12 @@ function! s:pop_leader()
   end
 endfunction
 
-let s:mapleaders = []
-
-
 call s:push_leader("\<Space>")
+  nnoremap <silent> <SID>(MyYankOperator) :set opfunc=MyYankOperator<cr>g@
+  xnoremap <silent> <SID>(MyYankOperator) :<c-u>call MyYankOperator(visualmode())<cr>
+  nmap <leader>y <SID>(MyYankOperator)
+  xmap <leader>y <SID>(MyYankOperator)
+
   " WINDOW STUFF
   call s:push_leader("w")
     " window movement
@@ -384,7 +388,6 @@ call s:push_leader("\<Space>")
 
   " SEARCHING
   call s:push_leader("s")
-    nnoremap <leader>p :execute "Grepper -tool ag -dir ".projectroot#get()<Cr>
     nnoremap <leader>. :Grepper -tool ag<Cr>
   call s:pop_leader()
 
@@ -405,7 +408,7 @@ call s:push_leader("\<Space>")
 
   " COLORSCHEME
   call s:push_leader("T")
-    nnoremap <leader>c :Denite color<Cr>
+    nnoremap <leader>c :Denite colorscheme<Cr>
   call s:pop_leader()
 
   " TEXT MANIPULATIONS
@@ -449,20 +452,12 @@ call s:push_leader("\<Space>")
     nnoremap <leader><Tab> /<Tab><CR>
     " Highlight just pasted text
     nnoremap <leader>v V`]
-
-  call s:pop_leader()
-
-  " COPY/YANK commands
-  call s:push_leader("y")
-    " Highlight the current word
-    nnoremap <leader>iw yiw:set hlsearch<Cr>:let @/="\\V\\<" . escape(@", "\\") . "\\>"<Cr>
-
-    " Highlight the current line
-    nnoremap <leader>y ^y$:set hlsearch<Cr>:let @/="\\V\\^" . escape(@", "\\") . "\\$"<Cr>
   call s:pop_leader()
 
   " FILE STUFF
   call s:push_leader("f")
+    nnoremap <leader>l :lcd %:h<Cr>
+    nnoremap <leader>c :cd %:h<Cr>
     nnoremap <leader>eD :n $MYVIMRC<Cr>
     execute "nnoremap <leader>ed :n ".s:mainconfig."<Cr>"
     nnoremap <leader>S  :source %<Cr>
@@ -499,6 +494,30 @@ call s:push_leader("\<Space>")
   call s:pop_leader()
 
 call s:pop_leader()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                             highlight operator                              "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! MyYankOperator(type) abort
+  let regsave = @@
+  let selsave = &selection
+  let &selection = 'inclusive'
+
+  if a:type =~? 'v'
+    silent execute "normal! gvy"
+  elseif a:type == 'line'
+    silent execute "normal! '[V']y"
+  else
+    silent execute "normal! `[v`]y"
+  endif
+
+  let &selection = selsave
+
+  let &hlsearch = 1
+  let @/ = "\\V".escape(@@, "\\")
+  let @@ = regsave
+endfunction
 
 " Find qt headers
 " if isdirectory("/usr/local/qt")
