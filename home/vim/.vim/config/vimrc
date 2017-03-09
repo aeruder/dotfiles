@@ -339,12 +339,12 @@ function! s:push_leader(app)
     call add(s:mapleaders, s:mapleaders[-1].a:app)
   endif
   let g:mapleader = s:mapleaders[-1]
-  execute "nnoremap <leader> ":n"::
-endfunction
-
-function! s:push_leader_set(val)
-  call add(s:mapleaders, a:val)
-  let g:mapleader = s:mapleaders[-1]
+  let l:indentstr = repeat("\\ ", 2*(len(s:mapleaders)-1))
+  if empty(l:indentstr)
+    execute "nnoremap <leader> :n +/^".l:indentstr."call\\ s:push_leader ".s:mainconfig."<Cr>"
+  else 
+    execute "nnoremap <leader> :n +/^".l:indentstr."call\\ s:push_leader(\"".a:app."\") ".s:mainconfig."<Cr>"
+  endif
 endfunction
 
 function! s:pop_leader()
