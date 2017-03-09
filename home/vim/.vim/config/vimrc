@@ -352,6 +352,7 @@ function! s:push_leader(app)
   else
     execute "nnoremap <leader>? :n +/^".l:indentstr."call\\ s:push_leader(\"".a:app."\") ".s:mainconfig."<Cr>"
   endif
+  nnoremap <leader> <Nop>
 endfunction
 
 function! s:pop_leader()
