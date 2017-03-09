@@ -319,14 +319,19 @@ set diffopt=filler
 set list listchars=tab:»·,trail:·,extends:>,precedes:<
 let &colorcolumn="80,".join(range(120,999),",")
 
-" Misc non-leader junk
-    " Make j and k go through wrapped lines
-    nnoremap j gj
-    nnoremap k gk
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                              regular mappings                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Make j and k go through wrapped lines
+nnoremap j gj
+nnoremap k gk
 
-    " Use 'jk' instead of ESC
-    inoremap jk <ESC>
+" Use 'jk' instead of ESC
+inoremap jk <ESC>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                             hierarchy mappings                              "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! s:push_leader(app)
   if len(s:mapleaders) == 0
     call add(s:mapleaders, a:app)
@@ -334,6 +339,7 @@ function! s:push_leader(app)
     call add(s:mapleaders, s:mapleaders[-1].a:app)
   endif
   let g:mapleader = s:mapleaders[-1]
+  execute "nnoremap <leader> ":n"::
 endfunction
 
 function! s:push_leader_set(val)
@@ -351,6 +357,8 @@ function! s:pop_leader()
 endfunction
 
 let s:mapleaders = []
+
+
 call s:push_leader("\<Space>")
   " WINDOW STUFF
   call s:push_leader("w")
@@ -500,44 +508,25 @@ call s:pop_leader()
 " endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  ultisnips                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                youcompleteme                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ycm_global_ycm_extra_conf = expand("<sfile>:p:h").s:sep."ycm_extra_conf.py"
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                    gtags                                    "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nmap <leader>gt :<c-u>Gtags<Cr>
 " nmap <leader>gr :<c-u>Gtags -r<Cr>
 " nmap <leader>gf :<c-u>Gtags -P<Cr>
+" let g:Gtags_OpenQuickfixWindow = 0
+" let g:Gtags_VerticalWindow = 0
+" let Gtags_Auto_Map = 0
 
-let g:Gtags_OpenQuickfixWindow = 0
-let g:Gtags_VerticalWindow = 0
-let Gtags_Auto_Map = 0
-
-
-""""""""""""""""""""""""
-""""""""""""""""""""""""
-""""""""""""""""""""""""
-" Our active abbreviations
-""""""""""""""""""""""""
-"""""""""""""""""""""""
-""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                abbreviations                                "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 abbreviate teh the
 abbreviate sl std_logic
 abbreviate slv std_logic_vector
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  deoplete                                   "
+"                                   denite                                    "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:deoplete#enable_at_startup = 1
-set completeopt=menuone,noinsert,noselect,preview
-
 if !empty(globpath(&rtp, "autoload/denite.vim"))
   " denite
   call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
@@ -545,6 +534,9 @@ if !empty(globpath(&rtp, "autoload/denite.vim"))
   call denite#custom#map('insert', '<C-g>', '<denite:quit>')
 endif
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                   grepper                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !empty(globpath(&rtp, "autoload/grepper.vim"))
   if has("vim_starting")
     runtime autoload/grepper.vim
@@ -559,6 +551,9 @@ if !empty(globpath(&rtp, "autoload/grepper.vim"))
   xmap gs <plug>(GrepperOperator)
 endif
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  deoplete                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !empty(globpath(&rtp, "autoload/deoplete.vim"))
   " Use deoplete.
   let g:deoplete#enable_at_startup = 1
@@ -576,6 +571,9 @@ if !empty(globpath(&rtp, "autoload/deoplete.vim"))
   endfunction
 endif
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 neocomplete                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !empty(globpath(&rtp, "autoload/neocomplete.vim"))
   " Use neocomplete.
   let g:neocomplete#enable_at_startup = 1
@@ -655,6 +653,9 @@ if !empty(globpath(&rtp, "autoload/neocomplete.vim"))
   "  endfunction"}}}
 endif
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                projectionist                                "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:projectionist_heuristics = {
         \ ".projectile": {
         \ },
@@ -670,14 +671,9 @@ let g:projectionist_heuristics = {
 "         \   "etc/rbenv.d/*.bash": {"type": "hook"}
 "         \ }}
 
-""""""""""""""""""""""""
-""""""""""""""""""""""""
-""""""""""""""""""""""""
-" Misc custom commands, etc.
-""""""""""""""""""""""""
-""""""""""""""""""""""""
-""""""""""""""""""""""""
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 random junk                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " This makes % work for a lot more than just
 " {(<, it also works on html, etc..
 runtime macros/matchit.vim
@@ -717,6 +713,9 @@ augroup customchanges
         \ Usespaces 2
 augroup END
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                   fswitch                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 augroup fswitch_c
     au!
     au BufEnter *.c    let b:fswitchdst = 'h' |
@@ -743,7 +742,9 @@ augroup fswitch_c
                      \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
 augroup END
 
-" This is used when editing a mutt mail message
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                    mutt                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 comm! -nargs=0 BeginMailMessage call BeginMailMessage()
 function! BeginMailMessage()
     set tw=72
@@ -755,6 +756,9 @@ function! BeginMailMessage()
     normal 1G
 endfunction
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                 hex editor                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Hex editing support (from http://vim.wikia.com/wiki/Improved_hex_editing)
 comm! -bar Hexmode call ToggleHex()
 
@@ -796,6 +800,9 @@ function! ToggleHex()
   let &modifiable=l:oldmodifiable
 endfunction
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               zsh integration                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Pull in our zsh special directories
 function! PullInZshNamedDirectories()
   if (exists("$HOME"))
@@ -811,5 +818,4 @@ function! PullInZshNamedDirectories()
     endif
   endif
 endfunction
-
 call PullInZshNamedDirectories()
