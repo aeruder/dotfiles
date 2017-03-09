@@ -1,4 +1,7 @@
 #!/bin/bash
 
 exe=(vim)
+if which nvim 2> /dev/null > /dev/null; then
+	exe=(nvim)
+fi
 exec "${exe[@]}" "$@"

@@ -8,6 +8,14 @@ else
   let s:sep="/"
 endif
 
+if has('nvim')
+  if len($PYTHONPATH) > 0
+    let $PYTHONPATH=expand("<sfile>:p:h:h").s:sep."python-client:".$PYTHONPATH
+  else
+    let $PYTHONPATH=expand("<sfile>:p:h:h").s:sep."python-client"
+  endif
+endif
+
 silent! runtime submodules/vim-pathogen.tpope.github.com/autoload/pathogen.vim
 if has('vim_starting') && exists("*pathogen#split")
   let config=pathogen#split(&runtimepath)[0]
@@ -79,7 +87,9 @@ if g:vimrc_profile >= 0
       Plug 'Shougo/denite.nvim'
       Plug 'Shougo/neomru.vim'
     end
-    if has("lua")
+    if has("nvim")
+      Plug 'Shougo/deoplete.nvim'
+    elseif has("lua")
       Plug 'Shougo/neocomplete.vim'
     end
   endif
@@ -366,8 +376,8 @@ call s:push_leader("\<Space>")
 
   " SEARCHING
   call s:push_leader("s")
+    nnoremap <leader>p :execute "Grepper -tool ag -dir ".projectroot#get()<Cr>
     nnoremap <leader>. :Grepper -tool ag<Cr>
-    nnoremap <leader>g :Grepper -tool git<Cr>
   call s:pop_leader()
 
   " PROJECT STUFF
@@ -377,7 +387,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>l :execute "lcd ".projectroot#get()<Cr>
     " Recursive from project
     nnoremap <leader>f :call denite#start([{'name': 'file_rec', 'args': [projectroot#get()]}])<Cr>
-    "r Recursive from current directory
+    " Recursive from current directory
     nnoremap <leader>. :Denite file_rec<Cr>
     " Recursive from directory of current file
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
@@ -536,14 +546,34 @@ if !empty(globpath(&rtp, "autoload/denite.vim"))
 endif
 
 if !empty(globpath(&rtp, "autoload/grepper.vim"))
-  runtime autoload/grepper.vim
+  if has("vim_starting")
+    runtime autoload/grepper.vim
+    let s:grepper_ag_grepprg = g:grepper.ag.grepprg
+  endif
   let g:grepper.tools     = ['ag', 'git', 'grep']
   let g:grepper.next_tool = '<C-n>'
   let g:grepper.switch    = 0
   let g:grepper.jump      = 0
-  let g:grepper.ag.grepprg .= ' --skip-vcs-ignores --hidden --'
+  let g:grepper.ag.grepprg = s:grepper_ag_grepprg.' --smart-case --ignore .git --ignore .svn --skip-vcs-ignores --hidden --'
   nmap gs <plug>(GrepperOperator)
   xmap gs <plug>(GrepperOperator)
+endif
+
+if !empty(globpath(&rtp, "autoload/deoplete.vim"))
+  " Use deoplete.
+  let g:deoplete#enable_at_startup = 1
+  " Use smartcase.
+  let g:deoplete#enable_smart_case = 1
+
+  " <C-h>, <BS>: close popup and delete backword char.
+  inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+
+  " <CR>: close popup and save indent.
+  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  function! s:my_cr_function() abort
+    return deoplete#close_popup() . "\<CR>"
+  endfunction
 endif
 
 if !empty(globpath(&rtp, "autoload/neocomplete.vim"))
