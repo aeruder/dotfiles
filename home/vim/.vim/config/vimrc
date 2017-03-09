@@ -78,6 +78,7 @@ if g:vimrc_profile >= 0
     Plug 'vim-ruby/vim-ruby'
     Plug 'xolox/vim-misc'
     Plug 'xolox/vim-notes'
+    Plug 'aeruder/vim-showmap'
   endif
 
   " full
@@ -352,7 +353,6 @@ function! s:push_leader(app)
   else
     execute "nnoremap <leader>? :n +/^".l:indentstr."call\\ s:push_leader(\"".a:app."\") ".s:mainconfig."<Cr>"
   endif
-  nnoremap <leader> <Nop>
 endfunction
 
 function! s:pop_leader()
@@ -501,6 +501,15 @@ call s:push_leader("\<Space>")
   call s:pop_leader()
 
 call s:pop_leader()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                   showmap                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:showmap_auto_whatis_all = 1
+if !empty(globpath(&rtp, "autoload/showmap.vim"))
+  " nmap <expr> <Space> showmap#helper("<lt>Space>", "n")
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  vim-notes                                  "
