@@ -1758,6 +1758,8 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias upenv='eval "`tmux show-environment -s`"'
 alias git='noglob git'
+alias vim='e'
+alias nvim='e'
 
 if [ "`uname`" != "Darwin" ]; then
     alias cp='cp -i --reflink=auto'
