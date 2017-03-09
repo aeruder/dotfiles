@@ -1851,4 +1851,4 @@ if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
 
-source ~/.zsh/iterm2_integration
+source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in

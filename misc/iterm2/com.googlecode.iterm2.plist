@@ -67,7 +67,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>410 380 620 392 0 0 1440 877 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>1845 274 796 473 1440 0 2560 1417 </string>
+	<string>1845 249 796 473 1440 0 2560 1417 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>99 293 592 584 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
@@ -1880,7 +1880,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.085872781065088763</real>
+			<real>0.0</real>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
@@ -1912,7 +1912,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>1AB6709B-E3AE-4564-A88E-DAD2D31EC3AA</string>
 	<key>NoSyncLastTipTime</key>
-	<real>510688681.437253</real>
+	<real>510775419.67565</real>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -1958,6 +1958,7 @@
 		<string>0027</string>
 		<string>0028</string>
 		<string>0029</string>
+		<string>0030</string>
 	</array>
 	<key>OpenTmuxWindowsIn</key>
 	<integer>1</integer>
