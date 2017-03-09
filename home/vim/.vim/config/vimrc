@@ -73,6 +73,11 @@ if g:vimrc_profile >= 0
     Plug 'tpope/vim-speeddating'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-unimpaired'
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+    Plug 'vim-ruby/vim-ruby'
+    Plug 'xolox/vim-misc'
+    Plug 'xolox/vim-notes'
   endif
 
   " full
@@ -495,6 +500,15 @@ call s:push_leader("\<Space>")
 
 call s:pop_leader()
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  vim-notes                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Default notes directory
+if !exists("g:notes_directories")
+  let g:notes_directories = [ '~/.notes' ]
+endif
+
+let g:notes_smart_quotes = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                             highlight operator                              "
