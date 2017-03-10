@@ -378,6 +378,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>k     <C-w>k
     nnoremap <leader>l     <C-w>l
     nnoremap <leader>d     <C-w>c
+    nnoremap <leader>=     <C-w>=
     nnoremap <leader>-     <C-w>s
     nnoremap <leader><bar> <C-w>v
   call s:pop_leader()
@@ -759,6 +760,9 @@ augroup customchanges
         \ Usespaces 2
 
     au FileType vim
+        \ Usespaces 2
+
+    au FileType perl
         \ Usespaces 2
 augroup END
 
