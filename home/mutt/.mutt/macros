@@ -9,21 +9,13 @@
 #bind browser,pager ^D exit
 #bind browser,pager <Esc>d exit
 #bind browser,pager D exit
-
-macro index,pager y "<change-folder>?<toggle-mailboxes>" "show incoming mailboxes list"
-bind browser y exit
+#
+macro   index   q       '<change-folder>?<toggle-mailboxes>'
+macro   browser q       '<exit><quit>'
 bind editor <Tab> complete-query
 bind editor ^T complete
 bind editor <space> noop 
 
-# Move message(s) to Spam/Verified by pressing "S"
-macro index S "<tag-prefix><enter-command>unset resolve<enter><tag-prefix><clear-flag>N<tag-prefix><enter-command>set resolve<enter><tag-prefix><save-message>+INBOX.Junk Mail.Verified<enter>" "file as Spam"
-macro pager S "<save-message>+INBOX.Junk Mail.Verified<enter>" "file as Spam"
-# Move message(s) to Spam/Ham by pressing "H"
-macro index H "<tag-prefix><enter-command>unset resolve<enter><tag-prefix><clear-flag>N<tag-prefix><enter-command>set resolve<enter><tag-prefix><save-message>+INBOX.Junk Mail.Ham<enter>" "file as Ham"
-macro pager H "<save-message>+INBOX.Junk Mail.Ham<enter>" "file as Ham"
-# Return to Inbox by pressing "."
-macro index . "<change-folder>+INBOX<enter>" "Inbox"
-# Move to archive
-macro index A "<tag-prefix><enter-command>unset resolve<enter><tag-prefix><clear-flag>N<tag-prefix><enter-command>set resolve<enter><tag-prefix><save-message>+INBOX.Archive<enter>" "file as Archive"
-macro pager A "<save-message>+INBOX.Archive<enter>" "file as Archive"
+macro browser,index <F1> '<sync-mailbox><enter-command>source ~/.mutt/account.aeruder<enter><change-folder>!<enter>' "switch to aeruder.net"
+macro browser,index <F2> '<sync-mailbox><enter-command>source ~/.mutt/account.gmail<enter><change-folder>!<enter>' "switch to gmail.com"
+macro browser,index <F3> '<sync-mailbox><enter-command>source ~/.mutt/account.ziprecruiter<enter><change-folder>!<enter>' "switch to ziprecruiter.com"

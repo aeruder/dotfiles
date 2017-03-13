@@ -1,0 +1,3 @@
+# vim:ft=muttrc
+
+set my_aeruder_pass="`security find-internet-password -a aeruder@fastmail.fm -s mutt -w`"

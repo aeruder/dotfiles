@@ -1,0 +1,3 @@
+# vim:ft=muttrc
+
+set my_ziprecruiter_pass="`security find-internet-password -a aeruder@ziprecruiter.com -s mutt -w`"

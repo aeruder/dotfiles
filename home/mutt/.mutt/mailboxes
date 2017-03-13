@@ -1,3 +1,13 @@
 # vim:ft=muttrc
 
+set mail_check = 120
+set timeout = 300
+set imap_keepalive = 300
+set move = no
+set copy= yes
+set confirmappend=no
 set imap_check_subscribed=yes
+
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/bodies
+set certificate_file=~/.mutt/certificates

@@ -4,6 +4,9 @@ source ~/.mutt/macros
 source ~/.mutt/global
 source ~/.mutt/gpg
 source ~/.mutt/hooks
-source ~/.mutt/mailboxes.global
 source ~/.mutt/mailboxes
 source ~/.mutt/subscriptions
+source ~/.mutt/account.ziprecruiter.pass
+source ~/.mutt/account.gmail.pass
+source ~/.mutt/account.aeruder.pass
+source ~/.mutt/account.aeruder

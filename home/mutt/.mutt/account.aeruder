@@ -1,0 +1,26 @@
+# vim:ft=muttrc
+
+set from="andy@aeruder.net"
+set hostname="aeruder.net"
+set folder = "imaps://mail.messagingengine.com:993"
+set postponed="+INBOX.Drafts"
+set spoolfile="+INBOX"
+set record="+INBOX.Sent Items"
+set smtp_url = "smtps://aeruder@fastmail.fm@mail.messagingengine.com:465/"
+set signature="~/.mutt/account.aeruder.signature"
+
+set imap_user="aeruder@fastmail.fm"
+set imap_pass="$my_aeruder_pass"
+set smtp_pass="$my_aeruder_pass"
+
+# Move message(s) to Spam/Verified by pressing "S"
+macro index S "<tag-prefix><enter-command>unset resolve<enter><tag-prefix><clear-flag>N<tag-prefix><enter-command>set resolve<enter><tag-prefix><save-message>+INBOX.Junk Mail.Verified<enter>" "file as Spam"
+macro pager S "<save-message>+INBOX.Junk Mail.Verified<enter>" "file as Spam"
+# Move message(s) to Spam/Ham by pressing "H"
+macro index H "<tag-prefix><enter-command>unset resolve<enter><tag-prefix><clear-flag>N<tag-prefix><enter-command>set resolve<enter><tag-prefix><save-message>+INBOX.Junk Mail.Ham<enter>" "file as Ham"
+macro pager H "<save-message>+INBOX.Junk Mail.Ham<enter>" "file as Ham"
+# Return to Inbox by pressing "."
+macro index . "<change-folder>+INBOX<enter>" "Inbox"
+# Move to archive
+macro index A "<tag-prefix><enter-command>unset resolve<enter><tag-prefix><clear-flag>N<tag-prefix><enter-command>set resolve<enter><tag-prefix><save-message>+INBOX.Archive<enter>" "file as Archive"
+macro pager A "<save-message>+INBOX.Archive<enter>" "file as Archive"

@@ -1,0 +1,3 @@
+# vim:ft=muttrc
+
+set my_gmail_pass="`security find-internet-password -a aeruder@gmail.com -s mutt -w`"
