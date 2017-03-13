@@ -23,7 +23,7 @@ if ! ssh -q "$remote_host" /bin/true > /dev/null 2>/dev/null ; then
 fi
 echo "yes"
 
-git push -f --mirror --atomic sandbox
+git push -f --mirror --atomic "$remote_host"
 ssh -q "$remote_host" <<END
   set -e
   cd "$remote_dir"
