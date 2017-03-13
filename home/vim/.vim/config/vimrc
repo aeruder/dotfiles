@@ -52,6 +52,7 @@ if type(g:vimrc_profile) != v:t_number
 endif
 
 if g:vimrc_profile >= 0
+  let g:plug_shallow = 0
   call plug#begin(s:maindir.s:sep."plugged")
 
   " bare and above
@@ -404,7 +405,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>c :execute "cd ".projectroot#get()<Cr>
     nnoremap <leader>l :execute "lcd ".projectroot#get()<Cr>
     " Recursive from project
-    nnoremap <leader>f :call denite#start([{'name': 'file_rec', 'args': [projectroot#get()]}])<Cr>
+    nnoremap <leader>f :call denite#start([{'name': 'file_rec', 'args': [projectroot#get(".")]}])<Cr>
     " Recursive from current directory
     nnoremap <leader>. :Denite file_rec<Cr>
     " Recursive from directory of current file
@@ -478,6 +479,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>u :UndotreeToggle<Cr>
     " Toggle in and out of hex dump mode
     nnoremap <leader>h :Hexmode<Cr>
+    nnoremap <leader>n :RecentNotes
   call s:pop_leader()
 
   " GIT
@@ -517,10 +519,15 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Default notes directory
 if !exists("g:notes_directories")
-  let g:notes_directories = [ '~/.notes' ]
+  if has('macunix')
+    let g:notes_directories = [ '~/Documents/Notes' ]
+  else
+    let g:notes_directories = [ '~/notes' ]
+  endif
 endif
 
-let g:notes_smart_quotes = 0
+let g:notes_suffix = '.txt'
+let g:notes_smart_quotes = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                             highlight operator                              "
@@ -764,35 +771,6 @@ augroup customchanges
 
     au FileType perl
         \ Usespaces 2
-augroup END
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                   fswitch                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-augroup fswitch_c
-    au!
-    au BufEnter *.c    let b:fswitchdst = 'h' |
-                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
-    au BufEnter *.cc   let b:fswitchdst = 'hh' |
-                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
-    au BufEnter *.cpp  let b:fswitchdst = 'hpp,h' |
-                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
-    au BufEnter *.cxx  let b:fswitchdst = 'hxx' |
-                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
-    au BufEnter *.C    let b:fswitchdst = 'H' |
-                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
-    au BufEnter *.m    let b:fswitchdst = 'h' |
-                     \ let b:fswitchlocs = './,reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|'
-    au BufEnter *.h    let b:fswitchdst = 'c,cpp,m' |
-                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
-    au BufEnter *.hh   let b:fswitchdst = 'cc' |
-                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
-    au BufEnter *.hpp  let b:fswitchdst = 'cpp' |
-                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
-    au BufEnter *.hxx  let b:fswitchdst = 'cxx' |
-                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
-    au BufEnter *.H    let b:fswitchdst = 'C' |
-                     \ let b:fswitchlocs = './,reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|'
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
