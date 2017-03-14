@@ -1450,7 +1450,6 @@ function battery_percent() {
     echo "$(((a * 100) / b))%%"
 }
 
-hostname="`hostname`"
 BATTERY=(/sys/class/power_supply/BAT*)
 BATTERY=${BATTERY[1]}
 BATTERY_PREFIX=""
@@ -1469,27 +1468,18 @@ fi
 # Sets the terminal or terminal multiplexer window title.
 function set-window-title {
   local title_format{,ted}
-  title_format="%s"
-  zformat -f title_formatted "$title_format" "s:$argv"
+  title_format="%h: %s"
+  zformat -f title_formatted "$title_format" "s:$argv" "h:$hostname"
 
   if [[ "$TERM" == screen* ]]; then
-    title_format=("\ek%s\e\\" "\e]2;%s\a")
+    title_format=("\ek%s\e\\" "\e]2;%s\a" "\e]1;%s\a")
   else
-    title_format=("\e]2;%s\a")
+    title_format=("\e]2;%s\a" "\e]1;%s\a")
   fi
 
   for a in "${title_format[@]}" ; do
     printf "$a" "${(V%)title_formatted}"
   done
-}
-
-# Sets the terminal tab title.
-function set-tab-title {
-  local title_format{,ted}
-  title_format="%s"
-  zformat -f title_formatted "$title_format" "s:$argv"
-
-  printf "\e]1;%s\a" ${(V%)title_formatted}
 }
 
 # Sets the tab and window titles with a given command.
@@ -1518,7 +1508,6 @@ function _terminal-set-titles-with-command {
     unset MATCH
 
     set-window-title "$cmd"
-    set-tab-title "$truncated_cmd"
   fi
 }
 
@@ -1530,10 +1519,10 @@ function _terminal-set-titles-with-path {
   local absolute_path="${${1:a}:-$PWD}"
   local abbreviated_path="${absolute_path/#$HOME/~}"
   local truncated_path="${abbreviated_path/(#m)?(#c15,)/...${MATCH[-12,-1]}}"
+  local super_short_path="`pr_aeruder_pwd`"
   unset MATCH
 
-  set-window-title "$abbreviated_path"
-  set-tab-title "$truncated_path"
+  set-window-title "$super_short_path"
 }
 
 # Sets the Terminal.app proxy icon.
@@ -1850,5 +1839,11 @@ alias nohist=' nohist'
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
+if [ -z "$hostname" ]; then
+    hostname="`hostname -f`"
+fi
 
+if [ -z "$iterm2_hostname" ]; then
+    iterm2_hostname="$hostname"
+fi
 source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
