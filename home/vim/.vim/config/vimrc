@@ -39,18 +39,15 @@ endif
 
 if g:vimrc_profile == "dead"
   let g:vimrc_profile = -1
-elseif type(g:vimrc_profile) != v:t_number
-  if g:vimrc_profile == "dead"
-    let g:vimrc_profile = -1
-  elseif g:vimrc_profile == "bare"
-    let g:vimrc_profile = 0
-  elseif g:vimrc_profile == "full"
-    let g:vimrc_profile = 100
-  elseif g:vimrc_profile == "medium"
-    let g:vimrc_profile = 1
-  else
-    let g:vimrc_profile = 0
-  endif
+elseif g:vimrc_profile == "bare"
+  let g:vimrc_profile = 0
+elseif g:vimrc_profile == "full"
+  let g:vimrc_profile = 100
+elseif g:vimrc_profile == "medium"
+  let g:vimrc_profile = 1
+elseif v:version < 800 ||
+      type(g:vimrc_profile) != v:t_number
+  let g:vimrc_profile = 0
 endif
 
 if g:vimrc_profile >= 0
