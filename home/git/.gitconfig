@@ -46,9 +46,9 @@
 	smtpuser = aeruder@fastmail.fm
 	smtpserverport = 465
 	confirm = always
-[url "https://github.com/"]
-	pushInsteadOf = git://github.com/
-[url "https://github.com/"]
-	pushInsteadOf = http://github.com/
 [include]
 	path = ~/.gitconfig.local
+[url "git@github.com:"]
+	pushInsteadOf = https://github.com/
+	pushInsteadOf = http://github.com/
+	pushInsteadOf = git://github.com/
