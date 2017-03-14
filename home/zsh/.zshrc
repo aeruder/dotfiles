@@ -1468,17 +1468,16 @@ fi
 # Sets the terminal or terminal multiplexer window title.
 function set-window-title {
   local title_format{,ted}
-  title_format="%h: %s"
-  zformat -f title_formatted "$title_format" "s:$argv" "h:$hostname"
 
   if [[ "$TERM" == screen* ]]; then
-    title_format=("\ek%s\e\\" "\e]2;%s\a" "\e]1;%s\a")
+    title_format=("\ek%h: %s\e\\" "\e]2;%h: %s\a" "\e]1;%s\a")
   else
-    title_format=("\e]2;%s\a" "\e]1;%s\a")
+    title_format=("\e]2;%h: %s\a" "\e]1;%s\a")
   fi
 
   for a in "${title_format[@]}" ; do
-    printf "$a" "${(V%)title_formatted}"
+    zformat -f title_formatted "$a" "s:$argv" "h:$short_hostname" "H:$long_hostname"
+    echo -n "${title_formatted}"
   done
 }
 
@@ -1839,11 +1838,19 @@ alias nohist=' nohist'
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
-if [ -z "$hostname" ]; then
-    hostname="`hostname -f`"
+
+if [ -z "$long_hostname" ]; then
+    long_hostname="`hostname -f`"
+fi
+if [ -z "$short_hostname" ]; then
+    short_hostname="`hostname`"
+fi
+if [ -z "$iterm2_hostname" ]; then
+    iterm2_hostname="$long_hostname"
 fi
 
-if [ -z "$iterm2_hostname" ]; then
-    iterm2_hostname="$hostname"
-fi
+function pr_aeruder_host {
+    echo "%{${pr_aeruder_fg_host}%}${USERNAME[1]}@${short_hostname} "
+}
+
 source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
