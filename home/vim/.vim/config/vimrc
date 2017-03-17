@@ -83,6 +83,7 @@ if g:vimrc_profile >= 0
     Plug 'thinca/vim-textobj-between'
     Plug 'kana/vim-textobj-entire'
     Plug 'lucapette/vim-textobj-underscore'
+    Plug 'tpope/vim-vinegar'
     Plug 'artnez/vim-wipeout'
   endif
 
