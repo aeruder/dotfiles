@@ -83,6 +83,7 @@ if g:vimrc_profile >= 0
     Plug 'thinca/vim-textobj-between'
     Plug 'kana/vim-textobj-entire'
     Plug 'lucapette/vim-textobj-underscore'
+    Plug 'artnez/vim-wipeout'
   endif
 
   " full
@@ -395,6 +396,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>r :Denite file_mru<Cr>
     " Filetype
     nnoremap <leader>t :Denite filetype<Cr>
+    " wipeout other buffers
+    nnoremap <leader>m :Wipeout<Cr>
   call s:pop_leader()
 
   " SEARCHING
