@@ -85,6 +85,7 @@ if g:vimrc_profile >= 0
     Plug 'lucapette/vim-textobj-underscore'
     Plug 'tpope/vim-vinegar'
     Plug 'artnez/vim-wipeout'
+    Plug 'tommcdo/vim-exchange'
   endif
 
   " full
