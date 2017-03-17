@@ -443,15 +443,6 @@ call s:push_leader("\<Space>")
     call s:pop_leader()
   call s:pop_leader()
 
-" Helps debug making syntax files, displays the syntax of the
-" character underneath the cursor.
-" nnoremap <leader>S :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-"             \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-"             \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-  " <leader>xa
-  "   ALIGNMENT STUFF
-
   " VISUAL/HIGHLIGHT manipulations
   call s:push_leader("v")
     nnoremap <leader>c :nohlsearch<CR>
@@ -508,6 +499,9 @@ call s:push_leader("\<Space>")
     nnoremap <leader>e :exe getline(".")<CR>
     vnoremap <leader>e :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
     nnoremap <leader>c :botr copen<Cr>
+    nnoremap <leader>s :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+          \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+          \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
   call s:pop_leader()
 
 call s:pop_leader()
