@@ -1,0 +1,38 @@
+snippet qobject
+#include `!p snip.rv = ('<' + t[2] + '>') if (t[2] == "" or t[2][0] == "Q") else ('"' + t[2].lower() + '"')`
+
+class ${1:name} : public ${2:QObject}
+{
+	Q_OBJECT
+
+public:
+	${1/(\w+).*/$1/}(`!p snip.rv = t[2] if (t[2] == "QState") else "QObject"` *parent = 0);
+	~${1/(\w+).*/$1/}();
+};
+endsnippet
+
+snippet qget
+${1:QString} ${2:property}() { return $2_; }
+endsnippet
+
+snippet qset
+void set`!p snip.rv = t[2][0].upper() + t[2][1:] if t[2] != "" else ""`(`!p snip.rv = 'const ' if re.search(r'^[A-Z]', t[1]) else ""`${1:QString}`!p snip.rv = '&' if re.search(r'^[A-Z]', t[1]) else ""` ${2:property}) { $2_ = $2; }
+endsnippet
+
+snippet qprop
+Q_PROPERTY(${1:QString} ${2:property} READ $2 WRITE set`!p snip.rv = t[2][0].upper() + t[2][1:] if t[2] != "" else ""`)
+endsnippet
+
+snippet qroprop
+Q_PROPERTY(${1:QString} ${2:property} READ $2)
+endsnippet
+
+snippet qfull
+Q_PROPERTY(${1:QString} ${2:property} READ $2 WRITE set`!p snip.rv = t[2][0].upper() + t[2][1:] if t[2] != "" else ""`)
+$1 $2() { return $2_; }
+void set`!p snip.rv = t[2][0].upper() + t[2][1:] if t[2] != "" else ""`(`!p snip.rv = 'const ' if re.search(r'^[A-Z]', t[1]) else ""`$1`!p snip.rv = '&' if re.search(r'^[A-Z]', t[1]) else ""` $2) { $2_ = $2; }
+$1 $2_;
+endsnippet
+
+
+# vim:ft=snippets:
