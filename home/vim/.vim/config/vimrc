@@ -399,11 +399,8 @@ call s:push_leader("\<Space>")
 
   " PROJECT STUFF
   call s:push_leader("p")
-    " cd to project root
-    nnoremap <leader>c :execute "cd ".projectroot#get()<Cr>
-    nnoremap <leader>l :execute "lcd ".projectroot#get()<Cr>
     " Recursive from project
-    nnoremap <leader>f :call denite#start([{'name': 'file_rec', 'args': [projectroot#get(".")]}])<Cr>
+    nnoremap <leader>f :Denite file_rec<Cr>
     " Recursive from current directory
     nnoremap <leader>. :Denite file_rec<Cr>
     " Recursive from directory of current file
