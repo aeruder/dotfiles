@@ -392,8 +392,10 @@ call s:push_leader("\<Space>")
 
   " BUFFERS
   call s:push_leader("b")
+    " buffer list and recent files
+    nnoremap <leader>b :Denite buffer file_mru<Cr>
     " Buffer list
-    nnoremap <leader>b :Denite buffer<Cr>
+    nnoremap <leader>B :Denite buffer<Cr>
     " Recent file list
     nnoremap <leader>r :Denite file_mru<Cr>
     " Filetype
