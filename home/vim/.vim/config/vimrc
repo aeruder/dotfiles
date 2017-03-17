@@ -445,7 +445,7 @@ call s:push_leader("\<Space>")
 
   " VISUAL/HIGHLIGHT manipulations
   call s:push_leader("v")
-    nnoremap <leader>c :nohlsearch<CR>
+    nnoremap <leader>c :let @/ = ""<CR>
     nnoremap <leader>D :%s/<C-R>///g<CR>
     nnoremap <leader>gD :%g/<C-R>//d<CR>
     nnoremap <leader>g!D :%g!/<C-R>//d<CR>
@@ -548,7 +548,6 @@ function! MyYankOperator(type) abort
 
   let &selection = selsave
 
-  let &hlsearch = 1
   let @/ = "\\V".escape(@@, "\\")
   let @@ = regsave
 endfunction
