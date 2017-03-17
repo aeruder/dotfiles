@@ -73,7 +73,7 @@ if g:vimrc_profile >= 0
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-unimpaired'
     Plug 'vim-airline/vim-airline'
-    Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+    Plug 'vim-perl/vim-perl'
     Plug 'vim-ruby/vim-ruby'
     Plug 'xolox/vim-misc'
     Plug 'xolox/vim-notes'
