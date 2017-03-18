@@ -43,6 +43,7 @@ set pipe_decode=no
 set pipe_sep=yes
 set ascii_chars=yes
 set alias_file=~/.mutt/aliases
+set smtp_authenticators='gssapi:login'
 
 alternative_order text/plain text/html *
 auto_view text/html
