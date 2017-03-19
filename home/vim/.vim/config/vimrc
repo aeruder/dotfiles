@@ -99,6 +99,7 @@ if g:vimrc_profile >= 0
       Plug 'SirVer/ultisnips'
       Plug 'Shougo/denite.nvim'
       Plug 'Shougo/neomru.vim'
+      Plug 'editorconfig/editorconfig-vim'
     end
     if has("nvim")
       Plug 'Shougo/deoplete.nvim'
