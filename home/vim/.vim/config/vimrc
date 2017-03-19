@@ -505,6 +505,11 @@ call s:push_leader("\<Space>")
           \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
   call s:pop_leader()
 
+  " QUIT stuff
+  call s:push_leader("q")
+    nnoremap <leader>q :q<Cr>
+  call s:pop_leader()
+
 call s:pop_leader()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
