@@ -76,7 +76,7 @@ if g:vimrc_profile >= 0
     Plug 'vim-perl/vim-perl'
     Plug 'vim-ruby/vim-ruby'
     Plug 'xolox/vim-misc'
-    Plug 'xolox/vim-notes'
+    Plug 'vimoutliner/vimoutliner'
     Plug 'aeruder/vim-showmap'
     Plug 'AndrewRadev/splitjoin.vim'
     Plug 'kana/vim-textobj-user'
@@ -420,6 +420,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
     " Recursive from parent directory of current file
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
+    " Recursive list all notes
+    nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
   call s:pop_leader()
 
   " COLORSCHEME
@@ -527,14 +529,30 @@ endif
 " Default notes directory
 if !exists("g:notes_directories")
   if has('macunix')
-    let g:notes_directories = [ '~/Documents/Notes' ]
+    let g:notes_directories = [ expand('~/Documents/Notes') ]
   else
-    let g:notes_directories = [ '~/notes' ]
+    let g:notes_directories = [ expand('~/notes') ]
   endif
 endif
 
 let g:notes_suffix = '.txt'
 let g:notes_smart_quotes = 1
+
+function! s:CheckIsNote()
+  if !empty(globpath(&rtp, "ftplugin/votl.vim"))
+    let l:thisfile = expand('%:p:h')
+    let l:is_note = 0
+    for l:n in g:notes_directories
+      if l:thisfile == l:n
+        let l:is_note = 1
+        break
+      endif
+    endfor
+    if l:is_note
+      set filetype=votl
+    endif
+  endif
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                             highlight operator                              "
@@ -758,6 +776,7 @@ augroup customchanges
     au BufNewFile,BufRead *.vb              set ft=vbnet
     au BufNewFile,BufRead *.il              set ft=ilasm
     au BufNewFile,BufRead *.adoc            set ft=asciidoc
+    au BufNewFile,BufRead *.txt             call s:CheckIsNote()
 
     " Space/tab settings for different filetypes
     au FileType make
