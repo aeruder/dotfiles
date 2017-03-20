@@ -373,10 +373,10 @@ function! s:pop_leader()
 endfunction
 
 call s:push_leader("\<Space>")
-  nnoremap <silent> <SID>(MyYankOperator) :set opfunc=MyYankOperator<cr>g@
-  xnoremap <silent> <SID>(MyYankOperator) :<c-u>call MyYankOperator(visualmode())<cr>
-  nmap <leader>y <SID>(MyYankOperator)
-  xmap <leader>y <SID>(MyYankOperator)
+  nnoremap <silent> <SID>(HighlightOnlyOperator) :set opfunc=HighlightOnlyOperator<cr>g@
+  xnoremap <silent> <SID>(HighlightOnlyOperator) :<c-u>call HighlightOnlyOperator(visualmode())<cr>
+  nmap <leader>y <SID>(HighlightOnlyOperator)
+  xmap <leader>y <SID>(HighlightOnlyOperator)
 
   " WINDOW STUFF
   call s:push_leader("w")
@@ -557,7 +557,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                             highlight operator                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! MyYankOperator(type) abort
+function! HighlightOnlyOperator(type) abort
   let regsave = @@
   let selsave = &selection
   let &selection = 'inclusive'
