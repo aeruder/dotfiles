@@ -403,6 +403,9 @@ call s:push_leader("\<Space>")
     nnoremap <leader>t :Denite filetype<Cr>
     " wipeout other buffers
     nnoremap <leader>m :Wipeout<Cr>
+    " delete buffer
+    nnoremap <leader>d :bdelete<Cr>
+    nnoremap <leader>D :bdelete!<Cr>
   call s:pop_leader()
 
   " SEARCHING
