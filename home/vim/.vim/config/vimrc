@@ -406,6 +406,8 @@ call s:push_leader("\<Space>")
     " delete buffer
     nnoremap <leader>d :bdelete<Cr>
     nnoremap <leader>D :bdelete!<Cr>
+    " Open a scratch buffer
+    nnoremap <leader>s <C-w>v<C-w>l:Scratch<Cr>
   call s:pop_leader()
 
   " SEARCHING
@@ -475,8 +477,6 @@ call s:push_leader("\<Space>")
     nnoremap <leader>eD :n $MYVIMRC<Cr>
     execute "nnoremap <leader>ed :n ".s:mainconfig."<Cr>"
     nnoremap <leader>S  :source %<Cr>
-    " Open a scratch buffer
-    nnoremap <leader>s <C-w>v<C-w>l:Scratch<Cr>
   call s:pop_leader()
 
   " APPLICATIONY THINGS
