@@ -1,18 +1,18 @@
 " File mappings
 
-let s:maindir=expand("<sfile>:p:h:h")
+let g:vim_maindir=expand("<sfile>:p:h:h")
 
 if has("win32")
-  let s:sep="\\"
+  let g:vim_sep="\\"
 else
-  let s:sep="/"
+  let g:vim_sep="/"
 endif
 
 if has('nvim')
   if len($PYTHONPATH) > 0
-    let $PYTHONPATH=expand("<sfile>:p:h:h").s:sep."python-client:".$PYTHONPATH
+    let $PYTHONPATH=expand("<sfile>:p:h:h").g:vim_sep."python-client:".$PYTHONPATH
   else
-    let $PYTHONPATH=expand("<sfile>:p:h:h").s:sep."python-client"
+    let $PYTHONPATH=expand("<sfile>:p:h:h").g:vim_sep."python-client"
   endif
 endif
 
@@ -52,7 +52,7 @@ endif
 
 if g:vimrc_profile >= 0
   let g:plug_shallow = 0
-  call plug#begin(s:maindir.s:sep."plugged")
+  call plug#begin(g:vim_maindir.g:vim_sep."plugged")
 
   " bare and above
   Plug 'morhetz/gruvbox'
@@ -112,11 +112,11 @@ if g:vimrc_profile >= 0
 endif
 
 let s:mainconfig=expand("<sfile>")
-let &directory=expand("<sfile>:p:h:h").s:sep."swp"
-let &undodir=expand("<sfile>:p:h:h").s:sep."undo"
+let &directory=expand("<sfile>:p:h:h").g:vim_sep."swp"
+let &undodir=expand("<sfile>:p:h:h").g:vim_sep."undo"
 
 if has("win32")
-    let $PATH=$PATH.";".expand("<sfile>:p:h:h").s:sep."bin"
+    let $PATH=$PATH.";".expand("<sfile>:p:h:h").g:vim_sep."bin"
 endif
 
 """"""""""""""""""""""""
@@ -425,6 +425,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     " Recursive list all notes
     nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
+    " Vim plugins
+    nnoremap <leader>v :call denite#start([{'name': 'file_rec', 'args': [g:vim_maindir.g:vim_sep."plugged"]}])<Cr>
   call s:pop_leader()
 
   " COLORSCHEME
