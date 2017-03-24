@@ -154,6 +154,8 @@
   on_ft: raml
 - repo: vim-perl/vim-perl
   on_ft: perl
+  hook_source: |
+    let perl_include_pod = 0
 - repo: vim-ruby/vim-ruby
   on_ft: ruby
 - repo: tpope/vim-rails
