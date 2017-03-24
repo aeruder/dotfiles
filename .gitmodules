@@ -1,9 +1,3 @@
 [submodule "antigen"]
 	path = antigen
 	url = http://github.com/zsh-users/antigen.git
-[submodule "home/vim/.vim/submodules/vim-pathogen.tpope.github.com"]
-	path = home/vim/.vim/submodules/vim-pathogen.tpope.github.com
-	url = https://github.com/tpope/vim-pathogen
-[submodule "home/vim/.vim/submodules/vim-plug.junegunn.github.com/vim-plug.junegunn.github.com"]
-	path = home/vim/.vim/submodules/vim-plug.junegunn.github.com/vim-plug.junegunn.github.com
-	url = https://github.com/junegunn/vim-plug
