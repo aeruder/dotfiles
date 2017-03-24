@@ -23,7 +23,7 @@ if has('nvim')
   "   h - Disable the effect of 'hlsearch' when loading the shada
   set shada='300,<50,@50,s100,h
 else
-  set viminfo='300,<10,@50,h,n$VARPATH/viminfo
+  let &viminfo="'300,<10,@50,h,n".PJ(g:vim_cachedir, "viminfo")
 endif
 
 """"""""""""""""""""""""
