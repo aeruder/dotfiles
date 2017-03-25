@@ -52,6 +52,14 @@ noremap  mj :m+<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let s:mapleaders = []
 
+function! MyDeniteDirectoryThenFile(dir)
+  let l:ret = denite#start([{'name': 'directory_rec', 'args': [a:dir]}], {'default_action': 'yank'})
+  if len(l:ret) > 0
+    let l:ret = denite#start([{'name': 'file_rec', 'args': [l:ret[0].word]}])
+  endif
+  return l:ret
+endfunction
+
 function! s:push_leader(app)
   if len(s:mapleaders) == 0
     call add(s:mapleaders, a:app)
@@ -125,7 +133,8 @@ call s:push_leader("\<Space>")
     " Recursive from current directory
     nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>. :Denite file_rec<Cr>
-    nnoremap <leader>d :Denite directory_rec -default-action=cd<Cr>
+    nnoremap <leader>d :call MyDeniteDirectoryThenFile(".")<Cr>
+    nnoremap <leader>D :Denite directory_rec -default-action=cd<Cr>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
     " Recursive from directory of current file
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
