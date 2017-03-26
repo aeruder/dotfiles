@@ -143,7 +143,7 @@ call s:push_leader("\<Space>")
     " Recursive list all notes
     nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
     " Vim plugins
-    nnoremap <leader>v :call denite#start([{'name': 'file_rec', 'args': [PJN(PTN(g:vim_cachedir), "dein", "repos")]}])<Cr>
+    nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
   call s:pop_leader()
 
   " COLORSCHEME
