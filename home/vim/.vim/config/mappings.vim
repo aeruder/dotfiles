@@ -138,6 +138,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
     " Recursive from directory of current file
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
+    nnoremap <leader>b :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
     " Recursive from parent directory of current file
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     " Recursive list all notes
