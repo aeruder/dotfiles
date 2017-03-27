@@ -55,7 +55,7 @@ let s:mapleaders = []
 function! MyDeniteDirectoryThenFile(dir)
   let l:ret = denite#start([{'name': 'directory_rec', 'args': [a:dir]}], {'default_action': 'yank'})
   if len(l:ret) > 0
-    let l:ret = denite#start([{'name': 'file_rec', 'args': [l:ret[0].word]}])
+    let l:ret = denite#start([{'name': 'file_rec', 'args': [l:ret[0].action__path]}])
   endif
   return l:ret
 endfunction
