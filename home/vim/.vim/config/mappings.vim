@@ -206,7 +206,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>u :UndotreeToggle<Cr>
     " Toggle in and out of hex dump mode
     nnoremap <leader>h :Hexmode<Cr>
-    nnoremap <leader>n :RecentNotes
+    nnoremap <leader>t :TagbarToggle<Cr>
   call s:pop_leader()
 
   " GIT
