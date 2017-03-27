@@ -341,7 +341,7 @@
 # Denite
 # ------
 - repo: Shougo/denite.nvim
-  if: has('nvim')
+  if: has('nvim') || v:version >= 800
   on_cmd: Denite
   on_func: denite#
   hook_source: |
