@@ -300,6 +300,10 @@ endif
 if dein#tap('dsf.vim') "{{{
   nmap dsf <Plug>DsfDelete
   nmap csf <Plug>DsfChange
+  omap af <Plug>DsfTextObjectA
+  xmap af <Plug>DsfTextObjectA
+  omap if <Plug>DsfTextObjectI
+  xmap if <Plug>DsfTextObjectI
 endif
 
 "}}}
