@@ -168,11 +168,13 @@
   on_cmd:
     - Gcd
     - Glcd
+    - Glog
+    - Gamend
     - Git
     - Gcommit
     - Gblame
     - Gstatus
-    - Gitdiff
+    - Gdiff
     - Gbrowse
     - Gwrite
     - Gread
