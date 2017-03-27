@@ -334,7 +334,7 @@
 # ==========================================
 # Denite
 # ------
-- repo: aeruder/denite.nvim
+- repo: Shougo/denite.nvim
   if: has('nvim')
   on_cmd: Denite
   on_func: denite#
