@@ -219,7 +219,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>r :<c-u>Gread<Cr>
     nnoremap <leader>w :<c-u>Gwrite<Cr>
     nnoremap <leader>c :<c-u>Gcommit<Cr>
-    nnoremap <leader>a :<c-u>Gamend<Cr>
+    nnoremap <leader>a :<c-u>Gcommit --amend<Cr>
     nnoremap <leader>P :<c-u>Git push-sandbox<Cr>
     nnoremap <leader>v :Gitv --all<Cr>
     nnoremap <leader>V :Gitv! --all<Cr>
