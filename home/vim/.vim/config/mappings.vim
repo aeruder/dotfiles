@@ -239,6 +239,7 @@ call s:push_leader("\<Space>")
           \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
     execute "nnoremap <leader>r :source" PJ(g:vim_configdir, "vimrc") "<cr>"
     execute "nnoremap <leader>R :call dein#clear_state() \\\| source" PJ(g:vim_configdir, "vimrc") "<cr>"
+    nnoremap <leader>U :call dein#update()<Cr>
   call s:pop_leader()
 
   " QUIT stuff
