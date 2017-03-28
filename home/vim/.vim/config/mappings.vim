@@ -169,8 +169,8 @@ call s:push_leader("\<Space>")
     call s:pop_leader()
   call s:pop_leader()
 
-  " VISUAL/HIGHLIGHT manipulations
-  call s:push_leader("v")
+  " HIGHLIGHT manipulations
+  call s:push_leader("h")
     nnoremap <leader>c :nohlsearch<Cr>
     nnoremap <leader>D :%s/<C-R>///g<CR>
     nnoremap <leader>gD :%g/<C-R>//d<CR>
@@ -227,7 +227,7 @@ call s:push_leader("\<Space>")
   call s:pop_leader()
 
   " VIM
-  call s:push_leader("V")
+  call s:push_leader("v")
     " executing lines
     nnoremap <silent><leader>p :<C-u>Denite dein -no-quit<CR>
     nnoremap <leader>e :exe getline(".")<CR>
