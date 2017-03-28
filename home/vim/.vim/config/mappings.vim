@@ -117,8 +117,8 @@ call s:push_leader("\<Space>")
     " wipeout other buffers
     nnoremap <leader>m :Wipeout<Cr>
     " delete buffer
-    nnoremap <leader>d :BUFKILLD<Cr>
-    nnoremap <leader>D :BUFKILLD!<Cr>
+    nnoremap <leader>d :BufKillD<Cr>
+    nnoremap <leader>D :BufKillD!<Cr>
     " Open a scratch buffer
     nnoremap <leader>s :Scratch<Cr>
   call s:pop_leader()
