@@ -48,6 +48,8 @@
 	confirm = always
 [include]
 	path = ~/.gitconfig.local
+[url "https://github.com/"]
+	insteadOf = "http://github.com/"
 [url "git@github.com:"]
 	pushInsteadOf = https://github.com/
 	pushInsteadOf = http://github.com/
