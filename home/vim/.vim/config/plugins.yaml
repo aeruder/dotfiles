@@ -178,6 +178,7 @@
     - Gwrite
     - Gread
   hook_post_source: |
+    bufdo call fugitive#detect(expand('%:p'))
     call airline#extensions#branch#init({})
     MyAirlineRefresh
 - repo: tpope/vim-abolish
