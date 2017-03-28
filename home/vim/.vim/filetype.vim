@@ -3,11 +3,11 @@ if exists('did_load_filetypes')
 endif
 
 augroup filetypedetect " {{{
-    au BufNewFile,BufRead build_log.txt     setf changelog
-    au BufNewFile,BufRead *.phys            setf cmphys
-    au BufNewFile,BufRead *.vb              setf vbnet
-    au BufNewFile,BufRead *.il              setf ilasm
-    au BufNewFile,BufRead *.adoc            setf asciidoc
+    au BufNewFile,BufRead build_log.txt     set filetype=changelog
+    au BufNewFile,BufRead *.phys            set filetype=cmphys
+    au BufNewFile,BufRead *.vb              set filetype=vbnet
+    au BufNewFile,BufRead *.il              set filetype=ilasm
+    au BufNewFile,BufRead *.adoc            set filetype=asciidoc
     au BufNewFile,BufRead *.txt             call s:CheckIsNote()
 augroup END " }}}
 
@@ -21,7 +21,7 @@ function! s:CheckIsNote()
     endif
   endfor
   if l:is_note
-    setf votl
+    set filetype=votl
   endif
 endfunction
 
