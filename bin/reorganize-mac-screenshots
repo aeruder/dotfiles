@@ -10,8 +10,9 @@ fi
 
 # This is a bad hack, but trying to reduce any race conditions on using
 # the launch agent
+should_sleep=0
 if [ "$1" = sleep ]; then
-    sleep 5
+    should_sleep=1
 fi
 
 prefix="screenshot"
@@ -23,6 +24,16 @@ fi
 cd "$loc" || exit
 
 for a in "Screen Shot"* ; do
+    if [ "$should_sleep" = 1 ]; then
+        # Wait until the file hasn't been modified for 2 seconds
+        while true ; do
+            age="`perl -e 'print (time - (stat($ARGV[0]))[9])'`"
+            if ((age > 2)); then
+                break
+            fi
+            sleep 1
+        done
+    fi
     ext="${a##*.}"
     date="`date -r "$a" "+%Y-%m-%d-%H%M"`"
     idx=0
@@ -34,5 +45,6 @@ for a in "Screen Shot"* ; do
         fi
         idx=$((idx+1))
     done
-    mv "$a" "$fullfile"
+    convert "$a" -strip "$fullfile"
+    rm -f "$a"
 done
