@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <file>" >&2
+    exit 1
+fi
+upfile="$1"
+
+tmpfile="`mktemp`"
+trap "rm -f '$tmpfile'" EXIT
+
+output="`curl -q -F "file=@$upfile" -o "$tmpfile" -w 'code: %{http_code}' http://babombpi2.local:9611/upload 2>&1`"
+
+if echo "$output" | grep -q '^code: 200$'; then
+    url="`cat "$tmpfile"`"
+    echo "$url"
+    exit 0
+fi
+
+echo "Failed!" >&2
+echo "$output" >&2
+exit 1

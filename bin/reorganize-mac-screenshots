@@ -45,6 +45,6 @@ for a in "Screen Shot"* ; do
         fi
         idx=$((idx+1))
     done
-    convert "$a" -strip "$fullfile"
+    /usr/local/bin/convert "$a" -strip "$fullfile"
     rm -f "$a"
 done
