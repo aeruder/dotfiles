@@ -59,10 +59,14 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>   url="`~/.dotfiles/bin/babombpi2-upload "$1"`"
-   if [ $? = 0 ]; then
-      echo "$url" | pbcopy
-   fi</string>
+					<string>url="`~/.dotfiles/bin/babombpi2-upload "$1"`"
+if [ $? = 0 ]; then
+   echo "$url" | pbcopy
+   osascript -e 'display notification "'"$url"'" with title "Upload complete"'
+   exit 0
+fi
+osascript -e 'display notification with title "Upload failed"'
+exit 1</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -172,12 +176,10 @@
 						<string>4</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>309.000000:253.000000</string>
+				<string>679.500000:253.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
