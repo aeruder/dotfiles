@@ -109,7 +109,7 @@ function fullDimension(dim)
   end
 end
 
-hs.hotkey.bind(hyper, "down", function ()
+hs.hotkey.bind(hyper, "s", function ()
   pressed.down = true
   if pressed.up then 
     fullDimension('h')
@@ -123,7 +123,7 @@ end, function ()
   pressed.down = false
 end)
 
-hs.hotkey.bind(hyper, "right", function ()
+hs.hotkey.bind(hyper, "d", function ()
   pressed.right = true
   if pressed.left then 
     fullDimension('w')
@@ -137,7 +137,7 @@ end, function ()
   pressed.right = false
 end)
 
-hs.hotkey.bind(hyper, "left", function ()
+hs.hotkey.bind(hyper, "a", function ()
   pressed.left = true
   if pressed.right then 
     fullDimension('w')
@@ -151,7 +151,7 @@ end, function ()
   pressed.left = false
 end)
 
-hs.hotkey.bind(hyper, "up", function ()
+hs.hotkey.bind(hyper, "w", function ()
   pressed.up = true
   if pressed.down then 
       fullDimension('h')
