@@ -103,9 +103,8 @@ call s:push_leader("\<Space>")
 
   " BUFFERS
   call s:push_leader("b")
-    nnoremap <leader>b :Denite buffer file_old<Cr>
-    nnoremap <leader>B :Denite buffer<Cr>
-    nnoremap <leader>r :Denite file_old<Cr>
+    nnoremap <leader>b :Denite buffer<Cr>
+    nnoremap <leader>r :Denite buffer file_old<Cr>
     nnoremap <leader>t :Denite filetype<Cr>
     " wipeout other buffers besides those that are visible
     nnoremap <leader>m :Wipeout<Cr>
@@ -113,6 +112,24 @@ call s:push_leader("\<Space>")
     nnoremap <leader>D :BufKillD!<Cr>
     " Open a scratch buffer
     nnoremap <leader>s :Scratch<Cr>
+  call s:pop_leader()
+
+  " Denite everything
+  call s:push_leader("d")
+    nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
+    nnoremap <leader>/ :Denite line<Cr>
+    nnoremap <leader>b :Denite buffer<Cr>
+    nnoremap <leader>d :Denite -resume<Cr>
+    nnoremap <leader>f :Denite file_rec<Cr>
+    nnoremap <leader>g :<C-u>Denite grep -buffer-name=grep<CR>
+    nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
+    nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
+    nnoremap <leader>o :Denite outline<Cr>
+    nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
+    nnoremap <leader>r :Denite buffer file_old<Cr>
+    nnoremap <leader>t :Denite filetype<Cr>
+    nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
+    nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
   call s:pop_leader()
 
   " FILE STUFF
@@ -193,6 +210,8 @@ call s:push_leader("\<Space>")
   call s:push_leader("s")
     nnoremap <leader>. :<C-u>Denite grep -buffer-name=grep<CR>
     nnoremap <leader>* :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
+    nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
+    nnoremap <leader>r :<C-u>Denite -resume -buffer-name=grep<Cr>
   call s:pop_leader()
 
   " TOGGLES
