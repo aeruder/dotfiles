@@ -94,24 +94,24 @@ call s:push_leader("\<Space>")
 
   " APPLICATIONY THINGS
   call s:push_leader("a")
-    " Open undotree
-    nnoremap <leader>u :UndotreeToggle<Cr>
     " Toggle in and out of hex dump mode
     nnoremap <leader>h :Hexmode<Cr>
     nnoremap <leader>t :TagbarToggle<Cr>
+    " Open undotree
+    nnoremap <leader>u :UndotreeToggle<Cr>
   call s:pop_leader()
 
   " BUFFERS
   call s:push_leader("b")
     nnoremap <leader>b :Denite buffer<Cr>
-    nnoremap <leader>r :Denite buffer file_old<Cr>
-    nnoremap <leader>t :Denite filetype<Cr>
-    " wipeout other buffers besides those that are visible
-    nnoremap <leader>m :Wipeout<Cr>
     nnoremap <leader>d :BufKillD<Cr>
     nnoremap <leader>D :BufKillD!<Cr>
+    " wipeout other buffers besides those that are visible
+    nnoremap <leader>m :Wipeout<Cr>
+    nnoremap <leader>r :Denite buffer file_old<Cr>
     " Open a scratch buffer
     nnoremap <leader>s :Scratch<Cr>
+    nnoremap <leader>t :Denite filetype<Cr>
   call s:pop_leader()
 
   " Denite everything
@@ -134,73 +134,66 @@ call s:push_leader("\<Space>")
 
   " FILE STUFF
   call s:push_leader("f")
-    nnoremap <leader>l :lcd %:h<Cr>
+    nnoremap <leader>* :<C-u>DeniteCursorWord line<CR>
+    nnoremap <leader>/ :<C-u>Denite line<CR>
     nnoremap <leader>c :cd %:h<Cr>
     call s:push_leader("e")
-      nnoremap <leader>D :n $MYVIMRC<Cr>
       execute "nnoremap <leader>d :n ".PJ(g:vim_configdir, "mappings.vim")."<Cr>"
+      nnoremap <leader>D :n $MYVIMRC<Cr>
       execute "nnoremap <leader>p :n ".PJ(g:vim_configdir, "plugins.yaml")."<Cr>"
     call s:pop_leader()
+    nnoremap <leader>l :lcd %:h<Cr>
+    nnoremap <leader>o :<C-u>Denite outline<CR>
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
-    nnoremap <Leader>y :let @+=expand("%:p")<CR>:echo 'Copied to clipboard.'<CR>
-    nnoremap <Leader>o :<C-u>Denite outline<CR>
-    nnoremap <Leader>/ :<C-u>Denite line<CR>
-    nnoremap <Leader>* :<C-u>DeniteCursorWord line<CR>
+    nnoremap <leader>y :let @+=expand("%:p")<CR>:echo 'Copied to clipboard.'<CR>
   call s:pop_leader()
 
   " GIT
   call s:push_leader("g")
-    nnoremap <leader>s :<c-u>Gstatus<Cr>
-    nnoremap <leader>l :<c-u>Glog<Cr>
-    nnoremap <leader>d :<c-u>Gdiff<Cr>
+    nnoremap <leader>a :<c-u>Gcommit --amend<Cr>
     nnoremap <leader>b :<c-u>Gblame<Cr>
     nnoremap <leader>B :<c-u>Gblame -M -C -C<Cr>
-    nnoremap <leader>r :<c-u>Gread<Cr>
-    nnoremap <leader>w :<c-u>Gwrite<Cr>
     nnoremap <leader>c :<c-u>Gcommit<Cr>
-    nnoremap <leader>a :<c-u>Gcommit --amend<Cr>
+    nnoremap <leader>d :<c-u>Gdiff<Cr>
+    nnoremap <leader>l :<c-u>Glog<Cr>
     nnoremap <leader>P :<c-u>Git push-sandbox<Cr>
+    nnoremap <leader>r :<c-u>Gread<Cr>
+    nnoremap <leader>s :<c-u>Gstatus<Cr>
     nnoremap <leader>v :Gitv --all<Cr>
     nnoremap <leader>V :Gitv! --all<Cr>
-    vnoremap <Leader>V :Gitv! --all<cr>
+    vnoremap <leader>V :Gitv! --all<cr>
+    nnoremap <leader>w :<c-u>Gwrite<Cr>
   call s:pop_leader()
 
   " HIGHLIGHT manipulations
   call s:push_leader("h")
-    nnoremap <leader>c :nohlsearch<Cr>
-    nnoremap <leader>D :%s/<C-R>///g<CR>
-    nnoremap <leader>gD :%g/<C-R>//d<CR>
-    nnoremap <leader>g!D :%g!/<C-R>//d<CR>
-    vnoremap <leader>D :s/<C-R>///g<CR>
-    vnoremap <leader>gD :g/<C-R>//d<CR>
-    vnoremap <leader>g!D :g!/<C-R>//d<CR>
     " Highlight spacing errors
     nnoremap <leader><space> /\v(\s+$)\|(<space>\ze<tab>)<CR>
     " Highlight tabs
     nnoremap <leader><Tab> /<Tab><CR>
+    nnoremap <leader>D :%s/<C-R>///g<CR>
+    nnoremap <leader>c :nohlsearch<Cr>
+    nnoremap <leader>g!D :%g!/<C-R>//d<CR>
+    nnoremap <leader>gD :%g/<C-R>//d<CR>
+    vnoremap <leader>D :s/<C-R>///g<CR>
+    vnoremap <leader>g!D :g!/<C-R>//d<CR>
+    vnoremap <leader>gD :g/<C-R>//d<CR>
     " Highlight just pasted text
     nnoremap <expr> <leader>v '`['.strpart(getregtype(), 0, 1).'`]'
   call s:pop_leader()
 
   " PROJECT STUFF
   call s:push_leader("p")
-    " Recursive from current directory
-    nnoremap <leader>f :Denite file_rec<Cr>
+    nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
     nnoremap <leader>. :Denite file_rec<Cr>
+    nnoremap <leader>b :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
     nnoremap <leader>d :call MyDeniteDirectoryThenFile(".")<Cr>
     nnoremap <leader>D :Denite directory_rec -default-action=cd<Cr>
+    nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
-
-    " Relative to open file
-    nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
-    nnoremap <leader>b :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
-    nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
-
-    " Recursive list all notes
     nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
-
-    " Vim plugins
+    nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
   call s:pop_leader()
 
@@ -211,10 +204,10 @@ call s:push_leader("\<Space>")
 
   " SEARCHING
   call s:push_leader("s")
-    nnoremap <leader>. :<C-u>Denite grep -buffer-name=grep<CR>
     nnoremap <leader>* :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
-    nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
+    nnoremap <leader>. :<C-u>Denite grep -buffer-name=grep<CR>
     nnoremap <leader>r :<C-u>Denite -resume -buffer-name=grep<Cr>
+    nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
   call s:pop_leader()
 
   " TOGGLES
@@ -224,12 +217,12 @@ call s:push_leader("\<Space>")
 
   " VIM
   call s:push_leader("v")
+    nnoremap <leader>c :botr copen<Cr>
     " executing lines
-    nnoremap <silent><leader>p :<C-u>Denite dein -no-quit<CR>
     nnoremap <leader>e :exe getline(".")<CR>
     vnoremap <leader>e :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
-    nnoremap <leader>c :botr copen<Cr>
     nnoremap <leader>h :Denite help<Cr>
+    nnoremap <silent><leader>p :<C-u>Denite dein -no-quit<CR>
     nnoremap <leader>s :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
           \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
           \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
@@ -240,14 +233,14 @@ call s:push_leader("\<Space>")
 
   " WINDOW STUFF
   call s:push_leader("w")
+    nnoremap <leader><bar> <C-w>v
+    nnoremap <leader>-     <C-w>s
+    nnoremap <leader>=     <C-w>=
+    nnoremap <leader>d     <C-w>c
     nnoremap <leader>h     <C-w>h
     nnoremap <leader>j     <C-w>j
     nnoremap <leader>k     <C-w>k
     nnoremap <leader>l     <C-w>l
-    nnoremap <leader>d     <C-w>c
-    nnoremap <leader>=     <C-w>=
-    nnoremap <leader>-     <C-w>s
-    nnoremap <leader><bar> <C-w>v
   call s:pop_leader()
 
   " TEXT MANIPULATIONS
@@ -355,8 +348,8 @@ if g:vimrc_profile >= 0
 
   "}}}
   if dein#tap('vim-commentary') "{{{
-    xmap <Leader>v  <Plug>Commentary
-    nmap <Leader>v  <Plug>CommentaryLine
+    xmap <leader>v  <Plug>Commentary
+    nmap <leader>v  <Plug>CommentaryLine
     xmap gc  <Plug>Commentary
     nmap gc  <Plug>Commentary
     omap gc  <Plug>Commentary
