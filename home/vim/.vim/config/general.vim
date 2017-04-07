@@ -139,7 +139,7 @@ set undofile
 
 " Time stuff
 set timeout ttimeout
-set timeoutlen=750  " Time out on mappings
+set timeoutlen=1500 " Time out on mappings
 set updatetime=2000 " Idle time to write swap and trigger CursorHold
 
 " Time out on key codes
