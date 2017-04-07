@@ -275,8 +275,8 @@ if g:vimrc_profile >= 0
 
   "}}}
   if dein#tap('accelerated-jk') "{{{
-    nmap <silent>j <Plug>(accelerated_jk_gj)
-    nmap <silent>k <Plug>(accelerated_jk_gk)
+    nmap <silent>j <Plug>(accelerated_jk_j)
+    nmap <silent>k <Plug>(accelerated_jk_k)
   endif
 
   "}}}
