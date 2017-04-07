@@ -136,10 +136,13 @@ call s:push_leader("\<Space>")
   call s:push_leader("f")
     nnoremap <leader>l :lcd %:h<Cr>
     nnoremap <leader>c :cd %:h<Cr>
-    nnoremap <leader>eD :n $MYVIMRC<Cr>
+    call s:push_leader("e")
+      nnoremap <leader>D :n $MYVIMRC<Cr>
+      execute "nnoremap <leader>d :n ".PJ(g:vim_configdir, "mappings.vim")."<Cr>"
+      execute "nnoremap <leader>p :n ".PJ(g:vim_configdir, "plugins.yaml")."<Cr>"
+    call s:pop_leader()
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
-    execute "nnoremap <leader>ed :n ".PJ(g:vim_configdir, "mappings.vim")."<Cr>"
     nnoremap <Leader>y :let @+=expand("%:p")<CR>:echo 'Copied to clipboard.'<CR>
     nnoremap <Leader>o :<C-u>Denite outline<CR>
     nnoremap <Leader>/ :<C-u>Denite line<CR>
