@@ -17,7 +17,8 @@ call denite#custom#source('_', 'matchers', ['matcher_substring'])
 let s:menus = {}
 
 let s:menus.zsh = {
-      \ 'description': 'Edit your import zsh configuration'
+      \ 'description': 'Edit your import zsh configuration',
+      \ 'shortcut': 'z',
       \ }
 let s:menus.zsh.file_candidates = [
       \ ['zshrc', '~/.config/zsh/.zshrc'],
