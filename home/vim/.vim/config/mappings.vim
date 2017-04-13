@@ -241,6 +241,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>j     <C-w>j
     nnoremap <leader>k     <C-w>k
     nnoremap <leader>l     <C-w>l
+    nnoremap <leader>v     <C-w>v
   call s:pop_leader()
 
   " TEXT MANIPULATIONS
