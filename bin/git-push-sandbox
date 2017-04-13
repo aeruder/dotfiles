@@ -16,12 +16,12 @@ echo "Host: $remote_host"
 echo "Dir:  $remote_url"
 echo "HEAD: $branch"
 
-echo -n "Checking if host is up..."
-if ! ssh -q "$remote_host" /bin/true > /dev/null 2>/dev/null ; then
-    echo "no"
-    exit 1
-fi
-echo "yes"
+# echo -n "Checking if host is up..."
+# if ! ssh -q "$remote_host" /bin/true > /dev/null 2>/dev/null ; then
+#     echo "no"
+#     exit 1
+# fi
+# echo "yes"
 
 git push -f --mirror --atomic "$remote_host"
 ssh -q "$remote_host" <<END
