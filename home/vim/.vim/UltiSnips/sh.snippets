@@ -46,3 +46,11 @@ fi
 echo "Processing file $file" >&2
 
 endsnippet
+
+snippet quote
+# This function shell-quotes the argument
+function quote {
+	local quoted=\${1//\\'/\\'\\\\\\'\\'}
+	printf "'%s'" "$quoted"
+}
+endsnippet
