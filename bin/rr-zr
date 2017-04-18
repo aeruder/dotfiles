@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Failed commands aborts script
+set -e
+# Uninitialized expansion aborts script
+set -u
+# Any command in a pipe failing aborts script
+set -o pipefail
+
+exec run-remote -d '~/ziprecruiter' -c sandbox "$@"
