@@ -59,3 +59,15 @@ function quote {
 	fi
 }
 endsnippet
+
+snippet runverbose
+# Prints out the command as it is running
+function runverbose {
+	typeset -a args
+	for a in "$@"; do
+		args+=("`quote "$a"`")
+	done
+	echo "RUNNING:" "${args[@]}" >&2
+	"$@"
+}
+endsnippet
