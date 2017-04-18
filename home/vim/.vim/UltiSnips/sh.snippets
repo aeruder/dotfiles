@@ -37,6 +37,7 @@ while getopts ":hf:" opt; do
 			;;
 	esac
 done
+shift $((OPTIND-1))
 if [ -z "${file:-}" ]; then
 	echo "Must provide file with -f" >&2
 	print_usage
