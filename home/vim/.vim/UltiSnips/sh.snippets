@@ -1,0 +1,47 @@
+snippet start
+#!/bin/bash
+
+# Failed commands aborts script
+set -e
+# Uninitialized expansion aborts script
+set -u
+# Any command in a pipe failing aborts script
+set -o pipefail
+
+endsnippet
+
+snippet getopts
+function print_usage {
+	echo "Usage: \$0 [options]" >&2
+	echo "Options:" >&2
+	echo "  -h           this help" >&2
+	echo "  -f <FILE>    the file for processing" >&2
+	exit 1
+}
+
+while getopts ":hf:" opt; do
+	case $opt in
+		h)
+			print_usage
+			;;
+		f)
+			file="$OPTARG"
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			print_usage
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			print_usage
+			;;
+	esac
+done
+if [ -z "${file:-}" ]; then
+	echo "Must provide file with -f" >&2
+	print_usage
+fi
+
+echo "Processing file $file" >&2
+
+endsnippet
