@@ -354,8 +354,9 @@
     execute 'source' PJ(g:vim_pconfigdir, "denite.vim")
   hook_post_source: |
     execute 'source' PJ(g:vim_pconfigdir, "denite.post.vim")
-
 - repo: chemzqm/unite-location
+  on_source: denite.nvim
+- repo: chemzqm/denite-git
   on_source: denite.nvim
 
 #  vim: set ts=2 sw=2 tw=80 et :
