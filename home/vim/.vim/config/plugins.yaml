@@ -162,6 +162,14 @@
   on_ft: ruby
 - repo: aeruder/vimoutliner
   on_ft: votl
+- repo: OmniSharp/omnisharp-vim
+  hook_source: |
+    let g:OmniSharp_server_type = 'roslyn'
+  lazy: 1
+- repo: dimixar/deoplete-omnisharp
+  if: has('nvim') && has('python') && g:vimrc_profile >= 1
+  depends: omnisharp-vim
+  on_ft: cs
 
 # others
 - repo: tpope/vim-fugitive
