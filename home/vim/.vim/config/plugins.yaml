@@ -185,6 +185,7 @@
     - Gbrowse
     - Gwrite
     - Gread
+  on_path: ^fugitive://.*
   hook_post_source: |
     bufdo call fugitive#detect(expand('%:p'))
     call airline#extensions#branch#init({})
