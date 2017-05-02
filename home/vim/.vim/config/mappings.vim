@@ -159,7 +159,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>l :<c-u>Glog<Cr>
     nnoremap <leader>P :<c-u>Git push-sandbox<Cr>
     nnoremap <leader>r :<c-u>Gread<Cr>
-    nnoremap <leader>s :<c-u>Gstatus<Cr>
+    nnoremap <leader>s :<c-u>Denite gitstatus<Cr>
+    nnoremap <leader>S :<c-u>Gstatus<Cr>
     nnoremap <leader>v :Gitv --all<Cr>
     nnoremap <leader>V :Gitv! --all<Cr>
     vnoremap <leader>V :Gitv! --all<cr>
@@ -241,6 +242,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>j     <C-w>j
     nnoremap <leader>k     <C-w>k
     nnoremap <leader>l     <C-w>l
+    nnoremap <leader>s     <C-w>s
     nnoremap <leader>v     <C-w>v
   call s:pop_leader()
 
@@ -258,7 +260,13 @@ call s:push_leader("\<Space>")
       " a,   b,   c,    d
       " foo, bar, blah, baz
       vnoremap <leader>, :Tab /[;,]<CR>gv:s/\v(\s+)([,;])\s?/\2\1/g<CR>gv:s/\v\s+$//<CR>:let @/=""<CR>
+
+      " Align = signs
+      vnoremap <leader>= :Tab /=.*<CR>
     call s:pop_leader()
+    nnoremap <leader>p "*p
+    nnoremap <leader>P "*P
+    vnoremap <leader>y "*y
   call s:pop_leader()
 call s:pop_leader()
 " }}}
