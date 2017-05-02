@@ -23,3 +23,4 @@ tags
 .projectile
 .byebug_history
 .tramp_history
+/.vscode/settings.json
