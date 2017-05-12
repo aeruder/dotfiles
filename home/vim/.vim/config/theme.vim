@@ -36,9 +36,23 @@ endfunction
 
 autocmd MyAutoCmd ColorScheme * call s:theme_save(expand('<amatch>'))
 
+let s:default_theme = "hybrid"
 let s:cache = PJ(g:vim_cachedir, "theme.txt")
 if ! exists("g:applied_colorscheme")
   set background=dark
-  let g:applied_colorscheme = filereadable(s:cache) ? readfile(s:cache)[0] : 'hybrid'
-  execute 'colorscheme' g:applied_colorscheme
+  try
+    let g:applied_colorscheme = filereadable(s:cache) ? readfile(s:cache)[0] : ''
+  catch
+    let g:applied_colorscheme = ''
+  endtry
+  let s:apply_theme = g:applied_colorscheme
+  if len(s:apply_theme) < 1
+    let s:apply_theme = s:default_theme
+  endif
+
+  try
+    execute 'colorscheme' s:apply_theme
+  catch
+    execute 'colorscheme' s:default_theme
+  endtry
 endif
