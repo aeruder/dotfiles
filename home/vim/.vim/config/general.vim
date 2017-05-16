@@ -36,14 +36,16 @@ set breakat=\ \ ;:,!?           " Long lines break chars
 set nostartofline               " Cursor in same column for few commands
 set whichwrap+=h,l,<,>,[,],~    " Move to following line on certain keys
 set switchbuf=useopen,usetab    " Jump to the first open window in any tab
-set switchbuf+=vsplit           " Switch buffer behavior to vsplit
+if has('patch-7.4.742')
+  set switchbuf+=vsplit           " Switch buffer behavior to vsplit
+endif
 
 
 set showfulltag                 " Show tag and tidy search in completion
 set complete=.                  " No wins, buffs, tags, include scanning
 set completeopt=menuone         " Show menu even for one item
-set completeopt+=noselect       " Do not select a match in the menu
 if has('patch-7.4.775')
+  set completeopt+=noselect       " Do not select a match in the menu
   set completeopt+=noinsert
 endif
 
