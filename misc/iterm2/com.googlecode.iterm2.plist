@@ -3315,7 +3315,7 @@
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>/usr/bin/ssh -Yt sandbox /usr/bin/tmux -CC new-session -s work -A</string>
+			<string>/usr/bin/ssh -Yt sandbox /usr/local/bin/tmux -CC new-session -s work -A</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -5688,7 +5688,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-05-15T22:22:25Z</date>
+	<date>2017-05-26T07:43:47Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>Secure Input</key>
