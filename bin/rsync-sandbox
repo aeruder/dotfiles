@@ -1,0 +1,283 @@
+#!/usr/bin/env perl
+
+=head1 NAME
+
+rsync-sandbox - monitors for changes and syncs directories
+
+=head1 SYNOPSIS
+
+rsync-sandbox [options] [mapping ...]
+
+  Options:
+    -help       This help message
+    -noaction   Do nothing
+    -dry-run    Non-destructive rsync
+    -verbose    Extra output
+
+=head1 DESCRIPTION
+
+B<rsync-sandbox> keeps directories in sync between hosts by calling
+rsync when files/directories change.  It does this by using an external
+program fswatch to watch the directories, and then rsyncing the entire
+tree on changes.  rsync runs fast enough on most hosts, that it is easier
+to just let it always rsync the whole thing.
+
+=head2 Specifying mappings
+
+Each mapping should be of the format
+
+local_dir:host:remote_dir
+
+For example
+
+/home/foo/project:otherhost:/home/foo2/project
+
+This uses ssh/rsync style semantics for directories, absolute paths
+work like normal, but relative paths are relative to CWD locally and
+HOME remotely.
+
+=cut
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+use Getopt::Long;
+use Data::Dumper;
+use Pod::Usage;
+use AnyEvent;
+use AnyEvent::Loop;
+
+my $host = "sandbox";
+my $verbose;
+my $noaction;
+my $dryrun;
+my $help;
+
+GetOptions(
+  "verbose" => \$verbose,
+  "host=s" => \$host,
+  "noaction|no-action" => \$noaction,
+  "dry-run" => \$dryrun,
+  "help|?" => \$help,
+) or pod2usage(2);
+pod2usage(1) if $help;
+
+my @mappings;
+
+for my $m (@ARGV) {
+  chomp $m;
+  if ($m !~ /^([^:]+):([^:]+):([^:]+)$/) {
+    print STDERR "Invalid mapping: $m\n";
+    pod2usage(2);
+  }
+  my ($local_dir, $host, $remote_dir) = ($1, $2, $3);
+  if (not -d $local_dir) {
+    print STDERR "Directory doesn't exist: $local_dir\n";
+    pod2usage(2);
+  }
+
+  push @mappings, {
+    host          => $host,
+    remote_dir    => $remote_dir,
+    local_dir     => $local_dir,
+  };
+}
+
+if (!@mappings) {
+  print STDERR "No mappings defined\n";
+  pod2usage(2);
+}
+
+my $exit_val;
+my $exit_cv = AnyEvent->condvar;
+
+sub schedule_exit {
+  my ($val) = @_;
+  if ($val) {
+    $exit_val ||= $val;
+  } else {
+    $exit_val //= $val;
+  }
+  $exit_cv->send;
+}
+
+
+my $rsyncs = 0;
+
+sub syncing_started {
+  # print STDERR "SYNC START\n";
+}
+
+sub syncing_ended {
+  # print STDERR "SYNC END\n";
+}
+
+sub rsync_started {
+  if (!$rsyncs) {
+    syncing_started();
+  }
+  $rsyncs++;
+}
+
+sub rsync_ended {
+  $rsyncs--;
+  if (!$rsyncs) {
+    syncing_ended();
+  }
+}
+
+sub ctrlc_received {
+  schedule_exit(0);
+}
+
+sub fswatch_cb {
+  my ($m, $fh) = @_;
+  my $buf;
+  my $res = sysread $fh,$buf,4096;
+  if (!defined($res) || $res == 0) {
+    print STDERR "fswatch for $m->{local_dir} failed";
+    schedule_exit(1);
+  } elsif (!$m->{sync_scheduled}) {
+    $m->{timer} = AnyEvent->timer(
+      after => 0.5,
+      cb => sub {
+        delete $m->{timer};
+        sync_dir($m);
+      }
+    );
+
+  }
+}
+
+sub rsync_cb {
+  my ($m, $fh) = @_;
+
+  my $buf;
+  my $res = sysread $fh,$buf,4096;
+
+  $m->{rsync_buf} //= "";
+  $m->{rsync_buf} .= $buf;
+
+  my @lines = split /\r{0,1}\n/, $m->{rsync_buf}, -1;
+  $m->{rsync_buf} = pop @lines;
+
+  my $empty_buffer = 0;
+  my $done;
+  if (!defined($res)) {
+    print STDERR "rsync for $m->{local_dir} failed";
+    schedule_exit(1);
+    delete $m->{rsync};
+    $empty_buffer = 1;
+  } elsif ($res == 0) {
+    delete $m->{rsync};
+    _sync_dir($m) if $m->{sync_scheduled};
+    $empty_buffer = 1;
+    $done = 1;
+  }
+
+  if ($empty_buffer && length($m->{rsync_buf})) {
+    push @lines, $m->{rsync_buf};
+  }
+  for my $line (@lines) {
+    print STDERR "  ",$line,"\n";
+  }
+
+  if ($done) {
+    print STDERR "END ",$m->{local_dir},"\n";
+  }
+  rsync_ended() if ($done);
+}
+
+sub call_rsync {
+  my ($m) = @_;
+
+  my @args = (
+    "rsync",
+    "-za",
+    "--delete",
+    $verbose ? ("--verbose") : (),
+    $dryrun ? ("--dry-run") : (),
+    "--",
+    $m->{local_dir}."/",
+    $m->{host}.":".$m->{remote_dir}
+  );
+
+  rsync_started();
+  print STDERR "START ",$m->{local_dir},": ",join(" ",@args),"\n";
+  return undef if ($noaction);
+  my $ret = open(my $fh, "-|", @args);
+  unless ($ret) {
+    print STDERR "rsync failed: $!";
+    schedule_exit(1);
+  }
+
+  return AnyEvent->io(
+    fh   => $fh,
+    poll => 'r',
+    cb   => sub {
+      rsync_cb($m, $fh);
+    },
+  );
+}
+
+sub _sync_dir {
+  my ($m) = @_;
+
+  unless ($m->{rsync}) {
+    delete $m->{sync_scheduled};
+    $m->{rsync} = call_rsync($m);
+  }
+}
+
+sub sync_dir {
+  my ($m) = @_;
+  if (!$m->{sync_scheduled}) {
+    AnyEvent::postpone { _sync_dir($m); };
+    $m->{sync_scheduled} = 1;
+  }
+}
+
+sub all_dirs_changed {
+  my ($mappings) = @_;
+
+  for my $m (@$mappings) {
+    sync_dir($m);
+  }
+}
+
+# Handle changes to directories by calling dir_changed
+for my $m (@mappings) {
+  print STDERR "Watching $m->{local_dir}\n";
+  open(my $fh, "-|", "fswatch", "-ro", $m->{local_dir})
+    || die "Problem running fswatch: $!";
+  $m->{event} = AnyEvent->io(
+    fh   => $fh,
+    poll => 'r',
+    cb   => sub {
+      fswatch_cb($m, $fh);
+    },
+  );
+}
+
+# If you press enter on the terminal, it will sync everything with
+# all_dirs_changed
+my $stdinwatcher = AnyEvent->io(
+  fh   => \*STDIN,
+  poll => 'r',
+  cb   => sub {
+    my $buf;
+    sysread STDIN,$buf,4096;
+    all_dirs_changed(\@mappings);
+  }
+);
+
+all_dirs_changed(\@mappings);
+$exit_cv->recv;
+
+for my $m (@mappings) {
+  delete $m->{rsync} if ($m->{rsync});
+}
+syncing_ended() if ($rsyncs > 0);
+
+exit $exit_val;
