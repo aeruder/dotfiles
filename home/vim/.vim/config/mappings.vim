@@ -123,7 +123,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>g :<C-u>Denite grep -buffer-name=grep<CR>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
-    nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
+    " nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
     nnoremap <leader>o :Denite outline<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>r :Denite buffer file_old<Cr>
@@ -184,6 +184,22 @@ call s:push_leader("\<Space>")
     nnoremap <expr> <leader>v '`['.strpart(getregtype(), 0, 1).'`]'
   call s:pop_leader()
 
+  " NOTES STUFF (VIMWIKI)
+  call s:push_leader("n")
+    let g:vimwiki_map_prefix = "\<Space>n"
+    nmap <silent><unique> <Leader>w <Plug>VimwikiIndex
+    nmap <silent><unique> <Leader>t <Plug>VimwikiTabIndex
+    nmap <silent><unique> <Leader>s <Plug>VimwikiUISelect
+    nmap <silent><unique> <Leader>i <Plug>VimwikiDiaryIndex
+    " DIARY
+    call s:push_leader("d")
+      nmap <silent><unique> <Leader>i <Plug>VimwikiDiaryGenerateLinks
+      nmap <silent><unique> <Leader>w <Plug>VimwikiMakeDiaryNote
+      nmap <silent><unique> <Leader>t <Plug>VimwikiTabMakeDiaryNote
+      nmap <silent><unique> <Leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+    call s:pop_leader()
+  call s:pop_leader()
+
   " PROJECT STUFF
   call s:push_leader("p")
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
@@ -193,7 +209,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>D :Denite directory_rec -default-action=cd<Cr>
     nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
-    nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
+    " nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
   call s:pop_leader()

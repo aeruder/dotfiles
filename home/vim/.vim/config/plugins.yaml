@@ -345,6 +345,11 @@
     if executable('jsctags')
       let g:tagbar_type_javascript = { 'ctagsbin': 'jsctags' }
     endif
+- repo: vimwiki/vimwiki
+  on_ft: vimwiki
+  on_map: <Plug>Vimwiki
+  hook_source: |
+    execute 'source' PJ(g:vim_pconfigdir, "vimwiki.vim")
 
 # ==========================================
 # Denite

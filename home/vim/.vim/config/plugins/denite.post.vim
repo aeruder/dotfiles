@@ -1,6 +1,6 @@
-call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
-call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
-call denite#custom#map('insert', '<C-g>', '<denite:quit>')
+call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
+call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
+call denite#custom#map('insert', '<C-g>', '<denite:quit>', 'noremap')
 
 " Ag command on grep source
 call denite#custom#var('grep', 'command', ['ag'])
