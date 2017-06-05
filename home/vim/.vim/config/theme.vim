@@ -18,6 +18,9 @@ endif
 
 function! s:theme_save(name)
   let l:theme_name = a:name
+  if len(l:theme_name) < 1
+    return
+  endif
   if match(l:theme_name, '/') != -1
     let l:theme_name = g:colors_name
   endif
