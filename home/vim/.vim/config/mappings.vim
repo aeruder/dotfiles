@@ -298,6 +298,12 @@ if g:vimrc_profile >= 0
   endif
 
   "}}}
+  if dein#tap('accelerated-jk') "{{{
+    nmap <silent>j <Plug>(accelerated_jk_j)
+    nmap <silent>k <Plug>(accelerated_jk_k)
+  endif
+
+  "}}}
   if dein#tap('vim-asterisk') "{{{
     map *   <Plug>(asterisk-g*)
     map g*  <Plug>(asterisk-*)
