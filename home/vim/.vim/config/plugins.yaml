@@ -350,6 +350,11 @@
   on_map: <Plug>Vimwiki
   hook_source: |
     execute 'source' PJ(g:vim_pconfigdir, "vimwiki.vim")
+- repo: easymotion/vim-easymotion
+  on_map: <Plug>(easymotion
+  hook_source: |
+    let g:EasyMotion_do_mapping = 0
+    let g:EasyMotion_smartcase = 1
 
 # ==========================================
 # Denite

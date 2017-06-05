@@ -132,6 +132,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
   call s:pop_leader()
 
+  nmap <leader>e <Plug>(easymotion-overwin-f)
+
   " FILE STUFF
   call s:push_leader("f")
     nnoremap <leader>* :<C-u>DeniteCursorWord line<CR>
