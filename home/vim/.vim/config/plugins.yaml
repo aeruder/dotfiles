@@ -223,6 +223,9 @@
 - repo: AndrewRadev/splitjoin.vim
   on_map:
     n: <plug>Splitjoin
+  hook_source: |
+    let g:splitjoin_split_mapping = ''
+    let g:splitjoin_join_mapping = ''
 - repo: AndrewRadev/linediff.vim
   on_cmd: Linediff
 - repo: AndrewRadev/dsf.vim

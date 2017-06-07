@@ -400,4 +400,9 @@ if g:vimrc_profile >= 0
     xmap <silent> if <Plug>(textobj-function-i)
   endif
   "}}}
+  if dein#tap('splitjoin.vim') "{{{
+    nmap <silent> gJ <Plug>SplitjoinJoin
+    nmap <silent> gS <Plug>SplitjoinSplit
+  endif
+  "}}}
 endif
