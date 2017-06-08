@@ -189,16 +189,16 @@ call s:push_leader("\<Space>")
   " NOTES STUFF (VIMWIKI)
   call s:push_leader("n")
     let g:vimwiki_map_prefix = "\<Space>n"
-    nmap <silent><unique> <Leader>w <Plug>VimwikiIndex
-    nmap <silent><unique> <Leader>t <Plug>VimwikiTabIndex
-    nmap <silent><unique> <Leader>s <Plug>VimwikiUISelect
-    nmap <silent><unique> <Leader>i <Plug>VimwikiDiaryIndex
+    nmap <silent> <Leader>w <Plug>VimwikiIndex
+    nmap <silent> <Leader>t <Plug>VimwikiTabIndex
+    nmap <silent> <Leader>s <Plug>VimwikiUISelect
+    nmap <silent> <Leader>i <Plug>VimwikiDiaryIndex
     " DIARY
     call s:push_leader("d")
-      nmap <silent><unique> <Leader>i <Plug>VimwikiDiaryGenerateLinks
-      nmap <silent><unique> <Leader>w <Plug>VimwikiMakeDiaryNote
-      nmap <silent><unique> <Leader>t <Plug>VimwikiTabMakeDiaryNote
-      nmap <silent><unique> <Leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+      nmap <silent> <Leader>i <Plug>VimwikiDiaryGenerateLinks
+      nmap <silent> <Leader>w <Plug>VimwikiMakeDiaryNote
+      nmap <silent> <Leader>t <Plug>VimwikiTabMakeDiaryNote
+      nmap <silent> <Leader>y <Plug>VimwikiMakeYesterdayDiaryNote
     call s:pop_leader()
   call s:pop_leader()
 
