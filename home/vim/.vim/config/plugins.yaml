@@ -358,6 +358,24 @@
   hook_source: |
     let g:EasyMotion_do_mapping = 0
     let g:EasyMotion_smartcase = 1
+- repo: kassio/neoterm
+  hook_source: |
+    let g:neoterm_keep_term_open = 1
+  on_cmd:
+    - T
+    - Tnew
+    - Tmap
+    - Tpos
+    - TREPLSetTerm <term-id>
+    - TREPLSendFile
+    - TREPLSendLine
+    - TREPLSendSelection
+    - Topen
+    - Tclose
+    - TcloseAll
+    - Ttoggle
+  on_func:
+    neoterm#
 
 # ==========================================
 # Denite
