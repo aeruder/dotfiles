@@ -63,7 +63,7 @@ GetOptions(
 ) or pod2usage(2);
 pod2usage(1) if $help;
 
-my @mappings;
+my %mappings;
 
 for my $m (@ARGV) {
   chomp $m;
@@ -76,15 +76,18 @@ for my $m (@ARGV) {
     print STDERR "Directory doesn't exist: $local_dir\n";
     pod2usage(2);
   }
+  $mappings{$local_dir} //= {};
+  $mappings{$local_dir}->{local_dir} //= $local_dir;
+  $mappings{$local_dir}->{remotes} //= [];
 
-  push @mappings, {
+  push @{$mappings{$local_dir}->{remotes}}, {
     host          => $host,
     remote_dir    => $remote_dir,
     local_dir     => $local_dir,
   };
 }
 
-if (!@mappings) {
+if (!scalar(keys %mappings)) {
   print STDERR "No mappings defined\n";
   pod2usage(2);
 }
@@ -132,21 +135,24 @@ sub ctrlc_received {
 }
 
 sub fswatch_cb {
-  my ($m, $fh) = @_;
+  my ($l, $fh) = @_;
   my $buf;
   my $res = sysread $fh,$buf,4096;
   if (!defined($res) || $res == 0) {
-    print STDERR "fswatch for $m->{local_dir} failed";
+    print STDERR "fswatch for $l->{local_dir} failed";
     schedule_exit(1);
-  } elsif (!$m->{sync_scheduled}) {
-    $m->{timer} = AnyEvent->timer(
-      after => 0.5,
-      cb => sub {
-        delete $m->{timer};
-        sync_dir($m);
+  } else {
+    for my $m (@{$l->{remotes}}) {
+      if (!$m->{sync_scheduled}) {
+        $m->{timer} = AnyEvent->timer(
+          after => 0.5,
+          cb => sub {
+            delete $m->{timer};
+            sync_dir($m);
+          }
+        );
       }
-    );
-
+    }
   }
 }
 
@@ -184,7 +190,7 @@ sub rsync_cb {
   }
 
   if ($done) {
-    print STDERR "END ",$m->{local_dir},"\n";
+    print STDERR "END ",$m->{local_dir},"->",$m->{host},":",$m->{remote_dir},"\n";
   }
   rsync_ended() if ($done);
 }
@@ -204,7 +210,7 @@ sub call_rsync {
   );
 
   rsync_started();
-  print STDERR "START ",$m->{local_dir},": ",join(" ",@args),"\n";
+  print STDERR "START ",$m->{local_dir},"->",$m->{host},":",$m->{remote_dir},": ",join(" ",@args),"\n";
   return undef if ($noaction);
   my $ret = open(my $fh, "-|", @args);
   unless ($ret) {
@@ -241,21 +247,23 @@ sub sync_dir {
 sub all_dirs_changed {
   my ($mappings) = @_;
 
-  for my $m (@$mappings) {
-    sync_dir($m);
+  for my $l (values %$mappings) {
+    for my $m (@{$l->{remotes}}) {
+      sync_dir($m);
+    }
   }
 }
 
 # Handle changes to directories by calling dir_changed
-for my $m (@mappings) {
-  print STDERR "Watching $m->{local_dir}\n";
-  open(my $fh, "-|", "fswatch", "-ro", $m->{local_dir})
+for my $l (values %mappings) {
+  print STDERR "Watching $l->{local_dir}\n";
+  open(my $fh, "-|", "fswatch", "-ro", $l->{local_dir})
     || die "Problem running fswatch: $!";
-  $m->{event} = AnyEvent->io(
+  $l->{event} = AnyEvent->io(
     fh   => $fh,
     poll => 'r',
     cb   => sub {
-      fswatch_cb($m, $fh);
+      fswatch_cb($l, $fh);
     },
   );
 }
@@ -268,15 +276,17 @@ my $stdinwatcher = AnyEvent->io(
   cb   => sub {
     my $buf;
     sysread STDIN,$buf,4096;
-    all_dirs_changed(\@mappings);
+    all_dirs_changed(\%mappings);
   }
 );
 
-all_dirs_changed(\@mappings);
+all_dirs_changed(\%mappings);
 $exit_cv->recv;
 
-for my $m (@mappings) {
-  delete $m->{rsync} if ($m->{rsync});
+for my $l (values %mappings) {
+  for my $m (values @{$l->{remotes}}) {
+    delete $m->{rsync} if ($m->{rsync});
+  }
 }
 syncing_ended() if ($rsyncs > 0);
 
