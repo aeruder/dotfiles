@@ -113,7 +113,10 @@ endif
 filetype plugin indent on
 syntax enable
 
-if g:vimrc_profile >= 0 && ! has('vim_starting')
+if g:vimrc_profile >= 0 && has('vim_starting')
+  call dein#call_hook('source')
+  autocmd VimEnter * call dein#call_hook('post_source')
+elseif g:vimrc_profile >= 0 && ! has('vim_starting')
   call dein#call_hook('source')
   call dein#call_hook('post_source')
 endif
