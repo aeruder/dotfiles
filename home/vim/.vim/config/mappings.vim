@@ -254,7 +254,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>e :exe getline(".")<CR>
     vnoremap <leader>e :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
     nnoremap <leader>h :Denite help<Cr>
-    nnoremap <silent><leader>p :<C-u>Denite dein -no-quit<CR>
+    nnoremap <leader>p :<C-u>Denite dein<CR>
+    nnoremap <leader>r :<C-u>call dein#remote_plugins()<CR>
     nnoremap <leader>s :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
           \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
           \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
