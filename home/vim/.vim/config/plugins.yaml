@@ -378,6 +378,18 @@
     neoterm#
 - repo: chemzqm/vim-easygit
   on_func: easygit#
+- repo: dbakker/vim-projectroot
+  on_func: projectroot#
+  on_cmd:
+    - ProjectRootExe
+    - ProjectRootCD
+    - ProjectRootLCD
+    - ProjectBufArgs
+    - ProjectBufFirst
+    - ProjectBufLast
+    - ProjectBufDo
+    - ProjectBufNext
+    - ProjectBufPrev
 
 # ==========================================
 # Denite
