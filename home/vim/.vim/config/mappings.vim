@@ -150,7 +150,18 @@ call s:push_leader("\<Space>")
     nnoremap <leader>o :<C-u>Denite outline<CR>
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
-    nnoremap <leader>y :let @+=expand("%:p")<CR>:echo 'Copied to clipboard.'<CR>
+    call s:push_leader("y")
+      nnoremap <leader>y :let @+ = <SID>transform_file("relative")<CR>:echo @+<CR>
+      nnoremap <leader>Y :let @+ = <SID>transform_file("absolute")<CR>:echo @+<CR>
+      nnoremap <leader>l :let @+ = <SID>transform_file("relative,line")<CR>:echo @+<CR>
+      nnoremap <leader>L :let @+ = <SID>transform_file("absolute,line")<CR>:echo @+<CR>
+      nnoremap <leader>h :let @+ = <SID>transform_file("github")<CR>:echo @+<CR>
+      nnoremap <leader>H :let @+ = <SID>transform_file("github,line")<CR>:echo @+<CR>
+      nnoremap <leader>g :let @+ = <SID>transform_file("gitlab")<CR>:echo @+<CR>
+      nnoremap <leader>G :let @+ = <SID>transform_file("gitlab,line")<CR>:echo @+<CR>
+      nnoremap <leader>z :let @+ = <SID>transform_file("ziprecruiter")<CR>:echo @+<CR>
+      nnoremap <leader>Z :let @+ = <SID>transform_file("ziprecruiter,line")<CR>:echo @+<CR>
+    call s:pop_leader()
   call s:pop_leader()
 
   " GIT
@@ -290,6 +301,99 @@ call s:push_leader("\<Space>")
   call s:pop_leader()
 call s:pop_leader()
 " }}}
+
+function! s:transform_file_sort_helper(a, b)
+  return a:a['from'] == a:b['from'] ? 0 : a:a['from'] < a:b['from'] ? 1 : -1
+endfunction
+function! s:transform_file(opts)
+  let options = {
+        \ "line": 0,
+        \ "remote": "origin",
+        \ "branch": "master",
+        \ }
+  let handler = "relative"
+  let handlers = split("relative,absolute", ",")
+  let githandlers = {}
+  let githandlers.github = {}
+  let githandlers.github.url = "https://github.com/{repo}/blob/{branch}/{relfile}"
+  let githandlers.gitlab = {}
+  let githandlers.gitlab.url = "https://github.com/{repo}/blob/{branch}/{relfile}"
+  let githandlers.ziprecruiter = {}
+  let githandlers.ziprecruiter.url = "https://git.ziprecruiter.com/{repo}/blob/{branch}/{relfile}"
+  let handlers = handlers + keys(githandlers)
+  for a in split(a:opts, ',')
+    if index(handlers,a) != -1
+      let handler = a
+    else
+      let idx = stridx(a, "=")
+      if idx == -1
+        let options[a] = 1
+      else
+        let key = a[0:(idx-1)]
+        let val = a[(idx+1):]
+        let options[key] = val
+      endif
+    endif
+  endfor
+
+  let absfile = expand("%:p")
+  let projroot = projectroot#guess(absfile)
+  let relfile = expand("%")
+  let idx = stridx(absfile, projroot)
+  if idx != -1
+    let relfile = absfile[(idx+len(projroot)+1):]
+    if stridx(relfile, "/") == 0
+      let relfile = relfile[1:]
+    endif
+  endif
+
+  let ret = relfile
+  if handler == "relative"
+    let ret = relfile
+  elseif handler == "absolute"
+    let ret = absfile
+  elseif has_key(githandlers, handler)
+    try
+      let url = system(["git", "--git-dir=".PJ(projroot,".git"), "remote", "get-url", "--push", options['remote']])
+      if v:shell_error != 0
+        throw "git failed: ".url
+      endif
+      let url = split(url, "\n", 1)[0]
+      let parts = split(url, ":", 1)
+      if parts[0] == "http" || parts[1] == "https"
+        let parts = split(url, "/", 1)
+        let repo = PJ(parts[3], parts[4])
+      else
+        let repo = parts[1]
+      endif
+      if repo[-4:] == ".git"
+        let repo = repo[:-5]
+      endif
+      let urlt = githandlers[handler]['url']
+      let parts = []
+      let parts += [{"from": stridx(urlt, "{repo}"),    "len": 6, "to": repo}]
+      let parts += [{"from": stridx(urlt, "{branch}"),  "len": 8, "to": options['branch']}]
+      let parts += [{"from": stridx(urlt, "{relfile}"), "len": 9, "to": relfile}]
+      call sort(parts, "s:transform_file_sort_helper")
+      for part in parts
+        let urlt = strcharpart(urlt, 0, part['from']) . part['to'] . strcharpart(urlt, part['from'] + part['len'])
+      endfor
+      let ret = urlt
+    catch
+      echom v:exception
+    endtry
+  endif
+
+  if options['line']
+    if has_key(githandlers, handler)
+      let ret = ret . "#L" . line('.')
+    else
+      let ret = ret . ":" . line('.')
+    endif
+  endif
+
+  return ret
+endfunction
 
 if g:vimrc_profile >= 0
   if dein#tap('vim-operator-surround') "{{{
