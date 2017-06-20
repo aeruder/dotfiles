@@ -152,7 +152,7 @@
   on_ft: nginx
 - repo: IN3D/vim-raml
   on_ft: raml
-- repo: vim-perl/vim-perl
+- repo: aeruder/vim-perl
   on_ft: perl
   hook_source: |
     let g:perl_include_pod = 0
