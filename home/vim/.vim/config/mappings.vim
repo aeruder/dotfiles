@@ -108,7 +108,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>D :BufKillD!<Cr>
     " wipeout other buffers besides those that are visible
     nnoremap <leader>m :Wipeout<Cr>
-    nnoremap <leader>r :Denite buffer file_old<Cr>
+    nnoremap <leader>r :Denite file_old<Cr>
     " Open a scratch buffer
     nnoremap <leader>s :Scratch<Cr>
     nnoremap <leader>t :Denite filetype<Cr>
@@ -126,7 +126,7 @@ call s:push_leader("\<Space>")
     " nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
     nnoremap <leader>o :Denite outline<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
-    nnoremap <leader>r :Denite buffer file_old<Cr>
+    nnoremap <leader>r :Denite file_old<Cr>
     nnoremap <leader>t :Denite filetype<Cr>
     nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
     nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
