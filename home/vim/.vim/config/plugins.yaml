@@ -376,6 +376,8 @@
     - Ttoggle
   on_func:
     neoterm#
+- repo: chemzqm/vim-easygit
+  on_func: easygit#
 
 # ==========================================
 # Denite
@@ -390,7 +392,7 @@
     execute 'source' PJ(g:vim_pconfigdir, "denite.post.vim")
 - repo: chemzqm/unite-location
   on_source: denite.nvim
-- repo: aeruder/denite-git
+- repo: chemzqm/denite-git
   on_source: denite.nvim
 
 #  vim: set ts=2 sw=2 tw=80 et :
