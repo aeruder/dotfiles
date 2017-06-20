@@ -99,6 +99,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>t :TagbarToggle<Cr>
     " Open undotree
     nnoremap <leader>u :UndotreeToggle<Cr>
+    " Neoterm run last command
+    nnoremap <leader>r :<C-u>call neoterm#do("!!\r")<Cr>
   call s:pop_leader()
 
   " BUFFERS
