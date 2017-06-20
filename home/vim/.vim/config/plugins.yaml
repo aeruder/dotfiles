@@ -317,7 +317,7 @@
   on_map:
     n: <Plug>
 - repo: ludovicchabant/vim-gutentags
-  if: executable('ctags') && g:vimrc_profile >= 1
+  if: executable('ctags')
   on_path: .*
   hook_add: |
     let g:gutentags_cache_dir = PJ(g:vim_cachedir, "tags")
