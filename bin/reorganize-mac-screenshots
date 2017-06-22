@@ -23,7 +23,11 @@ fi
 
 cd "$loc" || exit
 
+fullfile=
 for a in "Screen Shot"* ; do
+    if ! [ -e "$a" ]; then
+        continue
+    fi
     if [ "$should_sleep" = 1 ]; then
         # Wait until the file hasn't been modified for 2 seconds
         while true ; do
@@ -48,3 +52,7 @@ for a in "Screen Shot"* ; do
     /usr/local/bin/convert "$a" -strip "$fullfile"
     rm -f "$a"
 done
+
+if ! [ -z "$fullfile" ]; then
+    ~/.dotfiles/bin/babombpi2-upload-pbcopy "$fullfile"
+fi

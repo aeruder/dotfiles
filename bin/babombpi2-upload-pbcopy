@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+    exit 1
+fi
+
+url="`~/.dotfiles/bin/babombpi2-upload "$1"`"
+
+if [ $? = 0 ]; then
+   echo "$url" | pbcopy
+   osascript -e 'display notification "'"$url"'" with title "Upload complete"'
+   exit 0
+fi
+osascript -e 'display notification with title "Upload failed"'
+exit 1
