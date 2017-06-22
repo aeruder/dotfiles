@@ -8,6 +8,7 @@
 
 - repo: Shougo/dein.vim
 - repo: rafi/awesome-vim-colorschemes
+- repo: trevordmiller/nova-vim
 - repo: thinca/vim-localrc
 - repo: itchyny/vim-parenmatch
 - repo: tpope/vim-vinegar
