@@ -12,6 +12,7 @@ call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
 
 call denite#custom#source('_', 'matchers', ['matcher_substring'])
+call denite#custom#option('_', 'direction', 'aboveleft')
 
 " Add custom menus
 let s:menus = {}
