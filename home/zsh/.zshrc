@@ -1795,6 +1795,10 @@ bindkey -M viins "^Q" push-input
 bindkey -M viins "^A" accept-and-hold
 bindkey -M viins "^O" accept-line-and-down-history
 
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd "V" edit-command-line
+
 ##################################
 # sudo vim -> sudoedit
 ##################################
