@@ -257,6 +257,7 @@ call s:push_leader("\<Space>")
     vnoremap <leader>e :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
     nnoremap <leader>h :Denite help<Cr>
     nnoremap <leader>p :<C-u>Denite dein<CR>
+    nnoremap <leader>P :<C-u>call <SID>profile_toggle()<Cr>
     nnoremap <leader>r :<C-u>call dein#remote_plugins()<CR>
     nnoremap <leader>s :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
           \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
@@ -305,6 +306,15 @@ call s:push_leader("\<Space>")
 call s:pop_leader()
 " }}}
 
+function! s:profile_toggle()
+  if v:profiling
+    profile stop
+    exe "n" fnameescape(s:profile_toggle_file)
+  else
+    let s:profile_toggle_file = tempname()
+    exe "profile start" fnameescape(s:profile_toggle_file)
+  endif
+endfunction
 function! s:transform_file_sort_helper(a, b)
   return a:a['from'] == a:b['from'] ? 0 : a:a['from'] < a:b['from'] ? 1 : -1
 endfunction
