@@ -2,26 +2,26 @@
 	name = Andrew Ruder
 	email = andy@aeruder.net
 [alias]
-	stat = status
-	s = status
-	smfer = submodule foreach --recursive
-	smfe = submodule foreach
-	smu = submodule update
-	smur = submodule update --recursive
-	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
-	co = checkout
+	amend = commit --amend
 	cia = commit -a
+	co = checkout
+	commit-rnd = !sh -c \"git commit -m \\\"FIXME `curl -s http://whatthecommit.com/index.txt`\\\"\"
 	cpick = cherry-pick
 	fl = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	fla = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
-	l = log --abbrev-commit
-	root = rev-parse --show-toplevel
-	amend = commit --amend
-	commit-rnd = !sh -c \"git commit -m \\\"FIXME `curl -s http://whatthecommit.com/index.txt`\\\"\"
-	rbc = rebase --continue
 	gud = push
-	pt = push -n -v
+	l = log --abbrev-commit
 	ps = push-sandbox
+	pt = push -n -v
+	rbc = rebase --continue
+	root = rev-parse --show-toplevel
+	s = status
+	smfe = submodule foreach
+	smfer = submodule foreach --recursive
+	smu = submodule update
+	smur = submodule update --recursive
+	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
+	stat = status
 [color]
 	ui = auto
 [merge]
