@@ -22,7 +22,7 @@
 	smur = submodule update --recursive
 	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
 	stat = status
-	tr = git branch -u origin/master
+	tr = branch -u origin/master
 [color]
 	ui = auto
 [merge]
