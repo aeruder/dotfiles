@@ -24,3 +24,4 @@ tags
 .byebug_history
 .tramp_history
 /.vscode/settings.json
+instruments*.trace
