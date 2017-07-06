@@ -123,7 +123,7 @@ set errorbells
 
 """"""""""""""""""""""""
 " Highlight the entire line we are on
-set cursorline
+" set cursorline
 
 """"""""""""""""""""""""
 " Always enable the status line for the window, even if there is just
@@ -132,7 +132,7 @@ set laststatus=2
 
 """"""""""""""""""""""""
 " Display the line numbers relative to the current line
-set relativenumber
+" set relativenumber
 set number
 
 """"""""""""""""""""""""
