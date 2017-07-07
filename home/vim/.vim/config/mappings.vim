@@ -298,6 +298,8 @@ call s:push_leader("\<Space>")
 
       " Align = signs
       vnoremap <leader>= :Tab /=.*<CR>
+      " Reindent SQL
+      vnoremap <leader>S :!sqlformat -k upper -i lower -r --comma_first COMMA_FIRST -<Cr>
     call s:pop_leader()
     nnoremap <leader>p "*p
     nnoremap <leader>P "*P
