@@ -111,18 +111,18 @@
   on_ft: python
 - repo: raimon49/requirements.txt.vim
   on_ft: requirements
-- repo: StanAngeloff/php.vim
-  on_ft: php
+# - repo: StanAngeloff/php.vim
+#   on_ft: php
 - repo: osyo-manga/vim-monster
   on_ft: ruby
 - repo: toyamarinyon/vim-swift
   on_ft: swift
 - repo: vim-jp/syntax-vim-ex
   on_ft: vim
-- repo: m2mdas/phpcomplete-extended
-  on_ft: php
-  on_i: 1
-  hook_source: let g:phpcomplete_extended_use_default_mapping = 0
+# - repo: m2mdas/phpcomplete-extended
+#   on_ft: php
+#   on_i: 1
+#   hook_source: let g:phpcomplete_extended_use_default_mapping = 0
 - repo: chrisbra/csv.vim
   on_ft: csv
 - repo: tmux-plugins/vim-tmux
