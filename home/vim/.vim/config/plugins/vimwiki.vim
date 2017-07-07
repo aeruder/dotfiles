@@ -15,8 +15,8 @@ if !exists("g:vimwiki_list")
   else
     let s:mainwiki.path = expand(~/notes')
   endif
-  let s:mainwiki.auto_export = 1
-  let s:mainwiki.auto_toc = 1
+  let s:mainwiki.auto_export = 0
+  let s:mainwiki.auto_toc = 0
   let s:mainwiki.auto_tags = 1
   let g:vimwiki_list = [s:mainwiki]
 endif
