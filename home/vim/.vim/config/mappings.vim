@@ -47,6 +47,10 @@ vnoremap mj :m'>+<CR>gv=gv
 noremap  mk :m-2<CR>
 noremap  mj :m+<CR>
 
+" easymotion to comma
+nmap , <Plug>(easymotion-overwin-f)
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                             hierarchy mappings                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -83,8 +87,6 @@ function! s:pop_leader()
     let g:mapleader = s:mapleaders[-1]
   end
 endfunction
-
-nmap , <Plug>(easymotion-overwin-f)
 
 " Main keybindings {{{
 call s:push_leader("\<Space>")
