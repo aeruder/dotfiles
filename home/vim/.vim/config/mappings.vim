@@ -84,6 +84,8 @@ function! s:pop_leader()
   end
 endfunction
 
+nmap , <Plug>(easymotion-overwin-f)
+
 " Main keybindings {{{
 call s:push_leader("\<Space>")
   " nnoremap <silent> <SID>(HighlightOnlyOperator) :set opfunc=HighlightOnlyOperator<cr>g@
