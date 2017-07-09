@@ -229,17 +229,3 @@ set diffopt=filler
 set list listchars=tab:»·,trail:·,extends:>,precedes:<
 set colorcolumn=80,120,121
 set display=lastline
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  vim-notes                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if !exists("g:notes_directories")
-  if has('mac')
-    let g:notes_directories = [ expand('~/Documents/Notes') ]
-  else
-    let g:notes_directories = [ expand('~/notes') ]
-  endif
-endif
-
-let g:notes_suffix = '.txt'
-let g:notes_smart_quotes = 1
