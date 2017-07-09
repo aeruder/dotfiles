@@ -131,6 +131,7 @@ call s:source_file('mappings.vim')
 call s:source_file('whitespace.vim')
 call s:source_file('unused.vim')
 call s:source_file('perldoc.vim')
+call s:source_file('scratchfiles.vim')
 " }}}
 
 set secure
