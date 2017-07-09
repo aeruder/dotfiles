@@ -13,7 +13,7 @@ if !exists("g:vimwiki_list")
   if has('mac')
     let s:mainwiki.path = expand('~/Documents/Notes')
   else
-    let s:mainwiki.path = expand(~/notes')
+    let s:mainwiki.path = expand('~/notes')
   endif
   let s:mainwiki.auto_export = 0
   let s:mainwiki.auto_toc = 0
