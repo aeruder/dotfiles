@@ -153,6 +153,8 @@ call s:push_leader("\<Space>")
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
     call s:push_leader("y")
+      nnoremap <leader>d :let @+ = fnamemodify(<SID>transform_file("relative"), ":h")<CR>:echo @+<CR>
+      nnoremap <leader>D :let @+ = fnamemodify(<SID>transform_file("absolute"), ":h")<CR>:echo @+<CR>
       nnoremap <leader>y :let @+ = <SID>transform_file("relative")<CR>:echo @+<CR>
       nnoremap <leader>Y :let @+ = <SID>transform_file("absolute")<CR>:echo @+<CR>
       nnoremap <leader>l :let @+ = <SID>transform_file("relative,line")<CR>:echo @+<CR>
