@@ -24,8 +24,8 @@ if !exists('g:vimrc_profile')
   endif
   if !has('nvim') && !has('python3')
     let g:vimrc_profile = -1
-  elseif len($SSH_CLIENT) && g:vimrc_profile > 0
-    let g:vimrc_profile = 0
+  " elseif len($SSH_CLIENT) && g:vimrc_profile > 0
+  "   let g:vimrc_profile = 0
   endif
 endif
 
