@@ -47,6 +47,9 @@ vnoremap mj :m'>+<CR>gv=gv
 noremap  mk :m-2<CR>
 noremap  mj :m+<CR>
 
+" make ctrl-g work in command mode
+cnoremap <C-G> <C-C>
+
 " easymotion to comma
 nmap , <Plug>(easymotion-overwin-f)
 
