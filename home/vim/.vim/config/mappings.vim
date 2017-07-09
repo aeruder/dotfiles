@@ -144,7 +144,7 @@ call s:push_leader("\<Space>")
   call s:push_leader("f")
     nnoremap <leader>* :<C-u>DeniteCursorWord line<CR>
     nnoremap <leader>/ :<C-u>Denite line<CR>
-    nnoremap <leader>c :cd %:h<Cr>
+    nnoremap <leader>c :cd %:h<Cr>:let @+ = fnamemodify(<SID>transform_file("absolute"), ":h")<Cr>
     call s:push_leader("e")
       execute "nnoremap <leader>d :n ".PJ(g:vim_configdir, "mappings.vim")."<Cr>"
       nnoremap <leader>D :n $MYVIMRC<Cr>
