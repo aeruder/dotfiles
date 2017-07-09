@@ -152,6 +152,7 @@ call s:push_leader("\<Space>")
     call s:pop_leader()
     nnoremap <leader>l :lcd %:h<Cr>
     nnoremap <leader>o :<C-u>Denite outline<CR>
+    nnoremap <leader>u :<C-u>exe "e" fnameescape(PJ(g:vim_maindir, "UltiSnips", &filetype . ".snippets"))<Cr>
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
     call s:push_leader("y")
