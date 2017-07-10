@@ -139,6 +139,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>t :Denite filetype<Cr>
     nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
     nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
+    nnoremap <leader>] :<C-u>Denite -resume -cursor-pos=+1 -immediately<Cr>
+    nnoremap <leader>[ :<C-u>Denite -resume -cursor-pos=-1 -immediately<Cr>
   call s:pop_leader()
 
   nmap <leader>e <Plug>(easymotion-overwin-f)
