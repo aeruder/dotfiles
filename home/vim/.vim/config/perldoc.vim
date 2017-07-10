@@ -51,6 +51,7 @@ function! s:setup_buffer()
   setlocal nocursorcolumn
   setlocal iskeyword+=:
   setlocal iskeyword-=-
+  let b:man_sect = "ignore"
 endfunction
 
 function! s:is_perldoc_file(file)
