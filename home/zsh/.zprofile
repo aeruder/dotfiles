@@ -20,3 +20,7 @@ path=( ${(u)path[@]} )
 if [ -e "$PERLBREW_ROOT"/etc/bashrc ]; then
   source "$PERLBREW_ROOT"/etc/bashrc
 fi
+
+if [ -e ~/.zprofile.local ]; then
+    source ~/.zprofile.local
+fi
