@@ -7,4 +7,4 @@ set -u
 # Any command in a pipe failing aborts script
 set -o pipefail
 
-exec run-remote -d '~/ziprecruiter' -c sandbox zsh -c "$@"
+exec run-remote -d '~/ziprecruiter' -s /bin/zsh -c sandbox "$@"
