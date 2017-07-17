@@ -87,7 +87,7 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>99 293 592 584 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>688 80 652 474 0 0 1440 877 </string>
+	<string>0 965 2560 452 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>2085 778 1915 639 1440 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 10</key>
@@ -5688,7 +5688,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-05-26T07:43:47Z</date>
+	<date>2017-07-17T11:28:51Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>Secure Input</key>
@@ -5716,7 +5716,7 @@
 	<key>findIgnoreCase_iTerm</key>
 	<true/>
 	<key>findRegex_iTerm</key>
-	<false/>
+	<true/>
 	<key>iTerm Version</key>
 	<string>3.0.15</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
