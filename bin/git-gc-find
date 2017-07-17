@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+find . -name .git -type d | while read line ; do
+    git --git-dir="$line" --bare gc
+done
