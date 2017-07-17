@@ -132,7 +132,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>g :<C-u>Denite grep -buffer-name=grep<CR>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
-    " nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
+    nnoremap <leader>n :call <SID>find_wiki_files()<Cr>
     nnoremap <leader>o :Denite outline<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>r :Denite file_old<Cr>
@@ -219,6 +219,7 @@ call s:push_leader("\<Space>")
     nmap <silent> <Leader>t <Plug>VimwikiTabIndex
     nmap <silent> <Leader>s <Plug>VimwikiUISelect
     nmap <silent> <Leader>i <Plug>VimwikiDiaryIndex
+    nmap <silent> <Leader>R :VimwikiRenameLink<CR>
     " DIARY
     call s:push_leader("d")
       nmap <silent> <Leader>i <Plug>VimwikiDiaryGenerateLinks
@@ -237,7 +238,6 @@ call s:push_leader("\<Space>")
     nnoremap <leader>D :Denite directory_rec -default-action=cd<Cr>
     nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
-    " nnoremap <leader>n :call denite#start([{'name': 'file_rec', 'args': [g:notes_directories[0]]}])<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
   call s:pop_leader()
@@ -320,6 +320,16 @@ call s:push_leader("\<Space>")
   call s:pop_leader()
 call s:pop_leader()
 " }}}
+
+function! s:find_wiki_files()
+  call dein#source('vimwiki')
+  let sources = []
+  for a in g:vimwiki_list
+    call add(sources, {'name': 'file_rec', 'args': [a.path]})
+  endfor
+
+  call denite#start(sources)
+endfunction
 
 function! s:profile_toggle()
   if v:profiling
