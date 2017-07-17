@@ -1,0 +1,170 @@
+#!/bin/zsh
+
+size_dir() {
+    dir="$1"
+    du -skx "$dir" | sed -e 's/^\([0-9]\{1,\}\).*/\1/'
+}
+
+linkify() {
+    dir="$1"
+    if ( which md5 > /dev/null 2> /dev/null ); then
+        dir="`echo "$dir" | md5`"
+    else
+        dir="`echo "$dir" | md5sum`"
+    fi
+    dir="`echo "$dir" | sed -e 's/ \{1,\}.*$//'`"
+    echo "AAA$dir"
+}
+
+source_link() {
+    dir="$1"
+    dir="`linkify "$dir"`"
+    echo "<a name=\"$dir\"></a>"
+}
+
+target_link() {
+    dir="$1"
+    title="$2"
+    dir="`linkify "$dir"`"
+    echo "<a href=\"#$dir\">$title</a>"
+}
+
+should_skip() {
+    which="$1"
+    shift
+    for skip in "$@"; do
+        if [ "$skip" -ef "$which" ]; then
+            echo "Skipping $which (matches $skip)" >&2
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+generate_dir() {
+    dir="$1"
+    shift
+    src_link="`source_link "$dir"`"
+    size=`size_dir "$dir"`
+    cat <<EOF
+    $src_link
+    <h2>Summary for $dir (${size}K)</h2> (<a href="#_top">Top</a>)
+    <table><tr>
+        <th>Name</th>
+        <th>Size (Kilobytes)</th>
+    </tr>
+EOF
+    afterwards="`mktemp -t dureport.XXXXXX`"
+    touch "$afterwards" || exit 0
+    ls -a "$dir" | grep -vE '^\.{1,2}$' | while read line ; do
+        full="$dir"/"$line"
+
+        if ( should_skip "$full" "$@" ); then
+            continue
+        fi
+
+        size="`size_dir "$full"`"
+
+        if [ -d "$full" ]; then
+            line="$line/"
+        fi
+        if [ -d "$full" ] && [ "$size" -ge "$kilo" ]; then
+            echo "Recursing into $full" >&2
+            ( generate_dir "$full" "$@" ) >> "$afterwards"
+            line="`target_link "$full" "$line"`"
+        fi
+        class="normal"
+        if [ "$size" -ge "$kilo" ]; then
+            class="over"
+        fi
+        if [ "$size" -ge "$((kilo*10))" ]; then
+            class="wayover"
+        fi
+        cat <<EOF
+        <tr><td>$line</td><td class="$class">${size}K</td></tr>
+EOF
+    done
+    cat <<EOF
+    </table>
+EOF
+    cat "$afterwards"
+    rm -f "$afterwards"
+}
+
+
+if [ -z "$1" ] || ! [ -d "$1" ]; then
+    echo "Usage: $0 <dir> <sizerecurse in kilo> <stuff to ignore>"
+    exit 0
+fi
+
+dir="$1"
+shift
+
+if ! [ -z "$1" ]; then
+    kilo="$1"
+    shift
+else
+    kilo=10000
+fi
+
+if [ "$kilo" -le "0" ]; then
+    kilo="0"
+fi
+
+if ! ( echo "$dir" | grep -q "^/" ); then
+    dir="`pwd`"/"$dir"
+fi
+
+cat <<EOF
+<html>
+    <head>
+        <title>Summary for $dir</title>
+        <style type="text/css">
+            body {
+                font-family: monospace;
+                font-size: large;
+                background-color: #fff;
+                color: black;
+            }
+            a {
+                color: blue;
+            }
+            table {
+                border: thin solid black;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+            th, td {
+                border: thin solid black;
+                padding: 4px;
+            }
+            .over {
+                background-color: #fdd;
+            }
+            .wayover {
+                background-color: #f99;
+            }
+            .description {
+                font-size: small;
+            }
+        </style>
+    </head>
+    <body><a name="_top"></a>
+<div  class="description">
+<p>This report was generated on `date` by $0.  This summary will
+recurse into subdirectories bigger than ${kilo}K.  Files/directories bigger
+than ${kilo}K will use a <span class="over">background color like this</span>
+and files/directories bigger than $((kilo*10))K will use a <span
+class="wayover">background color like this</span>.  </p>
+<p> This script is Copyright (C) 2005 by Andrew Ruder and released under the
+terms of GPL v2.  Have fun.</p>
+</div>
+EOF
+
+generate_dir "$dir" "$@"
+
+cat <<EOF
+    </body>
+</html>
+EOF
