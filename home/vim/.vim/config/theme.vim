@@ -8,7 +8,7 @@ if g:vimrc_profile < 0
 endif
 
 " Enable true color (only in Neovim, but not in urxvt)
-if has('nvim') && $TERM !~# '^rxvt' && exists('+termguicolors')
+if has('nvim') && $TERM !~# '^rxvt' && $TERM_PROGRAM != 'Apple_Terminal' && exists('+termguicolors')
   set termguicolors
   if &term =~# 'tmux-256color'
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
