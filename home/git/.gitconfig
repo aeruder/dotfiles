@@ -23,6 +23,12 @@
 	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
 	stat = status
 	tr = branch -u origin/master
+	d = diff
+	p = pull
+	lp = log -p
+	f = fetch
+	rbm = rebase -i origin/master
+	rbu = rebase -i
 [color]
 	ui = auto
 [merge]
