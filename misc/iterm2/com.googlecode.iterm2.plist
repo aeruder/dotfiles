@@ -114,6 +114,10 @@
 	<true/>
 	<key>NeverWarnAboutMeta_selection</key>
 	<integer>0</integer>
+	<key>NeverWarnAboutShortLivedSessions_23618049-47CA-45EA-A5CE-6B2927F277F9</key>
+	<true/>
+	<key>NeverWarnAboutShortLivedSessions_23618049-47CA-45EA-A5CE-6B2927F277F9_selection</key>
+	<integer>0</integer>
 	<key>NeverWarnAboutShortLivedSessions_88D6CBE4-9E7B-4FC4-9978-235CF61F777B</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_88D6CBE4-9E7B-4FC4-9978-235CF61F777B_selection</key>
@@ -5688,7 +5692,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-07-17T11:28:51Z</date>
+	<date>2017-07-25T11:28:35Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>Secure Input</key>
