@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Failed commands aborts script
+set -e
+# Uninitialized expansion aborts script
+set -u
+# Any command in a pipe failing aborts script
+set -o pipefail
+
+brew tap caskroom/fonts
+brew cask install font-fantasquesansmono-nerd-font-mono font-fantasquesansmono-nerd-font
+brew cask install font-firacode-nerd-font font-firacode-nerd-font-mono
+brew cask install font-sourcecodepro-nerd-font font-sourcecodepro-nerd-font-mono
