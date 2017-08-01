@@ -12,3 +12,8 @@ snippet ddp
 use DDP ();
 DDP::p(${1:var}, use_prototypes => 0);
 endsnippet
+
+snippet whereami
+use Carp ();
+Carp::cluck "${1:Here I am}";
+endsnippet
