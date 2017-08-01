@@ -29,6 +29,7 @@
 	f = fetch
 	rbm = rebase -i origin/master
 	rbu = rebase -i
+	ls = log --stat
 [color]
 	ui = auto
 [merge]
