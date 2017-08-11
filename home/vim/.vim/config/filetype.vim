@@ -23,4 +23,16 @@ augroup MyAutoCmd
 
   autocmd FileType perl
     \ Usespaces 2
+
+  autocmd BufReadCmd a/** exe s:diff_buf_read(expand('<amatch>'))
+  autocmd BufReadCmd b/** exe s:diff_buf_read(expand('<amatch>'))
 augroup END
+
+function! s:diff_buf_read(path)
+  let file = a:path[2:]
+  let buf = bufnr('%')
+  exe "e" file
+  exe "doautocmd BufReadPost" file
+  exe "bdelete!" buf
+  return ''
+endfunction
