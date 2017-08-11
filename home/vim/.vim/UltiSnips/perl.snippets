@@ -5,7 +5,7 @@ use feature ':5.14';
 use strictures 2;
 use warnings 'all';
 $^W = 1;
-use Data::Printer;
+use DDP;
 endsnippet
 
 snippet ddp
@@ -16,4 +16,9 @@ endsnippet
 snippet whereami
 use Carp ();
 Carp::cluck "${1:Here I am}";
+endsnippet
+
+snippet fork
+my $pid = fork;
+die "fork: $!" unless defined $pid;
 endsnippet
