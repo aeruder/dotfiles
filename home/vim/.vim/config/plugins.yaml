@@ -25,9 +25,10 @@
 #     autocmd MyAutoCmd InsertLeave * let b:cursorword=1
 - repo: vim-airline/vim-airline
   hook_add: |
-    let g:airline_extensions = []
     execute 'source' PJ(g:vim_pconfigdir, "airline.vim")
+- repo: tpope/vim-fugitive
 - repo: tommcdo/vim-exchange
+- repo: tpope/vim-eunuch
 
 # Autocomplete stuff, wait until we start editing a file
 - repo: Shougo/deoplete.nvim
@@ -174,24 +175,6 @@
   on_ft: cs
 
 # others
-- repo: tpope/vim-fugitive
-  on_cmd:
-    - Gcd
-    - Glcd
-    - Glog
-    - Git
-    - Gcommit
-    - Gblame
-    - Gstatus
-    - Gdiff
-    - Gbrowse
-    - Gwrite
-    - Gread
-  on_path: ^fugitive://.*
-  hook_post_source: |
-    bufdo call fugitive#detect(expand('%:p'))
-    call airline#extensions#branch#init({})
-    MyAirlineRefresh
 - repo: tpope/vim-abolish
   on_cmd:
     - S
@@ -273,19 +256,6 @@
     - AddTabularPattern
   hook_post_source: |
     execute 'source '.PJ(g:vim_pconfigdir, "tabular.post.vim")
-- repo: tpope/vim-eunuch
-  on_cmd:
-    - Unlink
-    - Remove
-    - Move
-    - Rename
-    - Chmod
-    - Mkdir
-    - Find
-    - Locate
-    - SudoEdit
-    - SudoWrite
-    - Wall
 - repo: tpope/vim-repeat
   on_func: repeat#
 - repo: qpkorr/vim-bufkill
@@ -344,11 +314,7 @@
   if: empty($VIM_MINIMAL)
   on_cmd: TagbarToggle
   hook_source: |
-    let g:tagbar_map_showproto = '.'
-    let g:tagbar_width = 40
-    if executable('jsctags')
-      let g:tagbar_type_javascript = { 'ctagsbin': 'jsctags' }
-    endif
+    execute 'source' PJ(g:vim_pconfigdir, "tagbar.vim")
 - repo: vimwiki/vimwiki
   on_ft: vimwiki
   on_map: <Plug>Vimwiki
