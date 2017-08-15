@@ -251,6 +251,9 @@ call s:push_leader("\<Space>")
   call s:push_leader("s")
     nnoremap <leader>* :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
     nnoremap <leader>. :<C-u>Denite grep -buffer-name=grep<CR>
+    nnoremap <leader>R :<C-u>Denite -resume -buffer-name=grep<Cr>
+    nnoremap <leader>} :<C-u>Denite -resume -cursor-pos=+1 -immediately<Cr>
+    nnoremap <leader>{ :<C-u>Denite -resume -cursor-pos=-1 -immediately<Cr>
     nnoremap <leader>r :<C-u>Denite -resume -buffer-name=grep<Cr>
     nnoremap <leader>] :<C-u>Denite -resume -buffer-name=grep -cursor-pos=+1 -immediately<Cr>
     nnoremap <leader>[ :<C-u>Denite -resume -buffer-name=grep -cursor-pos=-1 -immediately<Cr>
