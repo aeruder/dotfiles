@@ -328,21 +328,7 @@
 - repo: kassio/neoterm
   hook_source: |
     let g:neoterm_keep_term_open = 1
-  on_cmd:
-    - T
-    - Tnew
-    - Tmap
-    - Tpos
-    - TREPLSetTerm <term-id>
-    - TREPLSendFile
-    - TREPLSendLine
-    - TREPLSendSelection
-    - Topen
-    - Tclose
-    - TcloseAll
-    - Ttoggle
-  on_func:
-    neoterm#
+    let g:neoterm_repl_python = 'python3'
 - repo: chemzqm/vim-easygit
   on_func: easygit#
 - repo: dbakker/vim-projectroot
