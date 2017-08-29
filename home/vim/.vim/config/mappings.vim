@@ -59,7 +59,7 @@ nmap , <Plug>(easymotion-overwin-f)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let s:mapleaders = []
 
-function! MyDeniteDirectoryThenFile(dir)
+function! s:denite_dir_then_file(dir)
   let l:ret = denite#start([{'name': 'directory_rec', 'args': [a:dir]}], {'default_action': 'yank'})
   if len(l:ret) > 0
     let l:ret = denite#start([{'name': 'file_rec', 'args': [l:ret[0].action__path]}])
@@ -137,7 +137,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>r :Denite file_old<Cr>
     nnoremap <leader>t :Denite filetype<Cr>
-    nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
+    nnoremap <leader>V :call <SID>denite_dir_then_file(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
     nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
     nnoremap <leader>] :<C-u>Denite -resume -cursor-pos=+1 -immediately<Cr>
     nnoremap <leader>[ :<C-u>Denite -resume -cursor-pos=-1 -immediately<Cr>
