@@ -136,7 +136,9 @@ call s:push_leader("\<Space>")
     nnoremap <leader>o :Denite outline<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>r :Denite file_old<Cr>
+    nnoremap <leader>s :call denite#start([{'name': 'file_rec', 'args': [g:scratchfiles_dir]}])<Cr>
     nnoremap <leader>t :Denite filetype<Cr>
+    nnoremap <leader>v :call denite#start([{'name': 'file_rec', 'args': [g:vim_maindir]}])<Cr>
     nnoremap <leader>V :call <SID>denite_dir_then_file(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
     nnoremap <leader>w :<C-u>DeniteCursorWord grep -buffer-name=grep<CR>
     nnoremap <leader>] :<C-u>Denite -resume -cursor-pos=+1 -immediately<Cr>
