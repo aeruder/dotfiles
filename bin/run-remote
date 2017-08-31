@@ -89,7 +89,7 @@ for a in "$@"; do
 done
 cmdstring="${cmdstring[*]}"
 
-cmdstring="cd $dir && eval $cmdstring"
+cmdstring="cd $dir && eval `quote "$cmdstring"`"
 
 if [ "$verbose" = 1 ]; then
     runverbose ssh -q -t "$host" "${cmd[@]}" "`quote "$cmdstring"`"
