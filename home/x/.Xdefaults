@@ -1,6 +1,6 @@
 XTerm*loginShell: True
-XTerm*faceSize: 13
-XTerm*faceName: Inconsolata
+XTerm*faceSize: 10
+XTerm*faceName: Sauce Code Pro
 XTerm*background: black
 XTerm*foreground: white
 XTerm*locale: UTF-8
