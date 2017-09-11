@@ -1801,7 +1801,7 @@ bindkey -M vicmd "V" edit-command-line
 
 # Auto-use rr-zr sometimes
 my-accept-line () {
-  if [[ "$PWD" == "/Users/aeruder/ziprecruiter" ]] && [[ "$BUFFER" == "bin/"* ]]; then
+  if [[ "$PWD" == "/Users/aeruder/ziprecruiter" ]] && { [[ "$BUFFER" == "bin/"* ]] || [[ "$BUFFER" == "app/"* ]] } ; then
     BUFFER="rr-zr ${BUFFER}"
   fi
   zle .accept-line
