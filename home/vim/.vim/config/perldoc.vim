@@ -1,7 +1,9 @@
 augroup perldoc_files
   autocmd!
-  autocmd FileReadCmd perldoc://**              exe s:perldoc_file_read(expand('<amatch>'))
-  autocmd BufReadCmd  perldoc://**              exe s:perldoc_buf_read(expand('<amatch>'))
+  autocmd FileReadCmd perldoc://**              exe s:perldoc_file_read([], expand('<amatch>'))
+  autocmd BufReadCmd  perldoc://**              exe s:perldoc_buf_read([], expand('<amatch>'))
+  autocmd FileReadCmd perlfunc://**             exe s:perldoc_file_read(['-f'], expand('<amatch>'))
+  autocmd BufReadCmd  perlfunc://**             exe s:perldoc_buf_read(['-f'], expand('<amatch>'))
 augroup END
 
 function! s:extract_perldoc(url)

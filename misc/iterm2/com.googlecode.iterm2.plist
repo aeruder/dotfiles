@@ -83,7 +83,7 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>1018 476 1111 268 0 0 2560 1417 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>970 768 620 392 0 0 2560 1417 </string>
+	<string>970 788 620 392 0 0 2560 1417 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 165 606 456 0 0 2560 1417 </string>
 	<key>NSWindow Frame SharedPreferences</key>
@@ -91,7 +91,7 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>99 293 592 584 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1252 370 586 426 0 0 2560 1417 </string>
+	<string>517 5 1349 863 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>2085 778 1915 639 1440 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 10</key>
@@ -5605,7 +5605,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>1AB6709B-E3AE-4564-A88E-DAD2D31EC3AA</string>
 	<key>NoSyncLastTipTime</key>
-	<real>522874993.45500201</real>
+	<real>523284246.16587102</real>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -5690,6 +5690,9 @@
 		<string>0066</string>
 		<string>0067</string>
 		<string>0068</string>
+		<string>0069</string>
+		<string>0070</string>
+		<string>0071</string>
 	</array>
 	<key>OpenTmuxWindowsIn</key>
 	<integer>1</integer>
@@ -5739,7 +5742,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-07-28T11:28:29Z</date>
+	<date>2017-08-29T23:22:17Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>Secure Input</key>
@@ -5753,6 +5756,7 @@
 	<key>ToolbeltTools</key>
 	<array>
 		<string>Captured Output</string>
+		<string>Command History</string>
 	</array>
 	<key>TripleClickSelectsFullWrappedLines</key>
 	<true/>

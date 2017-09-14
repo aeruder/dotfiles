@@ -1848,6 +1848,8 @@ function nohist() {
 }
 alias nohist=' nohist'
 
+[ -z "$SSH_CLIENT" ] || export COLORTERM=truecolor
+
 if [ -e ~/.zshrc.local ]; then
     source ~/.zshrc.local
 fi
