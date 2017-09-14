@@ -22,3 +22,15 @@ snippet fork
 my $pid = fork;
 die "fork: $!" unless defined $pid;
 endsnippet
+
+snippet json
+use JSON ();
+
+my $json = JSON->new->utf8->canonical->allow_nonref->allow_blessed->convert_blessed;
+endsnippet
+
+snippet cu
+configure_user ${1:user} => {
+	shared => { port => ${2:port} },
+};
+endsnippet
