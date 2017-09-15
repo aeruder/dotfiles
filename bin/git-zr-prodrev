@@ -1,0 +1,204 @@
+#!/usr/bin/env perl
+
+=head1 git-zr-prodrev / git-zr-stgrev
+
+=head2 Examples
+
+=head3 See hotfixes present on prod www at 2017-07-15 at midnight
+git log origin/master..`git zr-prodrev 2017-07-15`
+
+=head3 See what commits were introduced on prod www on 2017-07-15
+git log `git zr-prodrev 2017-07-14`..`git zr-prodrev 2017-07-15`
+
+=head3 See what commits were introduced on prod batch on 2017-07-15
+git log `git zr-prodrev batch 2017-07-14`..`git zr-prodrev batch 2017-07-15`
+
+=head2 Description
+
+These are helpers for git so you can investigate things that happened in prod
+or staging without having to locally track all of the tags.  These tools are
+specifically written to have very little dependencies so that you can get away
+with basically using Mac OSX builtin perl. :)
+
+This will query the `origin` remote directly for tags, resolve the tags, and
+then fetch them to local branches named e.g. tags/prod_www_2017-07-15... It will
+also output the downloaded tag on stdout so you can directly use it in git log
+expressions.
+
+=head2 Installation (optional)
+
+Put git-zr-prodrev and git-zr-stgrev in your PATH, this let's you use
+`git zr-prodrev <date>` and `git zr-stgrev <date>`.
+
+IF YOU SKIP THIS STEP - you will need to replace the instructions below with
+calling $STARTERVIEW/bin/git-zr-prodrev and $STARTERVIEW/bin/git-zr-stgrev
+
+=cut
+
+use strict;
+use warnings;
+
+package DateTime::Formatter::JustConvertItIDontCare;
+
+use strict;
+use warnings;
+use DateTime;
+
+my @FORMATTERS = (
+  { name => "DateTime::Format::Natural",
+    load => sub {
+      require DateTime::Format::Natural;
+    },
+    convert => sub {
+      my ($date) = @_;
+      my $inst = DateTime::Format::Natural->new;
+      my $datetime = $inst->parse_datetime($date);
+      die "Parser failed" unless $inst->success;
+      die "Datetime bad" unless $datetime;
+      $datetime;
+    },
+  },
+  { name => "DateTime::Format::Flexible",
+    load => sub {
+      require DateTime::Format::Flexible;
+    },
+    convert => sub {
+      my ($date) = @_;
+      DateTime::Format::Flexible->parse_datetime($date);
+    },
+  },
+  { name => "DateTime::Format::ISO8601",
+    load => sub {
+      require DateTime::Format::ISO8601;
+    },
+    convert => sub {
+      my ($date) = @_;
+      DateTime::Format::ISO8601->parse_datetime($date);
+    },
+  },
+  { name => "Builtin formatter",
+    load => sub {
+    },
+    convert => sub {
+      my ($date) = @_;
+      die "i am the worst datetime formatter, and I only do YYYY-MM-DD" unless $date =~ /^(\d{4})-(\d{2})-(\d{2})$/;
+      return DateTime->new(
+        year => $1,
+        month => $2,
+        day => $3,
+      );
+    },
+  },
+);
+
+sub clean_sprintf {
+  my $str = shift;
+  $str = sprintf($str, @_);
+  chomp $str;
+  return "$str\n";
+};
+
+sub parse_datetime {
+  my ($class, $date) = @_;
+  my $datetime;
+
+  my $info = "";
+
+  FORMATTER: for my $formatter (@FORMATTERS) {
+    {
+      local $@;
+      eval {
+        $formatter->{load}->();
+      };
+      if ($@) {
+        $info .= clean_sprintf("Loading %s failed: %s", $formatter->{name}, $@);
+        next FORMATTER;
+      }
+    }
+    $info .= clean_sprintf("Loading %s succeeded", $formatter->{name});
+
+    eval {
+      $datetime = $formatter->{convert}->($date);
+    };
+    last FORMATTER if $datetime;
+    $info .= clean_sprintf("Formatter %s failed to parse: %s", $formatter->{name}, $@);
+  }
+  die "Couldn't figure out how to parse '$date'\n$info" unless $datetime;
+
+  return $datetime;
+};
+
+1;
+
+package main;
+# use DateTime::Formatter::JustConvertItIDontCare;
+use List::Util;
+use Data::Dumper;
+use IO::Handle;
+
+my $remote = $ENV{ZR_PRODREV_REMOTE}//"origin";
+
+die "Usage: $0 [class] <date>" unless @ARGV;
+
+my $level = "prod";
+$level = "stg" if $0 =~ /stg/;
+
+# I know we have a list of these but I wanted to make something not dependent
+# on the rest of ziprecruiter tools so we can easily use on dev machines
+my $class = $ARGV[0];
+if ($class =~ /^(?:admin|alerts|anemometer|api|batch|dba|dbjump|dbslave|emp-api|feeds-manager|feeds-worker|filterto|fluentd|reporting|secrets|stats|svc|tungsten|worker|www)$/) {
+  shift @ARGV;
+} else {
+  $class = "www";
+}
+
+die "Usage: $0 [class] <date>" unless @ARGV;
+
+my $date = join(" ", @ARGV);
+my $datetime = DateTime::Formatter::JustConvertItIDontCare->parse_datetime($date);
+
+# Go through and find the previous 7 days or so since we generally will get
+# a release in once a week.  Trying to filter down the refs as much as possible
+# from the server so we run faster but not wanting to error out when we are
+# given a date that we didn't release on.
+my @prefixes = map {
+  my $adj_datetime = $datetime->clone->subtract(days => $_);
+  sprintf("%s_%s_%04d-%02d-%02d_*",
+    $level,
+    $class,
+    $adj_datetime->year,
+    $adj_datetime->month,
+    $adj_datetime->day,
+  );
+} (1..7);
+
+my %tags;
+my $found = List::Util::any {
+  my @cmd = (qw(git ls-remote --tags), $remote, "refs/tags/$_");
+  open my $fh, "-|", @cmd;
+  my $got_tag;
+  LINE: for (<$fh>) {
+    chomp $_;
+    next LINE unless /^([a-fA-F0-9]{30,})\s+refs\/tags\/(\S+)\^\{\}$/;
+    $tags{$2} = $1;
+    $got_tag = 1;
+  }
+  close $fh;
+  $got_tag;
+} @prefixes;
+
+my $last_tag = (sort { $b cmp $a } keys %tags)[0];
+my $output_ref = "tags/$last_tag";
+
+my @cmd = ("git", "fetch", $remote, $tags{$last_tag} . ":refs/heads/$output_ref");
+my $pid = fork;
+die "fork: $!" unless defined $pid;
+if (!$pid) {
+  STDOUT->fdopen(\*STDERR, 'w');
+  exec @cmd;
+}
+wait;
+die "git fetch failed: $?" if $?;
+
+print "$output_ref\n";
+exit(0);
