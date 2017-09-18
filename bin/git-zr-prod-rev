@@ -1,0 +1,5 @@
+#!/bin/bash
+
+name="`basename "$0"`"
+
+exec "$STARTERVIEW"/bin/"$name" "$@"
