@@ -29,6 +29,10 @@
 - repo: tpope/vim-fugitive
 - repo: tommcdo/vim-exchange
 - repo: tpope/vim-eunuch
+  # - repo: autozimu/LanguageClient-neovim
+- repo: Shougo/echodoc.vim
+- repo: roxma/nvim-completion-manager
+- repo: rizzatti/dash.vim
 
 # Autocomplete stuff, wait until we start editing a file
 - repo: Shougo/deoplete.nvim
