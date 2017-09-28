@@ -1,98 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env perl
 
-# Failed commands aborts script
-set -e
-# Uninitialized expansion aborts script
-set -u
-# Any command in a pipe failing aborts script
-set -o pipefail
+use feature ':5.14';
+use strictures 2;
+use Getopt::Long;
+# use Getopt::Long::Configure qw(bundling);
+use Data::Dumper;
+use MIME::Base64;
 
-DEFAULT_HOST="sandbox"
-DEFAULT_DIRECTORY="~/"
-DEFAULT_SHELL="/bin/bash"
-
-function print_usage {
-    echo "Usage: $0 [options]" >&2
-    echo "Options:" >&2
-    echo "  -h           this help" >&2
-    echo "  -c host      the host ($DEFAULT_HOST)" >&2
-    echo "  -d directory the directory to run from ($DEFAULT_DIRECTORY)" >&2
-    echo "  -s shell     the remote shell ($DEFAULT_SHELL)" >&2
-    echo "  -l           use a login shell" >&2
-    exit 1
+sub quote {
+  my ($arg) = @_;
+  if ($arg !~ /^[\/:a-zA-Z0-9_,=.-]+$/) {
+    $arg =~ s/'/'\\''/g;
+    $arg = "'".$arg."'";
+  }
+  $arg;
 }
 
-# This function shell-quotes the argument
-function quote {
-    local quoted=${1//\'/\'\\\'\'}
-    local finechars=${1//[\/a-zA-Z0-9_,=.-]/}
-    if [ -n "$1" ] && [ -z "$finechars" ]; then
-        printf "%s" "$1"
-    else
-        printf "'%s'" "$quoted"
-    fi
-}
-# Prints out the command as it is running
-function runverbose {
-    typeset -a args
-    for a in "$@"; do
-        args+=("`quote "$a"`")
-    done
-    echo "RUNNING:" "${args[@]}" >&2
-    "$@"
-}
+my ($help,$login,$verbose);
+my $dir=".";
+my $host="localhost";
+my $shell="/bin/sh";
+my $perl="perl";
 
-while getopts ":hc:d:s:lv" opt; do
-    case $opt in
-        c)
-            host="$OPTARG"
-            ;;
-        h)
-            print_usage
-            ;;
-        d)
-            dir="$OPTARG"
-            ;;
-        s)
-            shell="$OPTARG"
-            ;;
-        v)
-            verbose=1
-            ;;
-        l)
-            login=1
-            ;;
-        \?)
-            echo "Invalid option: -$OPTARG" >&2
-            print_usage
-            ;;
-        :)
-            echo "Option -$OPTARG requires an argument." >&2
-            print_usage
-            ;;
-    esac
-done
-shift $((OPTIND-1))
-host="${host:-$DEFAULT_HOST}"
-dir="${dir:-$DEFAULT_DIRECTORY}"
-shell="${shell:-$DEFAULT_SHELL}"
-verbose="${verbose:-0}"
+GetOptions(
+  'help'    => \$help,
+  'login'   => \$login,
+  'verbose' => \$verbose,
+  'dir=s'   => \$dir,
+  'host=s'  => \$host,
+  'shell=s' => \$shell,
+  'perl=s'  => \$perl,
+);
 
-cmd=("$shell")
-if [ "${login:-}" = 1 ]; then
-    cmd+=(-l)
-fi
-cmd+=(-c)
-cmdstring=()
-for a in "$@"; do
-    cmdstring+=("`quote "$a"`")
-done
-cmdstring="${cmdstring[*]}"
+# Escaping on ssh is a nightmare, just have a static command-line by
+# uuencoding a perl script and sending it over
+my @cmd=(qw(ssh -q -t), $host);
+my @shell_cmd = ($perl, qw(-MData::Dumper -MMIME::Base64 -e));
+push @shell_cmd, 'eval decode_base64($ARGV[0])';
 
-cmdstring="cd $dir && eval `quote "$cmdstring"`"
+my $login_shell = $shell;
+$login_shell =~ s/.*\///;
+$login_shell = "-".$login_shell;
 
-if [ "$verbose" = 1 ]; then
-    runverbose ssh -q -t "$host" "${cmd[@]}" "`quote "$cmdstring"`"
-else
-    ssh -q -t "$host" "${cmd[@]}" "`quote "$cmdstring"`"
-fi
+my @remote_cmd = ($login ? $login_shell : $shell, "-c");
+my @remote_shell_cmd = @ARGV;
+push @remote_cmd, join(" ", map { quote($_) } @remote_shell_cmd);
+
+my $prog = Data::Dumper->Dump([\@remote_cmd, $dir], ['REMOTECMD', 'REMOTEDIR']);
+my $script = "my (\$REMOTECMD, \$REMOTEDIR);\n";
+$script .= $prog;
+$script .= "chdir(\$REMOTEDIR);\n";
+$script .= "print STDERR Data::Dumper->Dump([\$REMOTECMD], [\"REMOTECMD\"]);\n" if $verbose;
+$script .= "exec {'$shell'} \@\$REMOTECMD;";
+
+push @shell_cmd, encode_base64($script,"");
+push @cmd, map { quote($_) } @shell_cmd;
+
+print STDERR sprintf("=== REMOTE SCRIPT START ===\n%s\n=== REMOTE SCRIPT END===\n", $script) if $verbose;
+print STDERR Data::Dumper->Dump([\@cmd], ["LOCALCMD"]) if $verbose;
+exec {$cmd[0]} @cmd;
