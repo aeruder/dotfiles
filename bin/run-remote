@@ -3,7 +3,6 @@
 use feature ':5.14';
 use strictures 2;
 use Getopt::Long;
-# use Getopt::Long::Configure qw(bundling);
 use Data::Dumper;
 use MIME::Base64;
 
@@ -22,6 +21,7 @@ my $host="localhost";
 my $shell="/bin/sh";
 my $perl="perl";
 
+Getopt::Long::Configure qw(require_order bundling no_ignore_case_always no_auto_abbrev);
 GetOptions(
   'help'    => \$help,
   'login'   => \$login,
