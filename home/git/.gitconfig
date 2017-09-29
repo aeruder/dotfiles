@@ -30,6 +30,7 @@
 	rbm = rebase -i origin/master
 	rbu = rebase -i
 	ls = log --stat
+	br = branch
 [color]
 	ui = auto
 [merge]
