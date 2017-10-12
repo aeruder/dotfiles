@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Failed commands aborts script
+set -e
+# Any command in a pipe failing aborts script
+set -o pipefail
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <pattern> <file1> ..." >&2
+    exit 1
+fi
+
+pattern="$1"
+shift
+
+last=
+for a in "$@" ; do
+    lines=()
+    if [ -n "$last" ]; then
+        echo
+    fi
+    echo "BLAME: $a"
+    for line_no in `grep -n -- "$pattern" "$a" | sed -e 's/:.*//'`; do
+        git blame -M -C -C -L"$line_no",+1 "$a"
+    done
+    last="$a"
+done
