@@ -34,3 +34,19 @@ configure_user ${1:user} => {
 	shared => { port => ${2:port} },
 };
 endsnippet
+
+snippet libstart
+package ${1:module};
+
+=head1 NAME
+
+$1 - ${2:summary}
+
+=cut
+endsnippet
+
+snippet moo
+use Moo;
+use strictures 2;
+use namespace::clean;
+endsnippet
