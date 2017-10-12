@@ -9,6 +9,7 @@
 	cpick = cherry-pick
 	fl = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	fla = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	flb = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --branches
 	gud = push
 	l = log --abbrev-commit
 	ps = push-sandbox
