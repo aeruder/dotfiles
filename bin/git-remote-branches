@@ -1,0 +1,34 @@
+#!/usr/bin/env perl
+
+=head1 OVERVIEW
+
+git-remote-branches - Lists remote branches
+
+=head1 USAGE
+
+git-remote-branches [remote1] [remote2] ...
+
+If no remotes are listed, lists all remote branches.
+
+=cut
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+
+my @remotes = @ARGV;
+@remotes = map { "$_/" } @remotes;
+@remotes = ('') unless @remotes;
+
+for my $remote (@remotes) {
+  open my $fh, '-|', qw(git for-each-ref), 'refs/remotes/' . $remote;
+
+  while (my $line = <$fh>) {
+    chomp $line;
+    my ($sha, $type, $name) = split(/\s+/, $line, 3);
+    next unless $type eq 'commit';
+    $name =~ s{^refs/remotes/}{};
+    print $name, "\n";
+  }
+}

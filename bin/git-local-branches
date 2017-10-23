@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+=head1 OVERVIEW
+
+git-local-branches - Lists local branches
+
+=cut
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+
+open my $fh, '-|', qw(git for-each-ref refs/heads/);
+
+while (my $line = <$fh>) {
+  chomp $line;
+  my ($sha, $type, $name) = split(/\s+/, $line, 3);
+  next unless $type eq 'commit';
+  $name =~ s{^refs/heads/}{};
+  print $name, "\n";
+}
