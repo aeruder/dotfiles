@@ -32,14 +32,14 @@ xnoremap > >gv|
 vnoremap <Tab> >gv|
 vnoremap <S-Tab> <gv
 
-" Navigation in command line
-cnoremap <C-j> <Left>
-cnoremap <C-k> <Right>
-cnoremap <C-h> <Home>
-cnoremap <C-l> <End>
-cnoremap <C-f> <Right>
-cnoremap <C-b> <Left>
-cnoremap <C-d> <C-w>
+" " Navigation in command line
+" cnoremap <C-j> <Left>
+" cnoremap <C-k> <Right>
+" cnoremap <C-h> <Home>
+" cnoremap <C-l> <End>
+" cnoremap <C-f> <Right>
+" cnoremap <C-b> <Left>
+" cnoremap <C-d> <C-w>
 
 " Drag current line/s vertically and auto-indent
 vnoremap mk :m-2<CR>gv=gv
@@ -156,11 +156,14 @@ call s:push_leader("\<Space>")
       execute "nnoremap <leader>d :n ".PJ(g:vim_configdir, "mappings.vim")."<Cr>"
       nnoremap <leader>D :n $MYVIMRC<Cr>
       execute "nnoremap <leader>p :n ".PJ(g:vim_configdir, "plugins.yaml")."<Cr>"
+      nnoremap <leader>u :<C-u>exe "e" fnameescape(PJ(g:vim_maindir, "UltiSnips", &filetype . ".snippets"))<Cr>
+      nmap <leader>r <Plug>(RegEditPrefix)
+      nmap <leader>R1 <Plug>(RegEditPostfix)
+      nmap <leader>R2 <Plug>RegEdit
     call s:pop_leader()
     nnoremap <leader>l :lcd %:h<Cr>
     nnoremap <leader>o :<C-u>Denite outline<CR>
     nnoremap <leader>s :<C-u>ScratchFileNew 
-    nnoremap <leader>u :<C-u>exe "e" fnameescape(PJ(g:vim_maindir, "UltiSnips", &filetype . ".snippets"))<Cr>
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
     call s:push_leader("y")

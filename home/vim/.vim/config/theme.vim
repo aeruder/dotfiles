@@ -39,7 +39,7 @@ endfunction
 
 autocmd MyAutoCmd ColorScheme * call s:theme_save(expand('<amatch>'))
 
-let s:default_theme = "hybrid"
+let s:default_theme = "elflord"
 let s:cache = PJ(g:vim_cachedir, "theme.txt")
 if ! exists("g:applied_colorscheme")
   set background=dark
