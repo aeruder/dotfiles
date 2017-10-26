@@ -15,6 +15,7 @@
 - repo: tpope/vim-vinegar
 - repo: tpope/vim-unimpaired
 - repo: mhinz/vim-signify
+- repo: aeruder/vim-regedit
 - repo: editorconfig/editorconfig-vim
   hook_add: |
     let g:EditorConfig_core_mode = "python_external"
