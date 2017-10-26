@@ -1,3 +1,20 @@
+global !p
+import re
+def insert_perl_module(name, use_import=False):
+	lastlinewithmod = 0
+	lastline = len(snip.buffer)
+	for i in range(0, lastline):
+		line = snip.buffer[i]
+		mo = re.search(r'^(use|require|package)\s+([a-zA-Z0-9:]+)', line)
+		# snip.buffer[lastline:lastline] = ["HELLO %d '%s' '%s'" % (i, line, repr(mo))]
+		if mo:
+			if not re.search(r'^namespace::', mo[2]):
+				lastlinewithmod = i
+			if mo[1] in ['use', 'require'] and mo[2] == name:
+				return 1
+	snip.buffer[lastlinewithmod+1:lastlinewithmod+1] = ['use %s%s;' % (name, "" if use_import else " ()")]
+endglobal
+
 snippet start
 #!/usr/bin/env perl
 
@@ -5,7 +22,6 @@ use feature ':5.14';
 use strictures 2;
 use warnings 'all';
 $^W = 1;
-use DDP;
 endsnippet
 
 snippet ddp
@@ -35,18 +51,167 @@ configure_user ${1:user} => {
 };
 endsnippet
 
-snippet libstart
-package ${1:module};
+snippet dietrack
+local $SIG{__DIE__} = sub { require Carp; Carp::confess(@_) };
+endsnippet
+
+snippet warntrack
+local $SIG{__WARN__} = sub { require Carp; Carp::cluck(@_); };
+endsnippet
+
+snippet package
+package ${1:`!v expand('%:p:s?.*\(lib\|tests\)/??:r:gs?/?::?')`};
 
 =head1 NAME
 
-$1 - ${2:summary}
+$1
+
+=head1 DESCRIPTION
+
+${2:description}
 
 =cut
+
+use strictures 2;
+
+$0
+
+1;
 endsnippet
 
 snippet moo
+package ${1:`!v expand('%:p:s?.*\(lib\|tests\)/??:r:gs?/?::?')`};
+
+=head1 NAME
+
+$1
+
+=head1 DESCRIPTION
+
+${2:description}
+
+=cut
+
 use Moo;
 use strictures 2;
 use namespace::clean;
+
+=head1 ATTRIBUTES
+
+=cut
+
+$0
+
+=head1 METHODS
+
+=cut
+
+1;
+endsnippet
+
+snippet has
+=head2 $1
+
+${4:description}
+
+=cut
+has ${1:attribute} => (
+	is => '${2:ro|rw}',
+	default => sub {
+		${3:defaultvalue},
+	},
+	${0:# other attributes}
+);
+endsnippet
+
+snippet method
+=head2 $1
+
+${2:description}
+
+=cut
+sub ${1:method} {
+	${0:my ($self) = @_;}
+}
+endsnippet
+
+snippet zrtcm
+package ${1:`!v expand('%:p:s?.*\(lib\|tests\)/??:r:gs?/?::?')`};
+
+use Test::ZR::RunTCM;
+use ZR::Bundle::TCM 'v1';
+
+use namespace::autoclean;
+
+$0
+
+__PACKAGE__->meta->make_immutable;
+1;
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Now', True)"
+snippet zr_now
+zr_now$0
+endsnippet
+
+pre_expand "insert_perl_module('Data::Dumper')"
+snippet dumper
+Data::Dumper::Dumper$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_errorf
+log_errorf$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_warnf
+log_warnf$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_infof
+log_infof$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_debugf
+log_debugf$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_tracef
+log_tracef$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_error
+log_error$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_warn
+log_warn$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_info
+log_info$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_debug
+log_debug$0
+endsnippet
+
+pre_expand "insert_perl_module('ZR::Log', True)"
+snippet log_trace
+log_trace$0
+endsnippet
+
+pre_expand "insert_perl_module('Sub::Override')"
+snippet override
+my $guard = Sub::Override->new('${1:function}' => sub {
+	$0
+});
 endsnippet
