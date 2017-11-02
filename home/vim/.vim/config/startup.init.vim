@@ -1,26 +1,8 @@
 " Vim Initialization
 " ------------------
 
-" Global Mappings "{{{
-" Use spacebar as leader and ; as secondary-leader
-" Required before loading plugins!
 let g:mapleader="\<Space>"
 let g:maplocalleader=';'
-
-" }}}
-" Ensure cache directory "{{{
-
-if has("win32")
-  let g:vim_cachedir=PJ(g:vim_maindir, "cache")
-else
-  let g:vim_cachedir=PJ(expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : '~/.cache')), 'vim')
-endif
-
-let g:vim_pconfigdir=PJ(g:vim_configdir, "plugins")
-
-if ! isdirectory(g:vim_cachedir)
-  call mkdir(g:vim_cachedir)
-endif
 
 " Create missing dirs i.e. cache/{undo,backup}
 if ! isdirectory(PJ(g:vim_cachedir, "undo"))
@@ -35,14 +17,6 @@ if ! isdirectory(PJ(g:vim_cachedir, "swp"))
 endif
 let &directory=PJ(g:vim_cachedir, "swp")
 
-" }}}
-" Load vault settings "{{{
-" if filereadable(expand('$VIMPATH/.vault.vim'))
-"   execute 'source' expand('$VIMPATH/.vault.vim')
-" endif
-
-" }}}
-" Setup dein {{{
 if g:vimrc_profile >= 0
   if empty(globpath(&rtp, PJ("autoload", "dein.vim")))
     let s:dein_dir = PJ(g:vim_cachedir, "dein", "repos", "github.com", "Shougo", "dein.vim")
@@ -53,10 +27,6 @@ if g:vimrc_profile >= 0
     execute 'set runtimepath+='.s:dein_dir
   endif
 endif
-
-" }}}
-
-" Disable default plugins "{{{
 
 " Disable menu.vim
 if has('gui_running')
@@ -85,4 +55,3 @@ let g:loaded_vimball = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_zip = 1
 let g:loaded_zipPlugin = 1
-" }}}

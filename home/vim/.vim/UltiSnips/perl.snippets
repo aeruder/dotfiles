@@ -79,6 +79,35 @@ $0
 1;
 endsnippet
 
+snippet mooserole
+package ${1:`!v expand('%:p:s?.*\(lib\|tests\)/??:r:gs?/?::?')`};
+
+=head1 NAME
+
+$1
+
+=head1 DESCRIPTION
+
+${2:description}
+
+=cut
+
+use Moose::Role;
+use strictures 2;
+
+=head1 ATTRIBUTES
+
+=cut
+
+$0
+
+=head1 METHODS
+
+=cut
+
+1;
+endsnippet
+
 snippet moo
 package ${1:`!v expand('%:p:s?.*\(lib\|tests\)/??:r:gs?/?::?')`};
 
@@ -147,6 +176,39 @@ $0
 
 __PACKAGE__->meta->make_immutable;
 1;
+endsnippet
+
+snippet zrnontcm
+#!/usr/bin/zrperl -w
+
+use ZR::Bootstrap test => 1;
+use ZR::Bundle::Test 'v2';
+use strictures 2;
+
+subtest 'my first test' => sub {
+	pass 'w00t!'
+};
+
+done_testing();
+endsnippet
+
+snippet zrnontcmdb
+#!/usr/bin/zrperl -w
+
+use ZR::Bootstrap test => 1;
+use ZR::Bundle::Test 'v2';
+use strictures 2;
+
+use ZR::Mock::MySQL -install;
+use ZR::Service::DBIC;
+
+my $schema = zr_dbic('starterview');
+
+$schema->sub_test('my first test' => sub {
+	pass 'w00t!'
+} );
+
+done_testing();
 endsnippet
 
 pre_expand "insert_perl_module('ZR::Now', True)"

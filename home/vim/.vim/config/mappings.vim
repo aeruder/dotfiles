@@ -239,12 +239,12 @@ call s:push_leader("\<Space>")
     nnoremap <leader>% :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
     nnoremap <leader>. :Denite file_rec<Cr>
     nnoremap <leader>b :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h")]}])<Cr>
-    nnoremap <leader>d :call MyDeniteDirectoryThenFile(".")<Cr>
+    nnoremap <leader>d :call <SID>denite_dir_then_file(".")<Cr>
     nnoremap <leader>D :Denite directory_rec -default-action=cd<Cr>
     nnoremap <leader>f :Denite file_rec<Cr>
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
-    nnoremap <leader>v :call MyDeniteDirectoryThenFile(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
+    nnoremap <leader>v :call <SID>denite_dir_then_file(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
   call s:pop_leader()
 
   " QUIT stuff
