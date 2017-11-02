@@ -15,6 +15,7 @@ export EDITOR=e
 export VISUAL=e
 export LESS=-FmqXR
 export PAGER=less
+export DBIC_TRACE_PROFILE=console
 
 if [ -x /bin/systemctl ]; then
 export XDG_RUNTIME_DIR="/run/user/$UID"
