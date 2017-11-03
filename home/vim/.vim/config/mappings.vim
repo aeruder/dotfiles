@@ -557,4 +557,8 @@ if g:vimrc_profile >= 0
     nmap <silent> gS <Plug>SplitjoinSplit
   endif
   "}}}
+  if dein#tap('ultisnips') "{{{
+    let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'private.UltiSnips']
+  endif
+  "}}}
 endif

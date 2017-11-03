@@ -1,18 +1,5 @@
 global !p
-import re
-def insert_perl_module(name, use_import=False):
-	lastlinewithmod = 0
-	lastline = len(snip.buffer)
-	for i in range(0, lastline):
-		line = snip.buffer[i]
-		mo = re.search(r'^(use|require|package)\s+([a-zA-Z0-9:]+)', line)
-		# snip.buffer[lastline:lastline] = ["HELLO %d '%s' '%s'" % (i, line, repr(mo))]
-		if mo:
-			if not re.search(r'^namespace::', mo[2]):
-				lastlinewithmod = i
-			if mo[1] in ['use', 'require'] and mo[2] == name:
-				return 1
-	snip.buffer[lastlinewithmod+1:lastlinewithmod+1] = ['use %s%s;' % (name, "" if use_import else " ()")]
+import perl_snippet_helper
 endglobal
 
 snippet start
@@ -164,114 +151,12 @@ sub ${1:method} {
 }
 endsnippet
 
-snippet zrtcm
-package ${1:`!v expand('%:p:s?.*\(lib\|tests\)/??:r:gs?/?::?')`};
-
-use Test::ZR::RunTCM;
-use ZR::Bundle::TCM 'v1';
-
-use namespace::autoclean;
-
-$0
-
-__PACKAGE__->meta->make_immutable;
-1;
-endsnippet
-
-snippet zrnontcm
-#!/usr/bin/zrperl -w
-
-use ZR::Bootstrap test => 1;
-use ZR::Bundle::Test 'v2';
-use strictures 2;
-
-subtest 'my first test' => sub {
-	pass 'w00t!'
-};
-
-done_testing();
-endsnippet
-
-snippet zrnontcmdb
-#!/usr/bin/zrperl -w
-
-use ZR::Bootstrap test => 1;
-use ZR::Bundle::Test 'v2';
-use strictures 2;
-
-use ZR::Mock::MySQL -install;
-use ZR::Service::DBIC;
-
-my $schema = zr_dbic('starterview');
-
-$schema->sub_test('my first test' => sub {
-	pass 'w00t!'
-} );
-
-done_testing();
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Now', True)"
-snippet zr_now
-zr_now$0
-endsnippet
-
-pre_expand "insert_perl_module('Data::Dumper')"
+pre_expand "perl_snippet_helper.insert_module('Data::Dumper')"
 snippet dumper
 Data::Dumper::Dumper$0
 endsnippet
 
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_errorf
-log_errorf$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_warnf
-log_warnf$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_infof
-log_infof$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_debugf
-log_debugf$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_tracef
-log_tracef$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_error
-log_error$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_warn
-log_warn$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_info
-log_info$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_debug
-log_debug$0
-endsnippet
-
-pre_expand "insert_perl_module('ZR::Log', True)"
-snippet log_trace
-log_trace$0
-endsnippet
-
-pre_expand "insert_perl_module('Sub::Override')"
+pre_expand "perl_snippet_helper.insert_module('Sub::Override')"
 snippet override
 my $guard = Sub::Override->new('${1:function}' => sub {
 	$0
