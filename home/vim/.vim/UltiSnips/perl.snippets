@@ -151,12 +151,12 @@ sub ${1:method} {
 }
 endsnippet
 
-pre_expand "perl_snippet_helper.insert_module('Data::Dumper')"
+pre_expand "perl_snippet_helper.insert_module(snip, 'Data::Dumper')"
 snippet dumper
 Data::Dumper::Dumper$0
 endsnippet
 
-pre_expand "perl_snippet_helper.insert_module('Sub::Override')"
+pre_expand "perl_snippet_helper.insert_module(snip, 'Sub::Override')"
 snippet override
 my $guard = Sub::Override->new('${1:function}' => sub {
 	$0

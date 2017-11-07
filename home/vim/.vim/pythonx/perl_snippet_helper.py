@@ -1,5 +1,5 @@
 import re
-def insert_module(name, use_import=False):
+def insert_module(snip, name, use_import=False):
     lastlinewithmod = 0
     lastline = len(snip.buffer)
     for i in range(0, lastline):
