@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Failed commands aborts script
+set -e
+# Uninitialized expansion aborts script
+set -u
+# Any command in a pipe failing aborts script
+set -o pipefail
+
+input="$1"
+palette="$input.palette.png"
+output="$input.gif"
+
+ffmpeg -y -i "$input" -vf fps=10,palettegen "$palette"
+ffmpeg -i "$input" -i "$palette" -filter_complex fps=10,paletteuse "$output"
