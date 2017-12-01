@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$1" ] ; then
+    echo "Usage: $0 <perlmodule>" >&2
+    exit 1
+fi
+
+mod="$1"
+
+perl -M$mod -e "print \$${mod}::VERSION, \"\\n\""
