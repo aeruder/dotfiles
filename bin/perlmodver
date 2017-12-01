@@ -7,4 +7,7 @@ fi
 
 mod="$1"
 
-perl -M$mod -e "print \$${mod}::VERSION, \"\\n\""
+if [ -z "$PERL" ]; then
+    PERL=perl
+fi
+"$PERL" -M$mod -e "print \$${mod}::VERSION, \"\\n\""
