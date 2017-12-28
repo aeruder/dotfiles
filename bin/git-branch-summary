@@ -1,0 +1,131 @@
+#!/usr/bin/env perl
+
+=head1 OVERVIEW
+
+git-branch-summary - Lists branches while sorting them
+
+=cut
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+use Getopt::Long;
+use Pod::Usage;
+use Data::Dumper;
+
+my $upstream = "origin/master";
+my $upstream_cache = {};
+my $help;
+my $verbose;
+
+GetOptions(
+  "upstream" => \$upstream,
+  "help|?" => \$help,
+  "verbose|v" => \$verbose,
+) or pod2usage(2);
+pod2usage(1) if $help;
+
+$upstream = git_rev_parse($upstream);
+
+# Cache the upstream revs
+{
+  open my $fh, '-|', qw(git rev-list), $upstream;
+
+  my $count = 0;
+  while (my $line = <$fh>) {
+    chomp $line;
+    $upstream_cache->{$line} = $count;
+    $count++;
+  }
+}
+
+open my $fh, '-|', qw(git for-each-ref refs/heads/);
+
+my @branches;
+my $longest_name = 0;
+while (my $line = <$fh>) {
+  chomp $line;
+  my ($sha, $type, $name) = split(/\s+/, $line, 3);
+  next unless $type eq 'commit';
+  $name =~ s{^refs/heads/}{};
+  my $branch_info = {
+    sha => $sha,
+    name => $name,
+  };
+  $longest_name = length($name) if length($name) > $longest_name;
+
+  my ($merge_base, $ahead) = git_merge_base($branch_info->{sha});
+  next unless $merge_base;
+  $branch_info->{merge_base} = $merge_base;
+  $branch_info->{behind} = $upstream_cache->{$branch_info->{merge_base}};
+  $branch_info->{ahead} = $ahead;
+  {
+    open my $fh, "-|", qw(git rev-list -1 --pretty=%s), $sha;
+    $branch_info->{msg} = do { <$fh>; my $a = <$fh>; chomp $a; $a };
+  }
+
+  push @branches, $branch_info;
+}
+@branches = sort {
+  if (!$a->{ahead}) {
+    -1;
+  } elsif (!$b->{ahead}) {
+    1;
+  } else {
+    $b->{behind} <=> $a->{behind} or $a->{name} cmp $b->{name};
+  }
+} @branches;
+
+for my $branch_info (@branches) {
+  print sprintf("%-${longest_name}s [ahead %d, behind %d] %s\n",
+    $branch_info->{name},
+    $branch_info->{ahead},
+    $branch_info->{behind},
+    $branch_info->{msg});
+  if ($verbose) {
+    open my $fh, "-|", qw(git diff --name-only), $branch_info->{merge_base}."..".$branch_info->{sha};
+    while (my $line = <$fh>) {
+      chomp $line;
+      print "  $line\n";
+    }
+  }
+}
+
+exit(0);
+
+sub git_rev_parse {
+  my ($upstream) = @_;
+
+  open my $fh, "-|", qw(git rev-parse), $upstream;
+  my $line = <$fh>;
+  chomp $line;
+
+  $line;
+}
+
+sub git_merge_base {
+  my ($branch) = @_;
+
+  open my $fh, "-|", qw(git rev-list), $branch;
+  my $count = 0;
+  my $sha;
+  while ($sha = <$fh>) {
+    chomp $sha;
+    last if exists $upstream_cache->{$sha};
+    $count++;
+  }
+  warn "$branch doesn't share history with upstream" unless $sha;
+  return ($sha, $count);
+}
+
+sub git_rev_count {
+  my ($ref) = @_;
+
+  my $count = 0;
+  open my $fh, "-|", qw(git rev-list), $ref;
+  while (my $line = <$fh>) {
+    $count++;
+  }
+  $count;
+}

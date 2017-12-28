@@ -32,6 +32,7 @@
 	rbu = rebase -i
 	ls = log --stat
 	br = branch
+	bs = branch-summary
 [color]
 	ui = auto
 [merge]
