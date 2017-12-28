@@ -39,11 +39,11 @@ configure_user ${1:user} => {
 endsnippet
 
 snippet dietrack
-local $SIG{__DIE__} = sub { require Carp; Carp::confess(@_) };
+local \$SIG{__DIE__} = sub { require Carp; die @_ if ref(\$_[0]); if (\$_[-1] =~ /\\n\$/s) { my \$arg = pop @_; \$arg =~ s/(.*)( at .*? line .*?\\n\$)/\$1/s; push @_, \$arg; } die &Carp::longmess; };
 endsnippet
 
 snippet warntrack
-local $SIG{__WARN__} = sub { require Carp; Carp::cluck(@_); };
+local \$SIG{__WARN__} = sub { require Carp; if (\$_[-1] =~ /\\n\$/s) { my \$arg = pop @_; \$arg =~ s/(.*)( at .*? line .*?\\n\$)/\$1/s; push @_, \$arg; } warn &Carp::longmess; };
 endsnippet
 
 snippet package
