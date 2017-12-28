@@ -20,6 +20,7 @@ my $dir=".";
 my $host="localhost";
 my $shell="/bin/sh";
 my $perl="perl";
+my @env;
 
 Getopt::Long::Configure qw(require_order bundling no_ignore_case_always no_auto_abbrev);
 GetOptions(
@@ -30,6 +31,7 @@ GetOptions(
   'host=s'  => \$host,
   'shell=s' => \$shell,
   'perl=s'  => \$perl,
+  'env=s'   => \@env,
 );
 
 # Escaping on ssh is a nightmare, just have a static command-line by
@@ -46,9 +48,10 @@ my @remote_cmd = ($login ? $login_shell : $shell, "-c");
 my @remote_shell_cmd = @ARGV;
 push @remote_cmd, join(" ", map { quote($_) } @remote_shell_cmd);
 
-my $prog = Data::Dumper->Dump([\@remote_cmd, $dir], ['REMOTECMD', 'REMOTEDIR']);
-my $script = "my (\$REMOTECMD, \$REMOTEDIR);\n";
+my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, { %ENV{@env} }], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
+my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV);\n";
 $script .= $prog;
+$script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );";
 $script .= "chdir(\$REMOTEDIR);\n";
 $script .= "print STDERR Data::Dumper->Dump([\$REMOTECMD], [\"REMOTECMD\"]);\n" if $verbose;
 $script .= "exec {'$shell'} \@\$REMOTECMD;";
