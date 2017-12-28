@@ -394,6 +394,7 @@ you should place your code here."
   (setq tramp-use-ssh-controlmaster-options nil)
   (setq helm-input-idle-delay 0.25)
   (setq evil-escape-key-sequence "jk")
+  (setq helm-multi-match t)
 
   (fset 'evil-visual-update-x-selection 'ignore)
 
