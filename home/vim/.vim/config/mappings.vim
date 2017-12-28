@@ -192,8 +192,8 @@ call s:push_leader("\<Space>")
     nnoremap <leader>l :<c-u>Glog<Cr>
     nnoremap <leader>P :<c-u>Git push-sandbox<Cr>
     nnoremap <leader>r :<c-u>Gread<Cr>
-    nnoremap <leader>s :<c-u>Denite gitstatus<Cr>
-    nnoremap <leader>S :<c-u>Gstatus<Cr>
+    nnoremap <leader>s :<c-u>Gstatus<Cr>
+    nnoremap <leader>S :<c-u>Denite gitstatus<Cr>
     nnoremap <leader>v :Gitv --all<Cr>
     nnoremap <leader>V :Gitv! --all<Cr>
     vnoremap <leader>V :Gitv! --all<cr>
@@ -545,12 +545,12 @@ if g:vimrc_profile >= 0
   endif
 
   "}}}
-  if dein#tap('vim-textobj-function') "{{{
-    omap <silent> af <Plug>(textobj-function-a)
-    omap <silent> if <Plug>(textobj-function-i)
-    xmap <silent> af <Plug>(textobj-function-a)
-    xmap <silent> if <Plug>(textobj-function-i)
-  endif
+  " if dein#tap('vim-textobj-function') "{{{
+  "   omap <silent> af <Plug>(textobj-function-a)
+  "   omap <silent> if <Plug>(textobj-function-i)
+  "   xmap <silent> af <Plug>(textobj-function-a)
+  "   xmap <silent> if <Plug>(textobj-function-i)
+  " endif
   "}}}
   if dein#tap('splitjoin.vim') "{{{
     nmap <silent> gJ <Plug>SplitjoinJoin
