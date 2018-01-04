@@ -18,7 +18,6 @@ sub quote {
 my ($help,$login,$verbose);
 my $dir=".";
 my $host="localhost";
-my $shell="/bin/sh";
 my $perl="perl";
 my @env;
 
@@ -29,24 +28,20 @@ GetOptions(
   'verbose' => \$verbose,
   'dir=s'   => \$dir,
   'host=s'  => \$host,
-  'shell=s' => \$shell,
   'perl=s'  => \$perl,
   'env=s'   => \@env,
 );
 
+@env = grep { exists $ENV{$_} } @env;
+
 # Escaping on ssh is a nightmare, just have a static command-line by
 # uuencoding a perl script and sending it over
-my @cmd=(qw(ssh -q -t), $host);
+my @cmd=(qw(ssh -q), $host);
+push @cmd, "-t" if -t STDOUT && -t STDERR;
 my @shell_cmd = ($perl, qw(-MData::Dumper -MMIME::Base64 -e));
 push @shell_cmd, 'eval decode_base64($ARGV[0])';
 
-my $login_shell = $shell;
-$login_shell =~ s/.*\///;
-$login_shell = "-".$login_shell;
-
-my @remote_cmd = ($login ? $login_shell : $shell, "-c");
-my @remote_shell_cmd = @ARGV;
-push @remote_cmd, join(" ", map { quote($_) } @remote_shell_cmd);
+my @remote_cmd = @ARGV;
 
 my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, { %ENV{@env} }], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
 my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV);\n";
@@ -54,7 +49,7 @@ $script .= $prog;
 $script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );";
 $script .= "chdir(\$REMOTEDIR);\n";
 $script .= "print STDERR Data::Dumper->Dump([\$REMOTECMD], [\"REMOTECMD\"]);\n" if $verbose;
-$script .= "exec {'$shell'} \@\$REMOTECMD;";
+$script .= "exec {\$REMOTECMD->[0]} \@\$REMOTECMD;";
 
 push @shell_cmd, encode_base64($script,"");
 push @cmd, map { quote($_) } @shell_cmd;
