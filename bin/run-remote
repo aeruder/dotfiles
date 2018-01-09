@@ -31,6 +31,7 @@ GetOptions(
   'perl=s'  => \$perl,
   'env=s'   => \@env,
 );
+exit(0) unless @ARGV;
 
 @env = grep { exists $ENV{$_} } @env;
 
@@ -38,18 +39,18 @@ GetOptions(
 # uuencoding a perl script and sending it over
 my @cmd=(qw(ssh -q), $host);
 push @cmd, "-t" if -t STDOUT && -t STDERR;
-my @shell_cmd = ($perl, qw(-MData::Dumper -MMIME::Base64 -e));
-push @shell_cmd, 'eval decode_base64($ARGV[0])';
+my @shell_cmd = ($perl, qw(-Mwarnings -Mstrict -MData::Dumper -MMIME::Base64 -e));
+push @shell_cmd, 'eval decode_base64($ARGV[0]); warn $@ if $@';
 
 my @remote_cmd = @ARGV;
-
 my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, { %ENV{@env} }], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
 my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV);\n";
 $script .= $prog;
-$script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );";
+$script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );\n";
 $script .= "chdir(\$REMOTEDIR);\n";
 $script .= "print STDERR Data::Dumper->Dump([\$REMOTECMD], [\"REMOTECMD\"]);\n" if $verbose;
-$script .= "exec {\$REMOTECMD->[0]} \@\$REMOTECMD;";
+$script .= "{ exec {\$REMOTECMD->[0]} \@\$REMOTECMD; };\n";
+$script .= "exit(127);";
 
 push @shell_cmd, encode_base64($script,"");
 push @cmd, map { quote($_) } @shell_cmd;
