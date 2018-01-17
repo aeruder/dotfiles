@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+
+use Text::xSV;
+use JSON::XS;
+
+my $JSON = JSON::XS->new->canonical->utf8;
+my @json = ();
+my %header = ();
+while (my $line = <>) {
+  my $rec = $JSON->decode($line);
+  %header = (
+    %header,
+    %$rec,
+  );
+  push @json, $rec;
+}
+
+my $csv = Text::xSV->new;
+$csv->set_header(keys %header);
+$csv->print_header();
+$csv->print_data(%$_) for @json;

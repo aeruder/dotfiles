@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+
+use Text::xSV;
+use JSON::XS;
+
+my $CSV = Text::xSV->new();
+my $JSON = JSON::XS->new->canonical->utf8;
+$CSV->read_header();
+while (my $row = $CSV->fetchrow_hash) {
+    print $JSON->encode($row) . "\n";
+}
