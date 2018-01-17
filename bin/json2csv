@@ -15,7 +15,7 @@ my %header = ();
 tie(%header, 'Tie::IxHash');
 $header{$_} = 1 for @ARGV;
 
-while (my $line = <>) {
+while (my $line = <STDIN>) {
   my $rec = $JSON->decode($line);
   %header = (
     %header,
