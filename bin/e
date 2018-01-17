@@ -1,6 +1,8 @@
 #!/bin/bash
 
 exe=(vim)
+# if which code 2> /dev/null > /dev/null; then
+# 	exe=(code --wait)
 if which nvim 2> /dev/null > /dev/null; then
 	exe=(nvim)
 fi
