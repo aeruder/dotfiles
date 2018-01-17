@@ -5,12 +5,16 @@ use strictures 2;
 use warnings 'all';
 $^W = 1;
 
+use Tie::IxHash;
 use Text::xSV;
 use JSON::XS;
 
 my $JSON = JSON::XS->new->canonical->utf8;
 my @json = ();
 my %header = ();
+tie(%header, 'Tie::IxHash');
+$header{$_} = 1 for @ARGV;
+
 while (my $line = <>) {
   my $rec = $JSON->decode($line);
   %header = (
