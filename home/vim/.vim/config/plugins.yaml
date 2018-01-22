@@ -295,10 +295,7 @@
 - repo: Shougo/neco-vim
   on_ft: vim
 - repo: Shougo/neco-syntax
-  on_source: deoplete.nvim
-- repo: gregsexton/gitv
-  depends: vim-fugitive
-  on_cmd: Gitv
+  on_source: nvim-completion-manager
 - repo: haya14busa/vim-asterisk
   on_map:
     nv: <Plug>
@@ -343,8 +340,6 @@
 # ------
 - repo: Shougo/denite.nvim
   if: has('nvim') || v:version >= 800
-  on_cmd: Denite
-  on_func: denite#
   hook_source: |
     execute 'source' PJ(g:vim_pconfigdir, "denite.vim")
   hook_post_source: |
