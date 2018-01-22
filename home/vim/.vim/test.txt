@@ -1,0 +1,25 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.029  000.029: --- NVIM STARTING ---
+000.764  000.735: locale set
+001.430  000.666: inits 1
+001.447  000.018: window checked
+001.838  000.391: parsing arguments
+001.841  000.003: expanding arguments
+001.918  000.077: inits 2
+002.132  000.214: init highlight
+002.210  000.078: sourcing vimrc file(s)
+002.218  000.007: inits 3
+008.577  006.360: reading ShaDa
+012.705  004.128: clearing screen
+014.115  001.410: opening buffers
+014.119  000.004: BufEnter autocommands
+014.122  000.003: editing files in windows
+014.142  000.020: VimEnter autocommands
+014.144  000.002: before starting main loop
+031.795  017.651: first screen update
+031.798  000.004: --- NVIM STARTED ---

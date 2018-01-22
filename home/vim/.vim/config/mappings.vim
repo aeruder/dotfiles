@@ -167,6 +167,7 @@ call s:push_leader("\<Space>")
     nnoremap <silent><leader>w :write<Cr>:nohlsearch<Cr>
     vnoremap <silent><leader>w <Esc>:write<Cr>:nohlsearch<Cr>
     call s:push_leader("y")
+      nnoremap <leader>a mz1GVGy`z
       nnoremap <leader>d :let @+ = fnamemodify(<SID>transform_file("relative"), ":h")<CR>:echo @+<CR>
       nnoremap <leader>D :let @+ = fnamemodify(<SID>transform_file("absolute"), ":h")<CR>:echo @+<CR>
       nnoremap <leader>y :let @+ = <SID>transform_file("relative")<CR>:echo @+<CR>
@@ -279,12 +280,12 @@ call s:push_leader("\<Space>")
     nnoremap <leader>h :Denite help<Cr>
     nnoremap <leader>p :<C-u>Denite dein<CR>
     nnoremap <leader>P :<C-u>call <SID>profile_toggle()<Cr>
-    nnoremap <leader>r :<C-u>call dein#remote_plugins()<CR>
+    " nnoremap <leader>r :<C-u>call dein#remote_plugins()<CR>
+    execute "nnoremap <leader>r :source" PJ(g:vim_configdir, "vimrc") "<cr>"
+    execute "nnoremap <leader>R :call dein#clear_state() \\\| source" PJ(g:vim_configdir, "vimrc") "<cr>"
     nnoremap <leader>s :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
           \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
           \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-    execute "nnoremap <leader>r :source" PJ(g:vim_configdir, "vimrc") "<cr>"
-    execute "nnoremap <leader>R :call dein#clear_state() \\\| source" PJ(g:vim_configdir, "vimrc") "<cr>"
     nnoremap <leader>U :call dein#update()<Cr>
   call s:pop_leader()
 
