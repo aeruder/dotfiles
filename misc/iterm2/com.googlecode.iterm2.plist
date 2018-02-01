@@ -93,11 +93,11 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 165 606 456 0 0 2560 1417 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>161 257 796 473 0 0 2560 1417 </string>
+	<string>162 277 796 473 0 0 2560 1417 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
-	<string>99 293 592 584 0 0 1440 877 </string>
+	<string>230 833 592 584 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 1038 2560 379 0 0 2560 1417 </string>
+	<string>502 642 810 317 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>2085 778 1915 639 1440 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 10</key>
@@ -1525,7 +1525,7 @@
 			</dict>
 			<key>Bound Hosts</key>
 			<array>
-				<string>www-aeruder-01.sandbox.ziprecruiter.com</string>
+				<string>www-aeruder-02.sandbox.ziprecruiter.com</string>
 			</array>
 			<key>Character Encoding</key>
 			<integer>4</integer>
@@ -5754,15 +5754,15 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2017-11-07T00:40:33Z</date>
+	<date>2018-01-18T08:42:11Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>Secure Input</key>
-	<false/>
+	<true/>
 	<key>ShowBookmarkName</key>
 	<false/>
 	<key>ShowFullScreenTabBar</key>
-	<false/>
+	<true/>
 	<key>SmartPlacement</key>
 	<true/>
 	<key>ToolbeltTools</key>
@@ -5773,7 +5773,7 @@
 	<key>TripleClickSelectsFullWrappedLines</key>
 	<true/>
 	<key>UKCrashReporterLastCrashReportDate</key>
-	<real>1506565888</real>
+	<real>1510056192</real>
 	<key>URLHandlersByGuid</key>
 	<dict/>
 	<key>UseBorder</key>
@@ -5787,7 +5787,7 @@
 	<key>findRegex_iTerm</key>
 	<true/>
 	<key>iTerm Version</key>
-	<string>3.1.5.beta.1</string>
+	<string>3.1.5.beta.2</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>1</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
