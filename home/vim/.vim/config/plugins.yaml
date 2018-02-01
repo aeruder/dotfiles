@@ -169,6 +169,10 @@
   if: has('nvim') && has('python') && g:vimrc_profile >= 1
   depends: omnisharp-vim
   on_ft: cs
+# - repo: leafgarland/typescript-vim
+#   on_ft: typescript
+- repo: HerringtonDarkholme/yats.vim
+  on_ft: typescript
 
 # others
 - repo: tpope/vim-abolish
@@ -292,6 +296,8 @@
     let g:gutentags_generate_on_write = 1
     let g:gutentags_generate_on_missing = 0
     let g:gutentags_generate_on_new = 0
+  on_cmd:
+    - GutentagsUpdate
 - repo: Shougo/neco-vim
   on_ft: vim
 - repo: Shougo/neco-syntax

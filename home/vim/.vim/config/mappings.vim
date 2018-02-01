@@ -246,6 +246,7 @@ call s:push_leader("\<Space>")
     nnoremap <leader>l :Denite location_list -buffer-name=list<Cr>
     nnoremap <leader>p :call denite#start([{'name': 'file_rec', 'args': [expand("%:p:h:h")]}])<Cr>
     nnoremap <leader>v :call <SID>denite_dir_then_file(PJN(PTN(g:vim_cachedir), "dein", "repos"))<Cr>
+    nnoremap <leader>s :call denite#start([{'name': 'file_rec', 'args': ["."]}], {'input': expand("%:t:r")})<Cr>
   call s:pop_leader()
 
   " QUIT stuff
