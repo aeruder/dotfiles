@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+
+=head1 OVERVIEW
+
+lighttpd-proxy - Starts up a throttling proxy
+
+=cut
+
+use feature ':5.14';
+use strictures 2;
+use warnings 'all';
+$^W = 1;
+use Getopt::Long qw(GetOptions);
+use Pod::Usage qw(pod2usage);
+use File::Basename qw(dirname);
+
+my $remote_server = "127.0.0.1";
+my $remote_port = 8080;
+my $local_port = 8081;
+my $kilobytes_per_second = 50;
+my $verbose;
+my $help;
+
+GetOptions(
+  "remote-server" => \$remote_server,
+  "remote-port" => \$remote_port,
+  "local-port" => \$local_port,
+  "kps|kilobytes-per-second|k" => \$kilobytes_per_second,
+  "help|?" => \$help,
+  "verbose|v" => \$verbose,
+) or pod2usage(2);
+pod2usage(1) if $help;
+
+my $conf = dirname(__FILE__) . "/../misc/lighttpd.conf";
+$ENV{LIGHTTPD_KPS}           = $kilobytes_per_second;
+$ENV{LIGHTTPD_LOCAL_PORT}    = $local_port;
+$ENV{LIGHTTPD_REMOTE_SERVER} = $remote_server;
+$ENV{LIGHTTPD_REMOTE_PORT}   = $remote_port;
+
+exec("lighttpd", "-Df", $conf);
