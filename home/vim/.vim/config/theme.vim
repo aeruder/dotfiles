@@ -21,7 +21,7 @@ function! s:theme_save(name)
   if len(l:theme_name) < 1
     return
   endif
-  if match(l:theme_name, '/') != -1
+  if match(l:theme_name, '/') != -1 && exists("g:colors_name")
     let l:theme_name = g:colors_name
   endif
 
