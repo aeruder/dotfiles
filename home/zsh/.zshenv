@@ -6,6 +6,9 @@ if [[ "$OSTYPE" == darwin* ]]; then
   export BROWSER='open'
 fi
 
+if [ -e ~/.zshenv.local.early ]; then
+    source ~/.zshenv.local.early
+fi
 #
 # Editors
 #
