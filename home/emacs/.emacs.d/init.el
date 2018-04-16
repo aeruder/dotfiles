@@ -19,6 +19,7 @@
   :config
   (which-key-mode))
 
+(setq evil-want-integration nil)
 (use-package evil
   :config
   (evil-mode 1))
@@ -53,6 +54,10 @@
   (interactive)
   (find-file user-init-file))
 (define-key my-leader-map "fed" '("init.el" . my-edit-init-file))
+(defun my-fzf-dotfiles ()
+  (interactive)
+  (fzf/start (expand-file-name "~/.dotfiles")))
+(define-key my-leader-map "feD" '("dotfile" . my-fzf-dotfiles))
 
 ; Help
 (define-key my-leader-map "h" '("help"))
@@ -123,7 +128,7 @@
 (use-package counsel-projectile)
 (use-package org)
 (use-package magit)
-(use-package evil-magit)
+;; (use-package evil-magit)
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
   :config
@@ -167,6 +172,9 @@
   :commands lispyville-mode
   :init
   (add-hook 'emacs-lisp-mode-hook #'lispyville-mode))
+(use-package evil-collection
+  :config
+  (evil-collection-init))
 
 ;; perl stuff
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
