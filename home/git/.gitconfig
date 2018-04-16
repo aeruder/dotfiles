@@ -71,3 +71,5 @@
 	autoStash = true
 [commit]
 	verbose = true
+[gc]
+	pruneExpire = 2 days ago
