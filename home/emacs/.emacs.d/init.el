@@ -10,6 +10,8 @@
 ;; load files
 (require '00-use-package)
 
+(use-package cl)
+(use-package dash)
 (use-package diminish)
 (use-package bind-key)
 (use-package which-key
@@ -24,77 +26,132 @@
   :config
   (evil-mode 1))
 
+(use-package general)
+
 (defvar my-leader-map (make-sparse-keymap)
   "Keymap for \"leader key\" shortcuts.")
 
-(define-key evil-normal-state-map (kbd "SPC") my-leader-map)
-
-; Project settings
-(define-key my-leader-map "p" '("project"))
-(define-key my-leader-map "pp" 'projectile-switch-project)
-(define-key my-leader-map "pf" 'fzf-projectile)
-
-; Window
-(define-key my-leader-map "w" '("window"))
-(define-key my-leader-map "wh" 'evil-window-left)
-(define-key my-leader-map "wl" 'evil-window-right)
-(define-key my-leader-map "wj" 'evil-window-down)
-(define-key my-leader-map "wk" 'evil-window-up)
-(define-key my-leader-map "wd" 'delete-window)
-(define-key my-leader-map "wD" 'delete-other-window)
-(define-key my-leader-map "ws" 'split-window-below)
-(define-key my-leader-map "wv" 'split-window-right)
-
-; File
-(define-key my-leader-map "f" '("file"))
-(define-key my-leader-map "ff" 'find-file)
-(define-key my-leader-map "fw" 'save-buffer)
-(define-key my-leader-map "fe" '("edit"))
-(defun my-edit-init-file ()
+(defun aeruder/edit-init-file ()
   (interactive)
   (find-file user-init-file))
-(define-key my-leader-map "fed" '("init.el" . my-edit-init-file))
-(defun my-fzf-dotfiles ()
+
+(defun aeruder/ls-dotfiles ()
   (interactive)
   (fzf/start (expand-file-name "~/.dotfiles")))
-(define-key my-leader-map "feD" '("dotfile" . my-fzf-dotfiles))
 
-; Help
-(define-key my-leader-map "h" '("help"))
-(define-key my-leader-map "hd" '("describe"))
-(define-key my-leader-map "hdb" 'describe-bindings)
-(define-key my-leader-map "hdc" 'describe-char)
-(define-key my-leader-map "hdf" 'describe-function)
-(define-key my-leader-map "hdk" 'describe-key)
-(define-key my-leader-map "hdp" 'describe-package)
-(define-key my-leader-map "hdt" 'describe-theme)
-(define-key my-leader-map "hdv" 'describe-variable)
-(define-key my-leader-map "hn" 'view-emacs-news)
+(defun aeruder/align= (start end)
+  (interactive "r")
+  (align-regexp start end "\\(\\s-*\\)=" 1 1 t))
 
-;; Git
-(define-key my-leader-map "g" '("git"))
-(define-key my-leader-map "gb" 'magit-blame)
-(define-key my-leader-map "gs" 'magit-status)
-(define-key my-leader-map "gS" 'magit-stage-file)
-(define-key my-leader-map "gU" 'magit-unstage-file)
-(define-key my-leader-map "gf" '("file"))
-(define-key my-leader-map "gfh" 'magit-log-buffer-file)
-(define-key my-leader-map "gr" 'magit-refresh)
-(define-key my-leader-map "gR" 'magit-refresh-all)
-
-
-
-; Quit
-(define-key my-leader-map "q" '("quit"))
-(defun my-quit-emacs ()
+(defun aeruder/quit ()
   (interactive)
   (save-some-buffers)
   (kill-emacs))
-(define-key my-leader-map "qq" '("quit" . my-quit-emacs))
-;; Buffer
-(define-key my-leader-map "b" '("buffer"))
-(define-key my-leader-map "bb" 'ivy-switch-buffer)
-(define-key my-leader-map "br" 'counsel-recentf)
+
+(defun aeruder/kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer
+	(delq (current-buffer)
+	      (-select (lambda (b)
+			 (or (buffer-file-name b)
+			     (eq 'dired-mode (buffer-local-value 'major-mode b))))
+		       (buffer-list)))))
+
+(defun aeruder/kill-all-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer
+	(-select (lambda (b)
+		   (or (buffer-file-name b)
+		       (eq 'dired-mode (buffer-local-value 'major-mode b))))
+		 (buffer-list))))
+
+(defun spacemacs/frame-killer ()
+  "Kill server buffer and hide the main Emacs window"
+  (interactive)
+  (condition-case-unless-debug nil
+      (delete-frame nil 1)
+      (error
+       (make-frame-invisible nil 1))))
+
+(general-override-mode)
+(general-define-key
+ :prefix "SPC"
+ :states '(normal visual motion)
+ :keymaps 'override
+ "" nil
+
+					; Buffer
+ "b" '(nil :which-key "buffer")
+ "b b" 'ivy-switch-buffer
+ "b r" 'counsel-recentf
+ "b D" 'aeruder/kill-all-buffers
+ "b m" 'aeruder/kill-other-buffers
+
+					; File
+ "f" '(nil :which-key "file")
+ "f f" 'find-file
+ "f w" 'save-buffer
+ "f e" '(nil :which-key "edit")
+ "f e d" 'aeruder/edit-init-file
+ "f e D" 'aeruder/ls-dotfiles
+ "f s" 'server-edit
+					; Git
+ "g" '(nil :which-key "git")
+ "g b" 'magit-blame
+ "g s" 'magit-status
+ "g S" 'magit-stage-file
+ "g U" 'magit-unstage-file
+ "g f" '(nil :which-key "file")
+ "g f h" 'magit-log-buffer-file
+ "g r" 'magit-refresh
+ "g R" 'magit-refresh-all
+
+					; Help
+ "h" '(nil :which-key "help")
+ "h d" '(nil :which-key "describe")
+ "h d b" 'describe-bindings
+ "h d c" 'describe-char
+ "h d f" 'describe-function
+ "h d k" 'describe-key
+ "h d p" 'describe-package
+ "h d t" 'describe-theme
+ "h d v" 'describe-variable
+ "h n" 'view-emacs-news
+
+					; Lisp
+ "l" '(nil :which-key "lisp")
+ "l e" 'eval-last-sexp
+ "l f" 'lispyville-prettify
+					; Project settings
+ "p" '(nil :which-key "project")
+ "p p" 'projectile-switch-project
+ "p f" 'fzf-projectile
+ "p s" 'projectile-ripgrep
+					; Quit
+ "q" '(nil :which-key "quit")
+ "q q" 'spacemacs/frame-killer
+ "q Q" 'aeruder/quit
+
+					; Window
+ "w" '(nil :which-key "window")
+ "w h" 'evil-window-left
+ "w l" 'evil-window-right
+ "w j" 'evil-window-down
+ "w k" 'evil-window-up
+ "w d" 'delete-window
+ "w D" 'delete-other-window
+ "w s" 'split-window-below
+ "w v" 'split-window-right
+
+
+
+					; Text
+ "x" '(nil :which-key "text")
+ "x a" '(nil :which-key "align")
+ "x a =" 'aeruder/align=)
+
 
 ;; relative line numbers
 (setq-default display-line-numbers 'relative)
@@ -128,7 +185,7 @@
 (use-package counsel-projectile)
 (use-package org)
 (use-package magit)
-;; (use-package evil-magit)
+(use-package evil-magit)
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
   :config
@@ -185,3 +242,23 @@
 
 (setq cperl-indent-parens-as-block t)
 (setq cperl-close-paren-offset -2)
+
+;; Put backup files neatly away                                                 
+(let ((backup-dir "~/.emacs.d/backups")
+      (auto-saves-dir "~/.emacs.d/backups"))
+  (dolist (dir (list backup-dir auto-saves-dir))
+    (when (not (file-directory-p dir))
+      (make-directory dir t)))
+  (setq backup-directory-alist `(("." . ,backup-dir))
+        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
+        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
+        tramp-backup-directory-alist `((".*" . ,backup-dir))
+        tramp-auto-save-directory auto-saves-dir))
+
+(setq backup-by-copying t    ; Don't delink hardlinks                           
+      delete-old-versions t  ; Clean up the backups                             
+      version-control t      ; Use version numbers on backups,                  
+      kept-new-versions 5    ; keep some new versions                           
+      kept-old-versions 2)   ; and some old ones, too    
+
+(server-start)

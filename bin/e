@@ -1,9 +1,17 @@
 #!/bin/bash
 
-exe=(vim)
-# if which code 2> /dev/null > /dev/null; then
-# 	exe=(code --wait)
-if which nvim 2> /dev/null > /dev/null; then
-	exe=(nvim)
+unset ALTERNATE_EDITOR
+
+if false; then
+    exe=(vim)
+elif which emacsclient 2> /dev/null > /dev/null &&
+    emacsclient -e t 2> /dev/null > /dev/null; then
+    exe=(emacsclient -q -nw)
+# elif which code 2> /dev/null > /dev/null; then
+#     exe=(code --wait)
+elif which nvim 2> /dev/null > /dev/null; then
+    exe=(nvim)
+else
+    exe=(vim)
 fi
 exec "${exe[@]}" "$@"

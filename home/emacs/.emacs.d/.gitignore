@@ -24,13 +24,14 @@ tramp
 /elpa/
 
 # tutorial
-tutorial/
+/tutorial/
 
 # tetris score
 /tetris
 
 # backup files
-backups/
+/backups/
+/auto-saves/
 
 # local settings
 /lisp/init-local.el
