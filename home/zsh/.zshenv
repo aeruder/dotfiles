@@ -144,6 +144,8 @@ if [ -e "$PERLBREW_ROOT"/etc/bashrc ]; then
   source "$PERLBREW_ROOT"/etc/bashrc
 fi
 
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+
 if [ -e ~/.zshenv.local ]; then
     source ~/.zshenv.local
 fi
