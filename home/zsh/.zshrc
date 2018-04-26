@@ -1864,6 +1864,21 @@ if [ -z "$iterm2_hostname" ]; then
     iterm2_hostname="$long_hostname"
 fi
 
+fzfpath="`which fzf 2> /dev/null`"
+if [ -n "$fzfpath" ] && [ -x "$fzfpath" ]; then
+    fzfroot="`dirname "$fzfpath"`"
+    if [ -e "$fzfroot"/../share/fzf/shell/completion.zsh ]; then
+	. "$fzfroot"/../share/fzf/shell/completion.zsh
+    fi
+    if [ -h "$fzfpath" ]; then
+	linkpath="`readlink "$fzfpath"`"
+	realpath="`dirname "$fzfroot"/"$linkpath"`"
+    fi
+    if [ -e "$realpath"/../shell/completion.zsh ]; then
+	. "$realpath"/../shell/completion.zsh
+    fi
+fi
+
 function pr_aeruder_host {
     echo "%{${pr_aeruder_fg_host}%}${USERNAME[1]}@${short_hostname} "
 }
