@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: signoff
+# key: sign
+# --
+Signed-off-by: `(nth 0 (process-lines "git" "config" "user.name"))` <`(nth 0 (process-lines "git" "config" "user.email"))`>
