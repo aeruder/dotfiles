@@ -227,7 +227,9 @@
 (use-package evil-exchange)
 (use-package evil-indent-textobject)
 (use-package evil-commentary)
-(use-package evil-surround)
+(use-package evil-surround
+    :config
+    (global-evil-surround-mode 1))
 (use-package evil-easymotion)
 (use-package evil-numbers)
 (use-package evil-search-highlight-persist)
@@ -248,7 +250,8 @@
 (use-package lispyville
     :commands lispyville-mode
     :init
-    (add-hook 'lispy-mode-hook #'lispyville-mode))
+    (add-hook 'lispy-mode-hook #'lispyville-mode)
+    (lispyville-set-key-theme '(operators c-w prettify additional-movement slurp/barf-cp wrap)))
 (use-package evil-collection
     :config
     (delq 'diff-mode evil-collection-mode-list)
