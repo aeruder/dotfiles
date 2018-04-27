@@ -75,7 +75,18 @@
         (error
             (make-frame-invisible nil 1))))
 
+(defun aeruder/edit-this-dir ()
+  (interactive)
+  (if (eq major-mode 'dired-mode)
+      (find-file "..")
+    (find-file ".")))
+
 (general-override-mode)
+(general-define-key
+  :states '(normal visual motion)
+  :keymaps 'override
+  "-" 'aeruder/edit-this-dir
+  )
 (general-define-key
     "C-c SPC" '(nil :which-key "custom")
     "C-c SPC x" '(nil :which-key "text")
