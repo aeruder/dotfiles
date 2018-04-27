@@ -8,7 +8,7 @@
   (replace-regexp-in-string
    "/" "::"
    (replace-regexp-in-string
-    "\\(^\\|.*/\\)b?lib/" ""
+    "\\(?:^\\|.*/\\)\\(?:tests\\|b?lib\\)/" ""
     (file-name-sans-extension filename))))
 
 (setq yas-cperl-mode-package-regexp "^\\(require\\|use\\)[[:space:]]+%s[[:space:]]*\\(?:;\\|[[:space:]]\\|$\\)")
