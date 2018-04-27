@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: moose
+# key: moose
+# --
+use Moose;
+use namespace::autoclean;
+$0
+__PACKAGE__->meta->make_immutable;

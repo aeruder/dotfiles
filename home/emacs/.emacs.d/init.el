@@ -136,6 +136,7 @@
     "l" '(nil :which-key "lisp")
     "l e" 'eval-last-sexp
     "l f" 'lispyville-prettify
+    "l x" 'pp-eval-expression
                                         ; Project settings
     "p" '(nil :which-key "project")
     "p p" 'projectile-switch-project
@@ -148,6 +149,7 @@
 
                                         ; Window
     "w" '(nil :which-key "window")
+    "w =" 'balance-windows
     "w h" 'evil-window-left
     "w l" 'evil-window-right
     "w j" 'evil-window-down
@@ -204,7 +206,7 @@
 (use-package vi-tilde-fringe
     :diminish vi-tilde-fringe-mode
     :config
-    (vi-tilde-fringe-mode))
+    (global-vi-tilde-fringe-mode))
 (use-package editorconfig
     :diminish editorconfig-mode
     :config
@@ -222,6 +224,7 @@
     :config
     (setq-default evil-escape-key-sequence "jk")
     (setq-default evil-escape-delay 0.2)
+    (add-to-list 'evil-escape-excluded-major-modes 'magit-status-mode)
     (evil-escape-mode))
 (use-package evil-lisp-state)
 (use-package evil-exchange)
@@ -261,6 +264,8 @@
     :config
     (add-to-list  'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)
     (yas-global-mode 1))
+
+(evil-set-initial-state 'term-mode 'emacs)
 
 (org-babel-do-load-languages
     'org-babel-load-languages

@@ -3,4 +3,22 @@
 # key: package
 # --
 package `(yas-cperl-mode-gen-package)`;
+
+=head1 NAME
+
+`(yas-cperl-mode-gen-package)` - ${1:description}
+
+=head1 SYNOPSIS
+
+    example code goes
+    here
+
+=head1 DESCRIPTION
+
+This is why I created this.  Maybe see perlpodstyle
+
+=cut
+
+use strictures 2;
 $0
+1;
