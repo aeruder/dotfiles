@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# key: warntrack
+# --
+local \$SIG{__WARN__} = sub { require Carp; if (\$_[-1] =~ /\\n\$/s) { my \$arg = pop @_; \$arg =~ s/(.*)( at .*? line .*?\\n\$)/\$1/s; push @_, \$arg; } warn &Carp::longmess; };

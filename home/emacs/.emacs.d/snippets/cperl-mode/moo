@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# key: moose
+# key: moo
 # --
-use Moose;
-use namespace::autoclean;
+use Moo;
+use namespace::clean;
 $0
 __PACKAGE__->meta->make_immutable;

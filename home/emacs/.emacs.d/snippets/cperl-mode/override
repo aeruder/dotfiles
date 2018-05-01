@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# key: override
+# --
+`(yas-cperl-mode-push-package "Sub::Override")`my \$${2:guard} = Sub::Override->new('${1:function}' => sub {
+	$0
+});

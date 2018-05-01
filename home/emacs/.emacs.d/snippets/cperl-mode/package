@@ -1,5 +1,4 @@
 # -*- mode: snippet -*-
-# name: package
 # key: package
 # --
 package `(yas-cperl-mode-gen-package)`;
