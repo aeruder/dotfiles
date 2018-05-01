@@ -282,15 +282,22 @@
     'org-babel-load-languages
     '((sql . t)))
 
+(use-package cperl-mode
+  :quelpa (fzf :fetcher github :repo "jrockway/cperl-mode")
+  :init
+  (setq cperl-indent-parens-as-block t)
+  (setq cperl-close-paren-offset -2)
+  (setq cperl-under-as-char t)
+  (setq cperl-hairy nil)
+  (setq cperl-font-lock t)
+  (setq cperl-electric-keywords nil))
+
 ;; perl stuff
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
-
-(setq cperl-indent-parens-as-block t)
-(setq cperl-close-paren-offset -2)
 
 ;; Put backup files neatly away                                                 
 (let ((backup-dir "~/.emacs.d/backups")
