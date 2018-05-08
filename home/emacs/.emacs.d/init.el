@@ -166,6 +166,10 @@
  "h d v" 'describe-variable
  "h n" 'view-emacs-news
 
+					; Jump
+ "j" '(nil :which-key "jump")
+ "j l" 'swiper
+
 					; Lisp
  "l" '(nil :which-key "lisp")
  "l e" 'eval-last-sexp
