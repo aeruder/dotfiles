@@ -191,8 +191,6 @@
  "w s" 'split-window-below
  "w v" 'split-window-right
 
-
-
 					; Text
  "x" '(nil :which-key "text")
  "x +" 'evil/inc-at-pt
@@ -303,7 +301,7 @@
  '((sql . t)))
 
 (use-package cperl-mode
-  :quelpa (fzf :fetcher github :repo "jrockway/cperl-mode")
+  :quelpa (cperl-mode :fetcher github :repo "aeruder/cperl-mode")
   :init
   (setq cperl-indent-parens-as-block t)
   (setq cperl-close-paren-offset -2)
