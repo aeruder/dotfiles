@@ -146,6 +146,10 @@ fi
 
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
+if ( which fd 2> /dev/null > /dev/null ); then
+    export FZF_DEFAULT_COMMAND='fd --type file --hidden --exclude .git'
+fi
+
 if [ -e ~/.zshenv.local ]; then
     source ~/.zshenv.local
 fi
