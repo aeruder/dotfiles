@@ -83,24 +83,74 @@
       (find-file "..")
     (find-file ".")))
 
-(defun aeruder/git-file-path (remote line)
-  (let* ((relpath (aeruder/copy-file-path t line)))))
-(defun aeruder/copy-git-file-path (remote line)
-  (interactive)
-  (kill-new (aeruder/git-file-path remote line) t))
+(defun aeruder/kill-new (str replace)
+  (message "Copied '%s'" str)
+  (kill-new str replace))
 (defun aeruder/file-path (relative)
   (if relative
-      (file-relative-name (buffer-file-name) (projectile-project-root))
+      (file-relative-name (buffer-file-name) (magit-toplevel))
     (buffer-file-name)))
-(defun aeruder/copy-file-path (relative)
-  (interactive)
-  (kill-new (aeruder/file-path relative) t))
 (defun aeruder/copy-file-path-rel ()
   (interactive)
-  (aeruder/copy-file-path t))
+  (aeruder/kill-new (aeruder/file-path t) t))
 (defun aeruder/copy-file-path-abs ()
   (interactive)
-  (aeruder/copy-file-path nil))
+  (aeruder/kill-new (aeruder/file-path nil) t))
+
+(defun aeruder/magit-remote-url (remote)
+  (magit-git-str "remote" "get-url" remote))
+
+(defun aeruder/magit-remote-host (remote)
+  (save-match-data
+    (let* ((remote-url (aeruder/magit-remote-url remote)))
+      (if (string-match "^[a-z]+://\\([^/]+\\)" remote-url)
+	  (match-string-no-properties 1 remote-url)
+	(if (string-match "\\([a-zA-Z0-9_.-]+\\):" remote-url)
+	    (match-string-no-properties 1 remote-url)
+	  nil)))))
+
+(defun aeruder/magit-remote-repo (remote)
+  (save-match-data
+    (let* ((remote-url (aeruder/magit-remote-url remote)))
+      (if (string-match "^[a-z]+://\\([^/]+\\)/\\(.*?\\)\\(\\.git\\)*$" remote-url)
+	  (match-string-no-properties 2 remote-url)
+	(if (string-match "\\([a-zA-Z0-9_.-]+\\):\\(.*?\\)\\(\\.git\\)*$" remote-url)
+	    (match-string-no-properties 2 remote-url)
+	  nil)))))
+
+(defun aeruder/magit-browse-url (remote commit path line)
+  (let* (
+	 (remote-host (aeruder/magit-remote-host remote))
+	 (remote-repo (aeruder/magit-remote-repo remote))
+	 (url (concat "https://" remote-host "/" remote-repo "/blob/" commit "/" path)))
+    (if line
+	(concat url "#L" (number-to-string line))
+      url)))
+
+(defun aeruder/magit-get-upstream-branch-minus-remote (&optional branch)
+  (save-match-data
+    (let* (
+	   (remote (magit-get-upstream-remote branch))
+	   (full-branch (magit-get-upstream-branch branch)))
+      (if (string-match (format "^%s/\\(.*\\)" (regexp-quote remote)) full-branch)
+	  (match-string-no-properties 1 full-branch)
+	full-branch))))
+
+(defun aeruder/copy-url-path ()
+  (interactive)
+  (aeruder/kill-new (aeruder/magit-browse-url
+		     (magit-get-upstream-remote)
+		     (aeruder/magit-get-upstream-branch-minus-remote)
+		     (aeruder/file-path t)
+		     nil) t))
+
+(defun aeruder/copy-url-path-line ()
+  (interactive)
+  (aeruder/kill-new (aeruder/magit-browse-url
+	     (magit-get-upstream-remote)
+	     (aeruder/magit-get-upstream-branch-minus-remote)
+	     (aeruder/file-path t)
+	     (line-number-at-pos)) t))
 
 (general-override-mode)
 (general-define-key
@@ -136,6 +186,8 @@
  "f y" '(nil :which-key "yank")
  "f y y" 'aeruder/copy-file-path-rel
  "f y Y" 'aeruder/copy-file-path-abs
+ "f y g" 'aeruder/copy-url-path
+ "f y G" 'aeruder/copy-url-path-line
 					; Git
  "g" '(nil :which-key "git")
  "g R" 'magit-refresh-all
