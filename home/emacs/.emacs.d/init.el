@@ -154,9 +154,11 @@
 
 (general-override-mode)
 (general-define-key
- :states '(normal visual motion)
- :keymaps 'override
- "-" 'aeruder/edit-this-dir)
+  :states '(normal visual motion)
+  :keymaps 'override
+  "-" 'aeruder/edit-this-dir
+  "]n" 'diff-hl-next-hunk
+  "[n" 'diff-hl-previous-hunk)
 (general-define-key
  "C-c SPC" '(nil :which-key "custom")
  "C-c SPC x" '(nil :which-key "text")
