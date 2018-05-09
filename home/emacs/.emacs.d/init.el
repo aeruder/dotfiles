@@ -368,6 +368,10 @@
   (setq cperl-font-lock t)
   (setq cperl-electric-keywords nil))
 
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode))
+
 ;; perl stuff
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
