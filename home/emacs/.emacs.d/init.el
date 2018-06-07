@@ -158,7 +158,9 @@
   :keymaps 'override
   "-" 'aeruder/edit-this-dir
   "]n" 'diff-hl-next-hunk
-  "[n" 'diff-hl-previous-hunk)
+  "[n" 'diff-hl-previous-hunk
+  "g c" 'evil-commentary-line)
+ 
 (general-define-key
  "C-c SPC" '(nil :which-key "custom")
  "C-c SPC x" '(nil :which-key "text")
