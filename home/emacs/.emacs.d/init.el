@@ -373,6 +373,7 @@
   (setq cperl-electric-keywords nil))
 
 (use-package perl6-mode)
+(use-package typescript-mode)
 
 (use-package diff-hl
   :config
