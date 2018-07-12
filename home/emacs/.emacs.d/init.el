@@ -322,6 +322,7 @@
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-escape-delay 0.2)
   (add-to-list 'evil-escape-excluded-major-modes 'magit-status-mode)
+  (add-to-list 'evil-escape-excluded-major-modes 'magit-revision-mode)
   (evil-escape-mode))
 (use-package evil-lisp-state)
 (use-package evil-exchange)
