@@ -96,6 +96,11 @@
 (defun aeruder/copy-file-path-abs ()
   (interactive)
   (aeruder/kill-new (aeruder/file-path nil) t))
+(defun aeruder/make-file-executable ()
+  (interactive)
+  (let ((file (buffer-file-name)))
+    (if file
+	(set-file-modes file #o755))))
 
 (defun aeruder/magit-remote-url (remote)
   (magit-git-str "remote" "get-url" remote))
@@ -187,6 +192,7 @@
  "f e d" 'aeruder/edit-init-file
  "f e D" 'aeruder/ls-dotfiles
  "f s" 'server-edit
+ "f x" 'aeruder/make-file-executable
  "f y" '(nil :which-key "yank")
  "f y y" 'aeruder/copy-file-path-rel
  "f y Y" 'aeruder/copy-file-path-abs
