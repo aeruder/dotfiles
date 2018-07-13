@@ -171,100 +171,104 @@
  "C-c SPC x" '(nil :which-key "text")
  "C-c SPC x y" 'company-yasnippet)
 (general-define-key
- :prefix "SPC"
- :states '(normal visual motion)
- :keymaps 'override
- "" nil
+  :prefix "SPC"
+  :states '(normal visual motion)
+  :keymaps 'override
+  "" nil
 
-					; Buffer
- "b" '(nil :which-key "buffer")
- "b b" 'ivy-switch-buffer
- "b r" 'counsel-recentf
- "b d" 'kill-current-buffer
- "b D" 'aeruder/kill-all-buffers
- "b m" 'aeruder/kill-other-buffers
+                                        ; Buffer
+  "b" '(nil :which-key "buffer")
+  "b b" 'ivy-switch-buffer
+  "b r" 'counsel-recentf
+  "b d" 'kill-current-buffer
+  "b D" 'aeruder/kill-all-buffers
+  "b m" 'aeruder/kill-other-buffers
 
-					; File
- "f" '(nil :which-key "file")
- "f f" 'find-file
- "f w" 'save-buffer
- "f e" '(nil :which-key "edit")
- "f e d" 'aeruder/edit-init-file
- "f e D" 'aeruder/ls-dotfiles
- "f s" 'server-edit
- "f x" 'aeruder/make-file-executable
- "f y" '(nil :which-key "yank")
- "f y y" 'aeruder/copy-file-path-rel
- "f y Y" 'aeruder/copy-file-path-abs
- "f y g" 'aeruder/copy-url-path
- "f y G" 'aeruder/copy-url-path-line
-					; Git
- "g" '(nil :which-key "git")
- "g R" 'magit-refresh-all
- "g f" 'magit-file-popup
- "g F" 'magit-fetch-popup
- "g b" 'magit-blame
- "g g" 'magit
- "g h" 'magit-reflog
- "g l" '(nil :which-key "log")
- "g l A" 'magit-log-author
- "g l R" 'magit-reflog
- "g l a" 'magit-log-all
- "g l f" 'magit-log-buffer-file
- "g l r" 'magit-reflog-current
- "g l x" 'magit-rebase-interactive
- "g r" 'magit-refresh
- "g s" 'magit-status
+                                        ; File
+  "f" '(nil :which-key "file")
+  "f f" 'find-file
+  "f w" 'save-buffer
+  "f b" '(nil :which-key "bookmark")
+  "f b b" 'bookmark-jump
+  "f b s" 'bookmark-save
+  "f b l" 'bookmark-bmenu-list
+  "f e" '(nil :which-key "edit")
+  "f e d" 'aeruder/edit-init-file
+  "f e D" 'aeruder/ls-dotfiles
+  "f s" 'server-edit
+  "f x" 'aeruder/make-file-executable
+  "f y" '(nil :which-key "yank")
+  "f y y" 'aeruder/copy-file-path-rel
+  "f y Y" 'aeruder/copy-file-path-abs
+  "f y g" 'aeruder/copy-url-path
+  "f y G" 'aeruder/copy-url-path-line
+                                        ; Git
+  "g" '(nil :which-key "git")
+  "g R" 'magit-refresh-all
+  "g f" 'magit-file-popup
+  "g F" 'magit-fetch-popup
+  "g b" 'magit-blame
+  "g g" 'magit
+  "g h" 'magit-reflog
+  "g l" '(nil :which-key "log")
+  "g l A" 'magit-log-author
+  "g l R" 'magit-reflog
+  "g l a" 'magit-log-all
+  "g l f" 'magit-log-buffer-file
+  "g l r" 'magit-reflog-current
+  "g l x" 'magit-rebase-interactive
+  "g r" 'magit-refresh
+  "g s" 'magit-status
 
-					; Help
- "h" '(nil :which-key "help")
- "h d" '(nil :which-key "describe")
- "h d b" 'describe-bindings
- "h d c" 'describe-char
- "h d f" 'describe-function
- "h d k" 'describe-key
- "h d p" 'describe-package
- "h d t" 'describe-theme
- "h d v" 'describe-variable
- "h n" 'view-emacs-news
+                                        ; Help
+  "h" '(nil :which-key "help")
+  "h d" '(nil :which-key "describe")
+  "h d b" 'describe-bindings
+  "h d c" 'describe-char
+  "h d f" 'describe-function
+  "h d k" 'describe-key
+  "h d p" 'describe-package
+  "h d t" 'describe-theme
+  "h d v" 'describe-variable
+  "h n" 'view-emacs-news
 
-					; Jump
- "j" '(nil :which-key "jump")
- "j l" 'swiper
+                                        ; Jump
+  "j" '(nil :which-key "jump")
+  "j l" 'swiper
 
-					; Lisp
- "l" '(nil :which-key "lisp")
- "l e" 'eval-last-sexp
- "l f" 'lispyville-prettify
- "l x" 'pp-eval-expression
-					; Project settings
- "p" '(nil :which-key "project")
- "p p" 'projectile-switch-project
- "p f" 'fzf-projectile
- "p s" 'projectile-ripgrep
-					; Quit
- "q" '(nil :which-key "quit")
- "q q" 'spacemacs/frame-killer
- "q Q" 'aeruder/quit
+                                        ; Lisp
+  "l" '(nil :which-key "lisp")
+  "l e" 'eval-last-sexp
+  "l f" 'lispyville-prettify
+  "l x" 'pp-eval-expression
+                                        ; Project settings
+  "p" '(nil :which-key "project")
+  "p p" 'projectile-switch-project
+  "p f" 'fzf-projectile
+  "p s" 'projectile-ripgrep
+                                        ; Quit
+  "q" '(nil :which-key "quit")
+  "q q" 'spacemacs/frame-killer
+  "q Q" 'aeruder/quit
 
-					; Window
- "w" '(nil :which-key "window")
- "w =" 'balance-windows
- "w h" 'evil-window-left
- "w l" 'evil-window-right
- "w j" 'evil-window-down
- "w k" 'evil-window-up
- "w d" 'delete-window
- "w D" 'delete-other-window
- "w s" 'split-window-below
- "w v" 'split-window-right
+                                        ; Window
+  "w" '(nil :which-key "window")
+  "w =" 'balance-windows
+  "w h" 'evil-window-left
+  "w l" 'evil-window-right
+  "w j" 'evil-window-down
+  "w k" 'evil-window-up
+  "w d" 'delete-window
+  "w D" 'delete-other-window
+  "w s" 'split-window-below
+  "w v" 'split-window-right
 
-					; Text
- "x" '(nil :which-key "text")
- "x +" 'evil/inc-at-pt
- "x -" 'evil/dec-at-pt
- "x a" '(nil :which-key "align")
- "x a =" 'aeruder/align=)
+                                        ; Text
+  "x" '(nil :which-key "text")
+  "x +" 'evil/inc-at-pt
+  "x -" 'evil/dec-at-pt
+  "x a" '(nil :which-key "align")
+  "x a =" 'aeruder/align=)
 
 
 ;; relative line numbers
