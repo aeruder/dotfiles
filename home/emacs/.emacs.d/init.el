@@ -157,6 +157,13 @@
 	     (aeruder/file-path t)
 	     (line-number-at-pos)) t))
 
+(defun aeruder/reformat-sql ()
+  (interactive)
+  (let (string)
+    (unless (mark)
+      (error "No region selected"))
+    (shell-command-on-region (region-beginning) (region-end) "sqlformat -r --comma_first COMMA_FIRST -" t t)))
+
 (general-override-mode)
 (general-define-key
   :states '(normal visual motion)
@@ -268,7 +275,8 @@
   "x +" 'evil/inc-at-pt
   "x -" 'evil/dec-at-pt
   "x a" '(nil :which-key "align")
-  "x a =" 'aeruder/align=)
+  "x a =" 'aeruder/align=
+  "x a S" 'aeruder/reformat-sql)
 
 
 ;; relative line numbers
