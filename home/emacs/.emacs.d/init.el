@@ -164,6 +164,23 @@
       (error "No region selected"))
     (shell-command-on-region (region-beginning) (region-end) "sqlformat -r --comma_first COMMA_FIRST -" t t)))
 
+;; mercilessly stolen
+(defun rename-file-and-buffer ()
+  "Renames current buffer and file it is visiting."
+  (interactive)
+  (let ((name (buffer-name))
+	(filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+	(message "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "New name: " filename)))
+	(cond ((get-buffer new-name)
+	       (message "A buffer named '%s' already exists!" new-name))
+	      (t
+	       (rename-file filename new-name 1)
+	       (rename-buffer new-name)
+	       (set-visited-file-name new-name)
+	       (set-buffer-modified-p nil)))))))
+
 (general-override-mode)
 (general-define-key
   :states '(normal visual motion)

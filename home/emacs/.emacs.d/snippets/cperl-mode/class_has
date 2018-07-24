@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# key: class_has
+# --
+`(yas-cperl-mode-push-package "MooseX::ClassAttribute" t)`class_has ${1:attribute} => (
+  is => 'rw',
+  isa => 'HashRef',
+  default => sub { {} },
+);
