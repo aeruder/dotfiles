@@ -188,6 +188,8 @@
   "-" 'aeruder/edit-this-dir
   "]n" 'diff-hl-next-hunk
   "[n" 'diff-hl-previous-hunk
+  "]q" 'compilation-next-error
+  "[q" 'compilation-previous-error
   "g c" 'evil-commentary-line)
  
 (general-define-key
@@ -211,6 +213,7 @@
                                         ; File
   "f" '(nil :which-key "file")
   "f f" 'find-file
+  "f R" 'read-only-mode
   "f w" 'save-buffer
   "f b" '(nil :which-key "bookmark")
   "f b b" 'bookmark-jump
@@ -315,6 +318,9 @@
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
 (use-package fzf
   :quelpa (fzf :fetcher github :repo "aeruder/fzf.el"))
+(use-package ripgrep
+  :config
+  (setq ripgrep-arguments (split-string "--hidden -g !.git")))
 (use-package projectile-ripgrep)
 (use-package projectile
   :diminish projectile-mode
@@ -352,6 +358,7 @@
   (setq-default evil-escape-delay 0.2)
   (add-to-list 'evil-escape-excluded-major-modes 'magit-status-mode)
   (add-to-list 'evil-escape-excluded-major-modes 'magit-revision-mode)
+  (add-to-list 'evil-escape-excluded-major-modes 'magit-diff-mode)
   (evil-escape-mode))
 (use-package evil-lisp-state)
 (use-package evil-exchange)
@@ -385,6 +392,7 @@
 (use-package evil-collection
   :config
   (delq 'diff-mode evil-collection-mode-list)
+  (delq 'outline evil-collection-mode-list)
   (evil-collection-init))
 (use-package yaml-mode)
 (use-package yasnippet
@@ -414,6 +422,9 @@
 (use-package diff-hl
   :config
   (global-diff-hl-mode))
+
+(use-package terraform-mode)
+(use-package dockerfile-mode)
 
 ;; perl stuff
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
