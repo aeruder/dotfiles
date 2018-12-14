@@ -1,0 +1,199 @@
+#!/usr/bin/perl
+use strict;
+
+my ($what, @args) = @ARGV;
+
+# For shell completion
+if ($what eq "--list") {
+    print join "\n", _command_names(), "";
+    exit 0;
+}
+
+_usage() unless defined $what;
+
+$what =~ tr/-/_/;
+
+{ no strict 'refs';
+  if (defined &$what) { print $what->(@args), $ENV{GIT_GET_NO_NEWLINE} ? "" : "\n" }
+  else {
+    _usage($what);
+  }
+}
+
+sub repo_rootdir_absolute {
+  _run("git rev-parse --show-toplevel");
+}
+
+sub repo_rootdir_relative {
+  my $rel = _run("git rev-parse --show-cdup");
+  $rel =~ s{/$}{};
+  $rel eq "" ? "." : $rel;
+}
+
+sub cwd_relative_to_repo {
+  my $rel = _run("git rev-parse --show-prefix");
+  $rel =~ s{/$}{};
+  $rel eq "" ? "." : $rel;
+}
+
+sub pwd_relative {
+  _run("git rev-parse --show-prefix");
+}
+
+sub current_branch_name {
+  if (_head_detached()) { return "" }
+  _run("git rev-parse --symbolic-full-name --abbrev-ref HEAD");
+}
+
+sub is_head_detached {
+  exit (_head_detached() ? 0 : 1);
+}
+
+sub _head_detached {
+  system("git symbolic-ref -q HEAD > /dev/null") != 0;
+}
+
+sub branch_remote {
+  my ($branch) = @_;
+  $branch ||= current_branch_name();
+  _run("git config --get 'branch.$branch.remote'");
+}
+
+sub branch_tracked_branch {
+  my ($branch) = @_;
+  $branch ||= current_branch_name();
+  my $remote = branch_remote($branch) or exit 1;
+  my $remote_ref = _run("git config --get 'branch.$branch.merge'");
+  $remote_ref =~ s{^refs/heads/}{};
+  $remote_ref or exit 1;
+  return $remote eq "." ? $remote_ref : "$remote/$remote_ref";
+}
+
+sub is_working_tree_clean {
+  exit (_working_tree_dirty() ? 1 : 0);
+}
+
+sub is_working_tree_dirty {
+  exit (_working_tree_dirty() ? 0 : 1);
+}
+
+sub _working_tree_dirty {
+  my ($arg) = @_;
+  for my $cmd ("git rev-parse --verify HEAD > /dev/null",
+	       "git update-index --ignore-submodules --refresh > /dev/null",
+	       "git diff-files --quiet --ignore-submodules",
+	       "git diff-index --cached --quiet HEAD --ignore-submodules") {
+      system($cmd) == 0 or return 1;
+  }
+  return 0;
+}
+
+sub heads {
+  my @heads;
+  for (qx{git branch}) {
+    s/^..//; # Trim off leading '*' and/or spaces
+    push @heads, $_;
+  }
+  chomp $heads[-1]; # wrapper will append an extra newline on output
+  @heads;
+}
+
+sub is_remote {
+  my ($in) = @_;
+  $in .= "\n";
+  if (grep $_ eq $in, qx{git remote}) { exit 0 } else { exit 1 }
+}
+
+sub is_ancestor_of {
+  my ($A, $B) = @_;
+  is_same_object($A, _run("git", "merge-base", $A, $B));
+}
+
+sub is_same_object {
+  my ($A, $B) = @_;
+  $A = _run("git", "rev-parse", $A);
+  $B = _run("git", "rev-parse", $B);
+  exit($A eq $B ? 0 : 1);
+}
+
+sub config_keys {
+  my ($pat) = @_ ? $_[0] : '.';
+  my @keys;
+  open my ($fh), "-|", "git config --null --list"
+    or die "couldn't run git-config: $!";
+  { local $/ = "\0";
+    while (my $line = <$fh>) {
+      chomp $line;
+      my ($k, $v) = split /\n/, $line, 2;
+      push @keys, "$k\n" if $k =~ /$pat/o;
+    }
+  }
+  chomp $keys[-1]; # wrapper will append an extra newline on output
+  return @keys;
+}
+
+# This is the complete pager command git uses, suitable for passing to
+# "sh -c", and including the environment setting to specify the
+# default pager flags.  Supply the -n flag to omit the environment
+# setting, if you need to pass to execve or something.  Supply the -v
+# flag if you want environment variables replaced by their values.
+sub pager_command {
+  my $pager = _run(qw(git config core.pager));
+  my %opt;
+  for (@_) {
+    next unless s/^-//;
+    $opt{$_} = 1 for split //;
+  }
+  $pager =~ s/\$(\w+)/$ENV{$1}/g if $opt{v};
+  return $opt{n} ? $pager : join(" ", "LESS=FRSX", $pager);
+}
+
+sub author_email {
+  _run(qw(git log -1 --format=%ae), _temporary_commit());
+}
+
+sub author_username {
+  my $email = author_email();
+  $email =~ s/\@.*\z//sr;
+}
+
+sub author_name {
+  _run(qw(git log -1 --format=%an), _temporary_commit());
+}
+
+# This insanity creates a new, unattached commit and returns its commit ID.
+# It does not change the index or any of the refs.
+sub _temporary_commit {
+  my $commit_id = qx{git commit-tree HEAD^{tree} < /dev/null};
+  chomp($commit_id);
+  return $commit_id;
+}
+
+sub in_any_repo {
+    exit (_in_any_repo() ? 0 : 1);
+}
+
+sub _in_any_repo {
+    system("git rev-parse HEAD >> /dev/null 2>&1") == 0;
+}
+
+sub _run {
+  my @cmd = @_;
+  open my($p), "-|", @cmd or die "Couldn't run '@cmd': $!";
+  my $res = join "", <$p>;
+  chomp($res);
+  return $res;
+}
+
+sub _usage {
+  my ($what) = @_;
+  warn "Don't know how to get '$what'; try:\n" if defined $what;
+  print STDERR join "\n", _command_names(), "";
+  exit;
+}
+
+sub _command_names {
+    my @names = sort grep !/^_/ && defined &{$_}, keys %main::;
+    tr/_/-/ for @names;
+    return @names;
+}
