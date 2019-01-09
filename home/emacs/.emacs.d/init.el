@@ -434,6 +434,7 @@
 
 (use-package perl6-mode)
 (use-package typescript-mode)
+(use-package go-mode)
 
 (use-package diff-hl
   :config
