@@ -315,9 +315,14 @@
 
 (recentf-mode 1)
 
-(use-package
-  color-theme-sanityinc-tomorrow
-  :config (color-theme-sanityinc-tomorrow-eighties))
+(use-package gruvbox-theme
+  :config (load-theme 'gruvbox-dark-soft t))
+;; (use-package
+;;   borland-blue-theme
+;;   :config (load-theme 'borland-blue t))
+;; (use-package
+;;   color-theme-sanityinc-tomorrow
+;;   :config (color-theme-sanityinc-tomorrow-eighties))
 (use-package undo-tree
   :diminish undo-tree-mode
   :config
