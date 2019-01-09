@@ -450,7 +450,8 @@
 (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
 
-;; Put backup files neatly away                                                 
+;; Put backup files neatly away
+
 (let ((backup-dir "~/.emacs.d/backups")
       (auto-saves-dir "~/.emacs.d/backups"))
   (dolist (dir (list backup-dir auto-saves-dir))
