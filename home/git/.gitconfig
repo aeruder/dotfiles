@@ -71,3 +71,5 @@
 	verbose = true
 [gc]
 	pruneExpire = 2 days ago
+[format]
+	pretty = fuller
