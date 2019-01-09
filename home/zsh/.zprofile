@@ -20,6 +20,9 @@ path=( ${(u)path[@]} )
 if [ -e "$PERLBREW_ROOT"/etc/bashrc ]; then
   source "$PERLBREW_ROOT"/etc/bashrc
 fi
+if command -v pyenv >/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
 
 if [ -e ~/.zprofile.local ]; then
     source ~/.zprofile.local
