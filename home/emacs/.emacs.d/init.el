@@ -24,6 +24,7 @@
 (use-package evil
   :init
   (setq evil-want-integration nil)
+  (setq evil-want-keybinding nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
   :config
   (evil-mode 1))
