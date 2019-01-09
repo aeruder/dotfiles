@@ -182,6 +182,16 @@
 	       (set-visited-file-name new-name)
 	       (set-buffer-modified-p nil)))))))
 
+;; and again stolen
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (delete-file filename)
+      (message "Deleted file %s" filename)
+      (kill-buffer))))
+
 (general-override-mode)
 (general-define-key
   :states '(normal visual motion)
