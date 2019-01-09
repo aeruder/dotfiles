@@ -9,7 +9,7 @@ set write_inc=50
 
 set delete=yes
 set delete_untag=no
-set editor='vim + -c "BeginMailMessage"'
+# set editor='vim + -c "BeginMailMessage"'
 set weed=yes
 
 set realname="Andrew Ruder"
