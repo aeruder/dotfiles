@@ -7,4 +7,4 @@ set -u
 # Any command in a pipe failing aborts script
 set -o pipefail
 
-exec run-remote --env=DBIC_TRACE --env=SCREEN_LOG_LEVEL --dir='ziprecruiter' --host=sandbox "$@"
+exec run-remote --env=DEV_NO_SIMDB --env=DBIC_TRACE --env=SCREEN_LOG_LEVEL --dir='ziprecruiter' --host=sandbox "$@"
