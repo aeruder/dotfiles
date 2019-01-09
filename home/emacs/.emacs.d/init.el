@@ -303,8 +303,8 @@
 
                                         ; Text
   "x" '(nil :which-key "text")
-  "x +" 'evil/inc-at-pt
-  "x -" 'evil/dec-at-pt
+  "x +" 'evil-numbers/inc-at-pt
+  "x -" 'evil-numbers/dec-at-pt
   "x a" '(nil :which-key "align")
   "x a =" 'aeruder/align=
   "x a S" 'aeruder/reformat-sql)
