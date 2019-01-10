@@ -1860,9 +1860,6 @@ fi
 if [ -z "$short_hostname" ]; then
     short_hostname="`hostname`"
 fi
-if [ -z "$iterm2_hostname" ]; then
-    iterm2_hostname="$long_hostname"
-fi
 
 fzfpath="`which fzf 2> /dev/null`"
 if [ -n "$fzfpath" ] && [ -x "$fzfpath" ]; then
@@ -1883,4 +1880,13 @@ function pr_aeruder_host {
     echo "%{${pr_aeruder_fg_host}%}${USERNAME[1]}@${short_hostname} "
 }
 
-source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
+if [ -n "$iterm2_hostname" ]; then
+  source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
+
+  function ssh {
+    if [ $# = 1 ]; then
+      printf "\033]1337;RemoteHost=%s\007" "$1"
+    fi
+    command ssh "$@"
+  }
+fi
