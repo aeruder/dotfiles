@@ -23,6 +23,7 @@ $header{$_} = 1 for @ARGV;
     my $rec = shift;
     $already_setup = 1;
     %header = (
+      %header,
       %$rec,
     );
     $csv->set_header(keys %header);
