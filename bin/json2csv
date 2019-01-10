@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use feature ':5.14';
-use strictures 2;
+use strict;
 use warnings 'all';
 $^W = 1;
 
@@ -9,22 +9,38 @@ use Tie::IxHash;
 use Text::xSV;
 use JSON::XS;
 
+my $csv = Text::xSV->new;
 my $JSON = JSON::XS->new->canonical->utf8;
-my @json = ();
 my %header = ();
 tie(%header, 'Tie::IxHash');
 $header{$_} = 1 for @ARGV;
 
+
+{
+  my $already_setup;
+  sub setup_header {
+    return if $already_setup;
+    my $rec = shift;
+    $already_setup = 1;
+    %header = (
+      %$rec,
+    );
+    $csv->set_header(keys %header);
+    $csv->print_header();
+  }
+};
+
 while (my $line = <STDIN>) {
   my $rec = $JSON->decode($line);
-  %header = (
-    %header,
-    %$rec,
-  );
-  push @json, $rec;
+  setup_header($rec);
+  for my $key (keys %$rec) {
+    next if exists $header{$key};
+    warn "Skipping unexpected field '$key'";
+    delete $rec->{$key};
+  }
+  for my $key (keys %header) {
+    next if exists $rec->{$key};
+    $rec->{$key} = "";
+  }
+  $csv->print_data(%$rec);
 }
-
-my $csv = Text::xSV->new;
-$csv->set_header(keys %header);
-$csv->print_header();
-$csv->print_data(%$_) for @json;

@@ -39,7 +39,7 @@ HOME remotely.
 =cut
 
 use feature ':5.14';
-use strictures 2;
+use strict;
 use warnings 'all';
 $^W = 1;
 use Getopt::Long;

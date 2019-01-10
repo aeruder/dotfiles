@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 
 use feature ':5.14';
-use strictures 2;
+use warnings;
+use strict;
 use Getopt::Long;
 use Data::Dumper;
 use MIME::Base64;
@@ -43,7 +44,7 @@ my @shell_cmd = ($perl, qw(-Mwarnings -Mstrict -MData::Dumper -MMIME::Base64 -e)
 push @shell_cmd, 'eval decode_base64($ARGV[0]); warn $@ if $@';
 
 my @remote_cmd = @ARGV;
-my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, { %ENV{@env} }], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
+my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, { map { $_ => $ENV{$_} } @env }], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
 my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV);\n";
 $script .= $prog;
 $script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );\n";

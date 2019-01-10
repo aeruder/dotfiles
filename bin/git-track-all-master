@@ -7,7 +7,7 @@ git-track-all-master - Makes all untracked local branches track origin/master
 =cut
 
 use feature ':5.14';
-use strictures 2;
+use strict;
 use warnings 'all';
 use Data::Dumper ();
 use Capture::Tiny;

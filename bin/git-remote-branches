@@ -13,7 +13,7 @@ If no remotes are listed, lists all remote branches.
 =cut
 
 use feature ':5.14';
-use strictures 2;
+use strict;
 use warnings 'all';
 $^W = 1;
 
