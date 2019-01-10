@@ -1860,6 +1860,9 @@ fi
 if [ -z "$short_hostname" ]; then
     short_hostname="`hostname`"
 fi
+if [ -z "$iterm2_hostname" ]; then
+    iterm2_hostname="$long_hostname"
+fi
 
 fzfpath="`which fzf 2> /dev/null`"
 if [ -n "$fzfpath" ] && [ -x "$fzfpath" ]; then
@@ -1880,13 +1883,33 @@ function pr_aeruder_host {
     echo "%{${pr_aeruder_fg_host}%}${USERNAME[1]}@${short_hostname} "
 }
 
-if [ -n "$iterm2_hostname" ]; then
-  source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
+source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
 
+if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
   function ssh {
     if [ $# = 1 ]; then
-      printf "\033]1337;RemoteHost=%s\007" "$1"
+      printf "\033]1337;RemoteHost=%s@%s\007" "$USER" "$1"
     fi
+
+    printf "\033]1337;SetProfile=%s\007" "remote"
+
+    local has_pokemon=0
+    if which pokemon >/dev/null 2>&1; then
+      has_pokemon=1
+    fi
+    if [ "$has_pokemon" = 1 ]; then
+      pokemon -d
+    fi
+
     command ssh "$@"
+    local ret="$?"
+
+    if [ "$has_pokemon" = 1 ]; then
+      pokemon -c
+    fi
+
+    printf "\033]1337;SetProfile=%s\007" "Default"
+
+    return $ret
   }
 fi
