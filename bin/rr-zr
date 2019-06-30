@@ -7,4 +7,16 @@ set -u
 # Any command in a pipe failing aborts script
 set -o pipefail
 
-exec run-remote --env=DEV_NO_SIMDB --env=DBIC_TRACE --env=SCREEN_LOG_LEVEL --dir='ziprecruiter' --host=sandbox "$@"
+commonargs=(--env=DEV_NO_SIMDB --env=DBIC_TRACE --env=SCREEN_LOG_LEVEL --host=sandbox)
+gitroot="`git root 2>/dev/null || true`"
+if [ -n "$gitroot" ] && [ -f "$gitroot"/.zr-installation-root ]; then
+  curdir="`pwd`"
+  curreldir="${curdir#$gitroot}"
+  if [ "$curreldir" != "$curdir" ]; then
+    exec run-remote "${commonargs[@]}" \
+         --dir='ziprecruiter'"$curreldir" "$@"
+  fi
+fi
+
+exec run-remote "${commonargs[@]}" \
+      --dir='ziprecruiter' "$@"
