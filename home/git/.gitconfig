@@ -73,3 +73,5 @@
 	pruneExpire = 2 days ago
 [format]
 	pretty = fuller
+[notes]
+	rewriteRef = refs/notes/commits

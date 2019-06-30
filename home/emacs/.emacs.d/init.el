@@ -34,13 +34,35 @@
 (defvar my-leader-map (make-sparse-keymap)
   "Keymap for \"leader key\" shortcuts.")
 
+;; (defun spacemacs//helm-hide-minibuffer-maybe ()
+;;   "Hide minibuffer in Helm session if we use the header line as input field."
+;;   (when (with-helm-buffer helm-echo-input-in-header-line)
+;;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+;;       (overlay-put ov 'window (selected-window))
+;;       (overlay-put ov 'face
+;;                    (let ((bg-color (face-background 'default nil)))
+;;                      `(:background ,bg-color :foreground ,bg-color)))
+;;       (setq-local cursor-type nil))))
+
 (defun aeruder/edit-init-file ()
   (interactive)
   (find-file user-init-file))
 
 (defun aeruder/ls-dotfiles ()
   (interactive)
-  (fzf/start (expand-file-name "~/.dotfiles")))
+  (helm-fzf (expand-file-name "~/.dotfiles")))
+
+(defun aeruder/fzf-projectile ()
+  (interactive)
+  (helm-fzf (projectile-project-root)))
+
+(defun aeruder/fzf-same-projectile ()
+  (interactive)
+  (helm-fzf-same (projectile-project-root)))
+
+(defun aeruder/ripgrep-projectile ()
+  (interactive)
+  (helm-ripgrep (projectile-project-root)))
 
 (defun aeruder/align= (start end)
   (interactive "r")
@@ -55,20 +77,20 @@
   "Kill all other buffers."
   (interactive)
   (mapc 'kill-buffer
-	(delq (current-buffer)
-	      (-select (lambda (b)
-			 (or (buffer-file-name b)
-			     (eq 'dired-mode (buffer-local-value 'major-mode b))))
-		       (buffer-list)))))
+        (delq (current-buffer)
+              (-select (lambda (b)
+                         (or (buffer-file-name b)
+                             (eq 'dired-mode (buffer-local-value 'major-mode b))))
+                       (buffer-list)))))
 
 (defun aeruder/kill-all-buffers ()
   "Kill all other buffers."
   (interactive)
   (mapc 'kill-buffer
-	(-select (lambda (b)
-		   (or (buffer-file-name b)
-		       (eq 'dired-mode (buffer-local-value 'major-mode b))))
-		 (buffer-list))))
+        (-select (lambda (b)
+                   (or (buffer-file-name b)
+                       (eq 'dired-mode (buffer-local-value 'major-mode b))))
+                 (buffer-list))))
 
 (defun spacemacs/frame-killer ()
   "Kill server buffer and hide the main Emacs window"
@@ -101,7 +123,7 @@
   (interactive)
   (let ((file (buffer-file-name)))
     (if file
-	(set-file-modes file #o755))))
+        (set-file-modes file 493))))
 
 (defun aeruder/magit-remote-url (remote)
   (magit-git-str "remote" "get-url" remote))
@@ -110,53 +132,53 @@
   (save-match-data
     (let* ((remote-url (aeruder/magit-remote-url remote)))
       (if (string-match "^[a-z]+://\\([^/]+\\)" remote-url)
-	  (match-string-no-properties 1 remote-url)
-	(if (string-match "\\([a-zA-Z0-9_.-]+\\):" remote-url)
-	    (match-string-no-properties 1 remote-url)
-	  nil)))))
+          (match-string-no-properties 1 remote-url)
+        (if (string-match "\\([a-zA-Z0-9_.-]+\\):" remote-url)
+            (match-string-no-properties 1 remote-url)
+          nil)))))
 
 (defun aeruder/magit-remote-repo (remote)
   (save-match-data
     (let* ((remote-url (aeruder/magit-remote-url remote)))
       (if (string-match "^[a-z]+://\\([^/]+\\)/\\(.*?\\)\\(\\.git\\)*$" remote-url)
-	  (match-string-no-properties 2 remote-url)
-	(if (string-match "\\([a-zA-Z0-9_.-]+\\):\\(.*?\\)\\(\\.git\\)*$" remote-url)
-	    (match-string-no-properties 2 remote-url)
-	  nil)))))
+          (match-string-no-properties 2 remote-url)
+        (if (string-match "\\([a-zA-Z0-9_.-]+\\):\\(.*?\\)\\(\\.git\\)*$" remote-url)
+            (match-string-no-properties 2 remote-url)
+          nil)))))
 
 (defun aeruder/magit-browse-url (remote commit path line)
   (let* (
-	 (remote-host (aeruder/magit-remote-host remote))
-	 (remote-repo (aeruder/magit-remote-repo remote))
-	 (url (concat "https://" remote-host "/" remote-repo "/blob/" commit "/" path)))
+         (remote-host (aeruder/magit-remote-host remote))
+         (remote-repo (aeruder/magit-remote-repo remote))
+         (url (concat "https://" remote-host "/" remote-repo "/blob/" commit "/" path)))
     (if line
-	(concat url "#L" (number-to-string line))
+        (concat url "#L" (number-to-string line))
       url)))
 
 (defun aeruder/magit-get-upstream-branch-minus-remote (&optional branch)
   (save-match-data
     (let* (
-	   (remote (magit-get-upstream-remote branch))
-	   (full-branch (magit-get-upstream-branch branch)))
+           (remote (magit-get-upstream-remote branch))
+           (full-branch (magit-get-upstream-branch branch)))
       (if (string-match (format "^%s/\\(.*\\)" (regexp-quote remote)) full-branch)
-	  (match-string-no-properties 1 full-branch)
-	full-branch))))
+          (match-string-no-properties 1 full-branch)
+        full-branch))))
 
 (defun aeruder/copy-url-path ()
   (interactive)
   (aeruder/kill-new (aeruder/magit-browse-url
-		     (magit-get-upstream-remote)
-		     (aeruder/magit-get-upstream-branch-minus-remote)
-		     (aeruder/file-path t)
-		     nil) t))
+                     (magit-get-upstream-remote)
+                     (aeruder/magit-get-upstream-branch-minus-remote)
+                     (aeruder/file-path t)
+                     nil) t))
 
 (defun aeruder/copy-url-path-line ()
   (interactive)
   (aeruder/kill-new (aeruder/magit-browse-url
-	     (magit-get-upstream-remote)
-	     (aeruder/magit-get-upstream-branch-minus-remote)
-	     (aeruder/file-path t)
-	     (line-number-at-pos)) t))
+                     (magit-get-upstream-remote)
+                     (aeruder/magit-get-upstream-branch-minus-remote)
+                     (aeruder/file-path t)
+                     (line-number-at-pos)) t))
 
 (defun aeruder/reformat-sql ()
   (interactive)
@@ -165,22 +187,28 @@
       (error "No region selected"))
     (shell-command-on-region (region-beginning) (region-end) "sqlformat -r --comma_first COMMA_FIRST -" t t)))
 
+(defun aeruder/reset-buffer-major-mode ()
+  (interactive)
+  (let ((this-major-mode (buffer-local-value 'major-mode (current-buffer))))
+    (when this-major-mode
+      (eval 'this-major-mode))))
+
 ;; mercilessly stolen
 (defun rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
   (interactive)
   (let ((name (buffer-name))
-	(filename (buffer-file-name)))
+        (filename (buffer-file-name)))
     (if (not (and filename (file-exists-p filename)))
-	(message "Buffer '%s' is not visiting a file!" name)
+        (message "Buffer '%s' is not visiting a file!" name)
       (let ((new-name (read-file-name "New name: " filename)))
-	(cond ((get-buffer new-name)
-	       (message "A buffer named '%s' already exists!" new-name))
-	      (t
-	       (rename-file filename new-name 1)
-	       (rename-buffer new-name)
-	       (set-visited-file-name new-name)
-	       (set-buffer-modified-p nil)))))))
+        (cond ((get-buffer new-name)
+               (message "A buffer named '%s' already exists!" new-name))
+              (t
+               (rename-file filename new-name 1)
+               (rename-buffer new-name)
+               (set-visited-file-name new-name)
+               (set-buffer-modified-p nil)))))))
 
 ;; and again stolen
 (defun delete-file-and-buffer ()
@@ -192,6 +220,38 @@
       (message "Deleted file %s" filename)
       (kill-buffer))))
 
+(defun pbcopy ()
+  (interactive)
+  (call-process-region (point) (mark) "pbcopy")
+  (setq deactivate-mark t))
+
+(defun pbpaste ()
+  (interactive)
+  (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+(defun pbcut ()
+  (interactive)
+  (pbcopy)
+  (delete-region (region-beginning) (region-end)))
+
+(xterm-mouse-mode 1)
+(setq last-paste-to-osx nil)
+
+(defun copy-from-osx ()
+  (let ((copied-text (shell-command-to-string "pbpaste")))
+    (unless (string= copied-text last-paste-to-osx)
+      copied-text)))
+
+(defun paste-to-osx (text &optional push)
+  (let ((process-connection-type nil))
+    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc)))
+  (setq last-paste-to-osx text))
+
+(setq interprogram-cut-function 'paste-to-osx)
+(setq interprogram-paste-function 'copy-from-osx)
+
 (general-override-mode)
 (general-define-key
   :states '(normal visual motion)
@@ -201,8 +261,14 @@
   "[n" 'diff-hl-previous-hunk
   "]q" 'compilation-next-error
   "[q" 'compilation-previous-error
-  "g c" 'evil-commentary-line)
- 
+  "g c" 'evil-commentary-line
+  "z o" 'origami-open-node
+  "z O" 'origami-open-node-recursively
+  "z c" 'origami-close-node
+  "z C" 'origami-close-node-recursively
+  "z R" 'origami-open-all-nodes
+  "z M" 'origami-close-all-nodes)
+
 (general-define-key
  "C-c SPC" '(nil :which-key "custom")
  "C-c SPC x" '(nil :which-key "text")
@@ -215,15 +281,16 @@
 
                                         ; Buffer
   "b" '(nil :which-key "buffer")
-  "b b" 'ivy-switch-buffer
-  "b r" 'counsel-recentf
+  "b b" 'helm-buffers-list
+  "b r" 'helm-recentf
   "b d" 'kill-current-buffer
   "b D" 'aeruder/kill-all-buffers
   "b m" 'aeruder/kill-other-buffers
+  "b x" 'aeruder/reset-buffer-major-mode
 
                                         ; File
   "f" '(nil :which-key "file")
-  "f f" 'find-file
+  "f f" 'helm-find-files
   "f R" 'read-only-mode
   "f w" 'save-buffer
   "f b" '(nil :which-key "bookmark")
@@ -260,6 +327,8 @@
 
                                         ; Help
   "h" '(nil :which-key "help")
+  "h a" 'helm-apropos
+  "h b" 'helm-descbinds
   "h d" '(nil :which-key "describe")
   "h d b" 'describe-bindings
   "h d c" 'describe-char
@@ -272,7 +341,8 @@
 
                                         ; Jump
   "j" '(nil :which-key "jump")
-  "j l" 'swiper
+  "j l" 'helm-swoop
+  "j h" 'helm-resume
 
                                         ; Lisp
   "l" '(nil :which-key "lisp")
@@ -282,8 +352,11 @@
                                         ; Project settings
   "p" '(nil :which-key "project")
   "p p" 'projectile-switch-project
-  "p f" 'fzf-projectile
+  "p f" 'aeruder/fzf-projectile
+  "p F" 'aeruder/fzf-same-projectile
   "p s" 'projectile-ripgrep
+  "p S" 'aeruder/ripgrep-projectile
+  "p t" 'helm-gtags-find-tag
                                         ; Quit
   "q" '(nil :which-key "quit")
   "q q" 'spacemacs/frame-killer
@@ -307,16 +380,27 @@
   "x -" 'evil-numbers/dec-at-pt
   "x a" '(nil :which-key "align")
   "x a =" 'aeruder/align=
-  "x a S" 'aeruder/reformat-sql)
-
+  "x a S" 'aeruder/reformat-sql
+  "x c" 'pbcopy
+  "x v" 'pbpaste
+  "x x" 'pbcut)
+(global-set-key (kbd "M-x") 'helm-M-x)
 
 ;; relative line numbers
 (setq-default display-line-numbers 'relative)
 
 (recentf-mode 1)
 
-(use-package gruvbox-theme
-  :config (load-theme 'gruvbox-dark-soft t))
+(use-package ample-theme
+  :config (load-theme 'ample t))
+;; (use-package soothe-theme
+;;   :config (load-theme 'soothe))
+;; (use-package nova-theme
+;;   :config (load-theme 'nova t))
+;; (use-package alect-themes
+;;   :config (load-theme 'alect-light-alt t))
+;; (use-package gruvbox-theme
+;;   :config (load-theme 'gruvbox-dark-soft t))
 ;; (use-package
 ;;   borland-blue-theme
 ;;   :config (load-theme 'borland-blue t))
@@ -327,26 +411,25 @@
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode))
-(use-package ivy
-  :diminish ivy-mode
-  :config
-  (ivy-mode)
-  (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
-(use-package fzf
-  :quelpa (fzf :fetcher github :repo "aeruder/fzf.el"))
+;; (use-package ivy
+;;   :diminish ivy-mode
+;;   :config
+;;   (ivy-mode)
+;;   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
+(setenv "FZF_DEFAULT_COMMAND" "rg --files --hidden -g !.git")
 (use-package ripgrep
   :config
-  (setq ripgrep-arguments (split-string "--hidden -g !.git")))
+  (setq ripgrep-arguments (split-string "--hidden --max-columns 400 -g !.git")))
 (use-package projectile-ripgrep)
 (use-package projectile
   :diminish projectile-mode
   :init
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-completion-system 'helm)
   :config
   (projectile-mode)
   (defun projectile-find-file (&optional arg)
     (interactive "P")
-    (fzf-projectile)))
+    (aeruder/fzf-projectile)))
 (use-package counsel-projectile)
 (use-package org)
 (use-package magit)
@@ -391,8 +474,8 @@
   :config
   (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
-	    (lambda ()
-	      (evil-org-set-key-theme)))
+            (lambda ()
+              (evil-org-set-key-theme)))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 (use-package lispy
@@ -413,6 +496,7 @@
 (use-package yaml-mode)
 (use-package yasnippet
   :config
+  (setq yas-indent-line 'auto)
   (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)
   (yas-global-mode 1))
 
@@ -443,6 +527,164 @@
 (use-package terraform-mode)
 (use-package dockerfile-mode)
 
+(use-package origami
+  :config
+  (global-origami-mode))
+
+(use-package helm-config
+  :quelpa (helm-config :fetcher github :repo "aeruder/helm"))
+(use-package helm
+  :quelpa (helm :fetcher github :repo "aeruder/helm")
+  :config
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  ;; (setq helm-split-window-inside-p t ; open helm buffer inside current window, not occupy whole other window
+  ;; helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+  helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
+  ;; helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
+  helm-ff-file-name-history-use-recentf t
+  ;; helm-echo-input-in-header-line t
+
+
+  ;; (add-hook 'helm-minibuffer-set-up-hook
+  ;;     'spacemacs//helm-hide-minibuffer-maybe)
+
+  ;; (setq helm-autoresize-max-height 0)
+  ;; (setq helm-autoresize-min-height 20)
+  ;; (helm-autoresize-mode 1)
+  (setq helm-split-window-default-side 'right)
+
+  (setq helm-ff-fuzzy-matching nil)
+  (helm-mode 1))
+
+(use-package helm-swoop)
+(setq helm-fzf-executable "fzf")
+(setq helm-fzf-source
+      (helm-build-async-source "fzf"
+        :candidates-process 'helm-fzf--do-candidate-process
+        :filter-one-by-one 'identity
+        :requires-pattern nil
+        :action 'helm-find-file-or-marked
+        :candidate-number-limit 100))
+
+(defun helm-fzf--do-candidate-process ()
+  (let* ((cmd-args (-filter 'identity (list helm-fzf-executable
+                                            "-f"
+                                            helm-pattern)))
+         (proc (apply 'start-file-process "helm-fzf" helm-buffer cmd-args)))
+    (prog1 proc
+      (set-process-sentinel
+       (get-buffer-process helm-buffer)
+       #'(lambda (process event)
+         (helm-process-deferred-sentinel-hook
+          process event (helm-default-directory)))))))
+
+(defun helm-fzf (directory)
+  (interactive "D")
+  (let ((default-directory directory))
+    (helm :sources '(helm-fzf-source)
+          :buffer "*helm-fzf*")))
+
+(defun helm-fzf-same (directory)
+  (interactive "D")
+  (let ((default-directory directory))
+    (helm :sources '(helm-fzf-source)
+          :buffer "*helm-fzf*"
+          :input (file-name-base (buffer-file-name)))))
+
+(setq helm-ripgrep-executable "rg")
+(setq helm-ripgrep-source
+      (helm-build-async-source "ripgrep"
+        :candidates-process 'helm-ripgrep--do-candidate-process
+        :filter-one-by-one 'identity
+        :requires-pattern nil
+        :action 'helm-ripgrep-action
+        :candidate-number-limit 100))
+
+(defun helm-ripgrep--do-candidate-process ()
+  (let* ((cmd-args (-filter 'identity (list helm-ripgrep-executable
+                                            "--no-heading" "--vimgrep" "-n"
+                                            "--hidden"
+                                            "--max-columns" "400"
+                                            "-g" "!.git"
+                                            "--"
+                                            helm-pattern)))
+         (proc (apply 'start-file-process "helm-ripgrep" helm-buffer cmd-args)))
+    (prog1 proc
+      (set-process-sentinel
+       (get-buffer-process helm-buffer)
+       #'(lambda (process event)
+         (helm-process-deferred-sentinel-hook
+          process event (helm-default-directory)))))))
+
+(defun helm-ripgrep (directory)
+  (interactive "D")
+  (let ((default-directory directory))
+    (helm :sources '(helm-ripgrep-source)
+          :buffer "*helm-ripgrep*")))
+
+(defun helm-ripgrep-action (candidate)
+  (let* ((split (split-string candidate ":"))
+         (lineno (string-to-number (nth 1 split)))
+         (col (string-to-number (nth 2 split)))
+         (loc-fname (car split))
+         (tramp-method (file-remote-p (or helm-ff-default-directory
+                                          default-directory) 'method))
+         (tramp-host (file-remote-p (or helm-ff-default-directory
+                                        default-directory) 'host))
+         (tramp-prefix (concat "/" tramp-method ":" tramp-host ":"))
+         (fname (if tramp-host
+                    (concat tramp-prefix loc-fname) loc-fname)))
+    (find-file fname)
+    (helm-goto-line lineno)
+    (forward-char (- col 1))))
+
+
+(use-package helm-descbinds)
+(use-package helm-gtags)
+(use-package nyan-mode
+  :config
+  (nyan-mode)
+  (nyan-toggle-wavy-trail))
+
+;; whitespace stuff
+(global-whitespace-mode 1)
+(setq-default whitespace-display-mappings
+      '(
+        ;; (space-mark ?\  [?·] [?.])        ; space - middle dot
+        (space-mark ?\xA0 [?¤] [?_])    ; hard space - currency sign
+        ;; NEWLINE is displayed using the face `whitespace-newline'
+        ;; (newline-mark ?\n [?$ ?\n])       ; eol - dollar sign
+        ;; (newline-mark ?\n    [?↵ ?\n] [?$ ?\n]); eol - downwards arrow
+        ;; (newline-mark ?\n    [?¶ ?\n] [?$ ?\n]); eol - pilcrow
+        ;; (newline-mark ?\n    [?¯ ?\n]  [?$ ?\n]); eol - overscore
+        ;; (newline-mark ?\n    [?¬ ?\n]  [?$ ?\n]); eol - negation
+        ;; (newline-mark ?\n    [?° ?\n]  [?$ ?\n]); eol - degrees
+        ;;
+        ;; WARNING: the mapping below has a problem.
+        ;; When a TAB occupies exactly one column, it will display the
+        ;; character ?\xBB at that column followed by a TAB which goes to
+        ;; the next TAB column.
+        ;; If this is a problem for you, please, comment the line below.
+        (tab-mark ?\t [?» ?\t] [?\\ ?\t]) ; tab - right guillemet
+        ))
+;; (setq-default whitespace-style
+;;               '(face
+;;                 tabs spaces trailing lines space-before-tab newline
+;;                 indentation empty space-after-tab
+;;                 space-mark tab-mark newline-mark))
+(setq whitespace-style (remove 'spaces whitespace-style))
+(setq whitespace-style (remove 'lines whitespace-style))
+(add-to-list 'whitespace-style 'lines-tail)
+(setq whitespace-line-column 120)
+(set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
+(set-face-attribute 'whitespace-empty nil :background "darkred" :foreground "gray30")
+
 ;; perl stuff
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
@@ -458,16 +700,21 @@
     (when (not (file-directory-p dir))
       (make-directory dir t)))
   (setq backup-directory-alist `(("." . ,backup-dir))
-	auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
-	auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
-	tramp-backup-directory-alist `((".*" . ,backup-dir))
-	tramp-auto-save-directory auto-saves-dir))
+        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
+        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
+        tramp-backup-directory-alist `((".*" . ,backup-dir))
+        tramp-auto-save-directory auto-saves-dir))
 
-(setq backup-by-copying t	     ; Don't delink hardlinks
-      delete-old-versions t	     ; Clean up the backups
-      version-control t		     ; Use version numbers on backups,
-      kept-new-versions 5	     ; keep some new versions
-      kept-old-versions 2)   ; and some old ones, too    
+(setq-default indent-tabs-mode nil)
+
+(setq backup-by-copying t            ; Don't delink hardlinks
+      delete-old-versions t          ; Clean up the backups
+      version-control t              ; Use version numbers on backups,
+      kept-new-versions 5            ; keep some new versions
+      kept-old-versions 2)           ; and some old ones, too
+
+;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
+(setq visible-bell 1)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)

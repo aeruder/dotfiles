@@ -1,4 +1,4 @@
 # -*- mode: snippet -*-
 # key: dump
 # --
-`(yas-cperl-mode-push-package "Data::Dumper")`Data::Dumper->new([${1:\$var}])->Indent(2)->Maxdepth(0)->Sortkeys(1)->Dump$0
+require DDP; &DDP::p({ '$1' => ${1:\$var} });$0

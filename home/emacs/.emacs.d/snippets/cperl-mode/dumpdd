@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# key: dumpdd
+# --
+require Data::Dumper; print STDERR Data::Dumper->new([${1:\$var}], ['$1'])->Terse(1)->Sortkeys(1)->Deparse(1)->Indent(0)->Dump, "\n";$0
