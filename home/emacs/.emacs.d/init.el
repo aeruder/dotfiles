@@ -14,6 +14,7 @@
 (use-package dash)
 (use-package diminish)
 (use-package bind-key)
+(use-package monitor)
 (use-package which-key
   :diminish which-key-mode
   :init
@@ -47,6 +48,10 @@
 (defun aeruder/edit-init-file ()
   (interactive)
   (find-file user-init-file))
+
+(defun aeruder/edit-todo-file ()
+  (interactive)
+  (find-file (expand-file-name "~/todo.org")))
 
 (defun aeruder/ls-dotfiles ()
   (interactive)
@@ -235,6 +240,8 @@
   (delete-region (region-beginning) (region-end)))
 
 (xterm-mouse-mode 1)
+(setq xterm-set-window-title t)
+
 (setq last-paste-to-osx nil)
 
 (defun copy-from-osx ()
@@ -300,6 +307,7 @@
   "f e" '(nil :which-key "edit")
   "f e d" 'aeruder/edit-init-file
   "f e D" 'aeruder/ls-dotfiles
+  "f e t" 'aeruder/edit-todo-file
   "f s" 'server-edit
   "f x" 'aeruder/make-file-executable
   "f y" '(nil :which-key "yank")
@@ -310,8 +318,7 @@
                                         ; Git
   "g" '(nil :which-key "git")
   "g R" 'magit-refresh-all
-  "g f" 'magit-file-popup
-  "g F" 'magit-fetch-popup
+  "g f" 'magit-file-dispatch
   "g b" 'magit-blame
   "g g" 'magit
   "g h" 'magit-reflog
@@ -349,6 +356,10 @@
   "l e" 'eval-last-sexp
   "l f" 'lispyville-prettify
   "l x" 'pp-eval-expression
+
+  "o" '(nil :which-key "org")
+  "o a" 'org-agenda
+  "o c" 'org-capture
                                         ; Project settings
   "p" '(nil :which-key "project")
   "p p" 'projectile-switch-project
@@ -432,7 +443,17 @@
     (aeruder/fzf-projectile)))
 (use-package counsel-projectile)
 (use-package org)
-(use-package magit)
+;; (use-package libgit
+;;   :quelpa (libgit :fetcher github :repo "magit/libegit2"))
+(use-package magit
+  :quelpa (magit :fetcher github :repo "aeruder/magit"
+                 :files ("lisp/magit"
+                         "lisp/magit*.el"
+                         "lisp/git-rebase.el"
+                         "Documentation/magit.texi"
+                         "Documentation/AUTHORS.md"
+                         "LICENSE"
+                         (:exclude "lisp/magit-libgit.el"))))
 (use-package evil-magit)
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
@@ -449,8 +470,7 @@
   (add-hook 'after-init-hook 'global-company-mode))
 (use-package company-lsp)
 
-(use-package
-  evil-escape
+(use-package evil-escape
   :diminish evil-escape-mode
   :config
   (setq-default evil-escape-key-sequence "jk")
@@ -469,15 +489,7 @@
 (use-package evil-easymotion)
 (use-package evil-numbers)
 (use-package evil-search-highlight-persist)
-(use-package evil-org
-  :commands evil-org-mode
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme)))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
+(use-package evil-org)
 (use-package lispy
   :commands lispy-mode
   :init
@@ -487,7 +499,7 @@
   :commands lispyville-mode
   :init
   (add-hook 'lispy-mode-hook #'lispyville-mode)
-  (lispyville-set-key-theme '(operators c-w prettify additional-movement slurp/barf-cp wrap)))
+  (lispyville-set-key-theme '(operators c-w prettify additional-movement slurp/barf-cp)))
 (use-package evil-collection
   :config
   (delq 'diff-mode evil-collection-mode-list)
@@ -522,7 +534,9 @@
 
 (use-package diff-hl
   :config
-  (global-diff-hl-mode))
+  (global-diff-hl-mode)
+  (diff-hl-margin-mode 1)
+  (diff-hl-flydiff-mode 1))
 
 (use-package terraform-mode)
 (use-package dockerfile-mode)
@@ -715,6 +729,15 @@
 
 ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
 (setq visible-bell 1)
+
+;; org mode stuff
+(setq org-agenda-files (list (expand-file-name "~/todo.org")))
+(setq org-highest-priority ?A)
+(setq org-lowest-priority ?C)
+(setq org-default-priority ?A)
+(setq org-agenda-window-setup "current-window")
+(setq org-capture-templates
+      '(("t" "todo" entry (file+headline "~/todo.org" "Tasks") "* TODO [#A] %?\n  %i\n   %a")))
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)

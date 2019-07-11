@@ -1,0 +1,11 @@
+#!/bin/sh
+
+
+start_time="`ruby -e 'puts Time.now.to_f'`"
+/usr/local/bin/git "$@"
+GITRET="$?"
+duration="`ruby -e \"puts Time.now.to_f - $start_time\"`"
+
+echo "$PPID $duration `date +%s` git $*" >> /tmp/gitcommands.txt
+
+exit $GITRET

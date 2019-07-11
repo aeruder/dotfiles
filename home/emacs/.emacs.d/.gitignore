@@ -48,3 +48,5 @@ tramp
 /custom.el
 /recentf
 /quelpa/
+
+/transient
