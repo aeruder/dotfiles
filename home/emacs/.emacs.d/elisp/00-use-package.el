@@ -29,7 +29,6 @@
 (setq package-enable-at-startup nil)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("gnu" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
@@ -46,6 +45,7 @@
    :fetcher github
    :repo "quelpa/quelpa-use-package"))
 (require 'quelpa-use-package)
+(require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (quelpa-use-package-activate-advice)
 
