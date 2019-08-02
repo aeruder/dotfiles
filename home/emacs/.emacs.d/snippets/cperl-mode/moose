@@ -1,7 +1,9 @@
 # -*- mode: snippet -*-
+# name: Moose template
 # key: moose
 # --
 use Moose;
-use namespace::autoclean;
+use Types::Standard -types;
+use namespace::clean -except => "meta";
 $0
 __PACKAGE__->meta->make_immutable;

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+cat cperl-mode/.yas-setup.el |
+  sed -e 's/yas-cperl-mode/yas-cperl-mode-priv/g' |
+  tee ../snippets.private/cperl-mode/.yas-setup.el > /dev/null

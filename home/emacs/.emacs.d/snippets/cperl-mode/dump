@@ -1,4 +1,5 @@
 # -*- mode: snippet -*-
+# name: Dump with DDP
 # key: dump
 # --
 require DDP; &DDP::p({ '$1' => ${1:\$var} });$0

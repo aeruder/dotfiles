@@ -1,4 +1,5 @@
 # -*- mode: snippet -*-
+# name: Full backtrace for die
 # key: dietrack
 # --
 local \$SIG{__DIE__} = sub { require Carp; die @_ if ref(\$_[0]); if (\$_[-1] =~ /\\n\$/s) { my \$arg = pop @_; \$arg =~ s/(.*)( at .*? line .*?\\n\$)/\$1/s; push @_, \$arg; } die &Carp::longmess; };

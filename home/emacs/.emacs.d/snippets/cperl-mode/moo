@@ -1,7 +1,9 @@
 # -*- mode: snippet -*-
+# name: Moo template
 # key: moo
 # --
 use Moo;
+use Types::Standard -types;
 use namespace::clean;
 $0
 __PACKAGE__->meta->make_immutable;

@@ -34,7 +34,15 @@ GetOptions(
 );
 exit(0) unless @ARGV;
 
-@env = grep { exists $ENV{$_} } @env;
+my %result_env = map {
+  my @ret;
+  if (/^(.+)=(.*)$/) {
+    @ret = ( $1 => $2 );
+  } else {
+    @ret = ( $_ => $ENV{$_} ) if exists $ENV{$_};
+  }
+  @ret;
+} @env;
 
 # Escaping on ssh is a nightmare, just have a static command-line by
 # uuencoding a perl script and sending it over
@@ -44,7 +52,7 @@ my @shell_cmd = ($perl, qw(-Mwarnings -Mstrict -MData::Dumper -MMIME::Base64 -e)
 push @shell_cmd, 'eval decode_base64($ARGV[0]); warn $@ if $@';
 
 my @remote_cmd = @ARGV;
-my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, { map { $_ => $ENV{$_} } @env }], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
+my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, \%result_env ], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
 my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV);\n";
 $script .= $prog;
 $script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );\n";

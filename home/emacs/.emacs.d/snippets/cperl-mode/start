@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# key: start
+# --
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use v5.10;

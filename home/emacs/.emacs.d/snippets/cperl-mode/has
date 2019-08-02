@@ -1,4 +1,5 @@
 # -*- mode: snippet -*-
+# name: Moo/Moose has
 # key: has
 # --
 =head2 $1
@@ -7,9 +8,10 @@ ${4:description}
 
 =cut
 has ${1:attribute} => (
-	is => '${2:ro|rw}',
-	default => sub {
-		${3:defaultvalue},
-	},
-	${0:# other attributes}
+$>is      => '${2:ro|rw}',
+$>isa     => Int,
+$>default => sub {
+$>$>${3:defaultvalue},
+$>},
+$>${0:# other attributes}
 );

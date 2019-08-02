@@ -18,6 +18,7 @@ This is why I created this.  Maybe see perlpodstyle
 
 =cut
 
-use strictures 2;
+use strict;
+use warnings;
 $0
 1;
