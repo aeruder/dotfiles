@@ -24,6 +24,7 @@
 
 (use-package evil
   :init
+  (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
   (setq evil-want-integration nil)
   (setq evil-want-keybinding nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
@@ -190,7 +191,7 @@
   (let (string)
     (unless (mark)
       (error "No region selected"))
-    (shell-command-on-region (region-beginning) (region-end) "sqlformat -r --comma_first COMMA_FIRST -" t t)))
+    (shell-command-on-region (region-beginning) (region-end) "cli-sql-formatter" t t)))
 
 (defun aeruder/reset-buffer-major-mode ()
   (interactive)
@@ -540,6 +541,8 @@
 
 (use-package terraform-mode)
 (use-package dockerfile-mode)
+(use-package processing-mode)
+(use-package rjsx-mode)
 
 (use-package origami
   :config
@@ -661,10 +664,10 @@
 
 (use-package helm-descbinds)
 (use-package helm-gtags)
-(use-package nyan-mode
-  :config
-  (nyan-mode)
-  (nyan-toggle-wavy-trail))
+;; (use-package nyan-mode
+;;   :config
+;;   (nyan-mode)
+;;   (nyan-toggle-wavy-trail))
 
 ;; whitespace stuff
 (global-whitespace-mode 1)
@@ -741,5 +744,11 @@
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(which-function-mode 1)
+
+(diminish 'global-whitespace-mode)
+(diminish 'auto-revert-mode)
+(diminish 'helm-mode)
+(diminish 'yas-minor-mode)
 
 (server-start)
