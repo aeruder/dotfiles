@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+branch="$1"
+commit="$2"
+
+git rev-parse --verify "$commit"
+
+git fetch
+git checkout origin/$branch
+git cherry-pick -x "$commit"
+git push origin HEAD:$branch
+echo "all good"
