@@ -246,9 +246,11 @@
 (setq last-paste-to-osx nil)
 
 (defun copy-from-osx ()
-  (let ((copied-text (shell-command-to-string "pbpaste")))
-    (unless (string= copied-text last-paste-to-osx)
-      copied-text)))
+  (with-temp-buffer
+    (cd temporary-file-directory)
+    (let ((copied-text (shell-command-to-string "pbpaste")))
+      (unless (string= copied-text last-paste-to-osx)
+        copied-text))))
 
 (defun paste-to-osx (text &optional push)
   (let ((process-connection-type nil))
@@ -403,8 +405,15 @@
 
 (recentf-mode 1)
 
-(use-package ample-theme
-  :config (load-theme 'ample t))
+;; (use-package green-is-the-new-black-theme)
+;; (use-package base16-theme
+;;   :config
+;;   (setq base16-theme-256-color-source "colors")
+;;   (load-theme 'base16-greenscreen))
+;; (use-package ample-theme
+;;   :config (load-theme 'ample-flat t))
+(use-package dracula-theme
+  :config (load-theme 'dracula t))
 ;; (use-package soothe-theme
 ;;   :config (load-theme 'soothe))
 ;; (use-package nova-theme
@@ -428,10 +437,10 @@
 ;;   :config
 ;;   (ivy-mode)
 ;;   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
-(setenv "FZF_DEFAULT_COMMAND" "rg --files --hidden -g !.git")
+(setenv "FZF_DEFAULT_COMMAND" "rg --files --no-ignore --hidden -g !.git")
 (use-package ripgrep
   :config
-  (setq ripgrep-arguments (split-string "--hidden --max-columns 400 -g !.git")))
+  (setq ripgrep-arguments (split-string "--hidden --no-ignore --max-columns 400 -g !.git")))
 (use-package projectile-ripgrep)
 (use-package projectile
   :diminish projectile-mode
@@ -509,7 +518,7 @@
 (use-package yaml-mode)
 (use-package yasnippet
   :config
-  (setq yas-indent-line 'auto)
+  (setq yas-indent-line 'fixed)
   (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)
   (yas-global-mode 1))
 
@@ -531,7 +540,17 @@
 
 (use-package perl6-mode)
 (use-package typescript-mode)
+
+ ;; GO SETUP
 (use-package go-mode)
+(use-package company-go)
+(use-package flymake-go)
+(use-package go-guru)
+(defun my-go-mode-hook ()
+  (add-hook 'before-save-hook 'gofmt-before-save t t)
+  (setq gofmt-command "goimports")
+  (go-guru-hl-identifier-mode))
+(add-hook 'go-mode-hook 'my-go-mode-hook)
 
 (use-package diff-hl
   :config
@@ -628,6 +647,7 @@
                                             "--no-heading" "--vimgrep" "-n"
                                             "--hidden"
                                             "--max-columns" "400"
+                                            "--no-ignore"
                                             "-g" "!.git"
                                             "--"
                                             helm-pattern)))
@@ -708,6 +728,7 @@
 (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
 
 ;; Put backup files neatly away
 
