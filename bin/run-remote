@@ -5,6 +5,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Data::Dumper;
+use Capture::Tiny qw(capture_stdout);
 use MIME::Base64;
 
 sub quote {
@@ -18,21 +19,27 @@ sub quote {
 
 my ($help,$login,$verbose);
 my $dir=".";
-my $host="localhost";
+my $host;
 my $perl="perl";
 my @env;
+my @delete_env;
 
 Getopt::Long::Configure qw(require_order bundling no_ignore_case_always no_auto_abbrev);
 GetOptions(
-  'help'    => \$help,
-  'login'   => \$login,
-  'verbose' => \$verbose,
-  'dir=s'   => \$dir,
-  'host=s'  => \$host,
-  'perl=s'  => \$perl,
-  'env=s'   => \@env,
+  'help'     => \$help,
+  'login'    => \$login,
+  'verbose'  => \$verbose,
+  'dir=s'    => \$dir,
+  'host=s'   => \$host,
+  'perl=s'   => \$perl,
+  'env=s'    => \@env,
+  'delete-env=s' => \@delete_env,
+  'docker=s' => \my $docker,
+  'docker-user=s' => \my $docker_user,
 );
 exit(0) unless @ARGV;
+
+die "must specify --host or --docker" if !$docker && !$host;
 
 my %result_env = map {
   my @ret;
@@ -44,26 +51,84 @@ my %result_env = map {
   @ret;
 } @env;
 
-# Escaping on ssh is a nightmare, just have a static command-line by
-# uuencoding a perl script and sending it over
-my @cmd=(qw(ssh -q), $host);
-push @cmd, "-t" if -t STDOUT && -t STDERR;
-my @shell_cmd = ($perl, qw(-Mwarnings -Mstrict -MData::Dumper -MMIME::Base64 -e));
-push @shell_cmd, 'eval decode_base64($ARGV[0]); warn $@ if $@';
+my $istty = -t STDOUT && -t STDERR;
 
+if ($docker) {
+  # Get a list of running docker images
+  if ($docker =~ m{^/(.*)/}) {
+    $docker = qr/$1/;
+  } else {
+    $docker = qr/^\Q$docker\E$/;
+  }
+  my @docker_cmd = (
+    qw(docker ps --format),
+    '{{ .Image }}\t{{ .Names }}\t{{ .ID }}'
+  );
+  if ($host) {
+    unshift @docker_cmd, $0, "--host=$host";
+  }
+  my $docker_ps = capture_stdout {
+    system(@docker_cmd);
+  };
+  my $docker_id;
+  for my $line (split /\n/, $docker_ps) {
+    chomp $line;
+    next unless $line =~ /^([^\t]*)\t([^\t]*)\t([^\t]*)$/;
+    my ($image, $name, $id) = ($1, $2, $3);
+    if ($id =~ $docker) {
+      $docker_id = $id;
+    } elsif ($name =~ $docker) {
+      $docker_id = $id;
+    } elsif ($image =~ $docker) {
+      $docker_id = $id;
+    }
+    last if $docker_id;
+  }
+  die "Can't find docker image matching /$docker/" unless $docker_id;
+  $docker = $docker_id;
+}
+
+my @perl = ($perl);
 my @remote_cmd = @ARGV;
-my $prog = Data::Dumper->Dump([\@remote_cmd, $dir, \%result_env ], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV']);
-my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV);\n";
-$script .= $prog;
-$script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );\n";
-$script .= "chdir(\$REMOTEDIR);\n";
-$script .= "print STDERR Data::Dumper->Dump([\$REMOTECMD], [\"REMOTECMD\"]);\n" if $verbose;
-$script .= "{ exec {\$REMOTECMD->[0]} \@\$REMOTECMD; };\n";
-$script .= "exit(127);";
 
-push @shell_cmd, encode_base64($script,"");
-push @cmd, map { quote($_) } @shell_cmd;
+if ($docker) {
+  unshift @perl,
+    "docker",
+    "exec",
+    "-i",
+    $istty ? ("-t") : (),
+    $docker_user ? ("-u", $docker_user) : (),
+    $docker;
+}
 
-print STDERR sprintf("=== REMOTE SCRIPT START ===\n%s\n=== REMOTE SCRIPT END===\n", $script) if $verbose;
-print STDERR Data::Dumper->Dump([\@cmd], ["LOCALCMD"]) if $verbose;
-exec {$cmd[0]} @cmd;
+if ($host) {
+  # Escaping on ssh is a nightmare, just have a static command-line by
+  # uuencoding a perl script and sending it over
+  my @cmd=(qw(ssh -q), $host);
+  push @cmd, "-t" if $istty;
+  my @shell_cmd = (@perl, qw(-Mwarnings -Mstrict -MData::Dumper -MMIME::Base64 -e));
+  push @shell_cmd, 'eval decode_base64($ARGV[0]); warn $@ if $@';
+
+  my $prog = Data::Dumper->Dump([
+    \@remote_cmd, $dir,
+    \%result_env, \@delete_env,
+  ], ['REMOTECMD', 'REMOTEDIR', 'REMOTEENV', 'DELETEENV']);
+  my $script = "my (\$REMOTECMD, \$REMOTEDIR, \$REMOTEENV, \$DELETEENV);\n";
+  $script .= $prog;
+  $script .= "\%ENV = ( \%ENV, \%\$REMOTEENV );\n";
+  $script .= "delete \$ENV{\$_} for \@\$DELETEENV;\n";
+  $script .= "chdir(\$REMOTEDIR);\n";
+  $script .= "print STDERR Data::Dumper->Dump([\$REMOTECMD], [\"REMOTECMD\"]);\n" if $verbose;
+  $script .= "{ exec {\$REMOTECMD->[0]} \@\$REMOTECMD; };\n";
+  $script .= "exit(127);";
+
+  push @shell_cmd, encode_base64($script,"");
+  push @cmd, map { quote($_) } @shell_cmd;
+
+  print STDERR sprintf("=== REMOTE SCRIPT START ===\n%s\n=== REMOTE SCRIPT END===\n", $script) if $verbose;
+  print STDERR Data::Dumper->Dump([\@cmd], ["LOCALCMD"]) if $verbose;
+
+  @remote_cmd = @cmd;
+}
+
+exec {$remote_cmd[0]} @remote_cmd;
