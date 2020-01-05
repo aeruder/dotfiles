@@ -548,7 +548,8 @@
 (use-package go-guru)
 (defun my-go-mode-hook ()
   (add-hook 'before-save-hook 'gofmt-before-save t t)
-  (setq gofmt-command "goimports")
+  (setq-local gofmt-command "goimports")
+  (setq-local whitespace-style (remove 'tab-mark whitespace-style))
   (go-guru-hl-identifier-mode))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 
@@ -717,6 +718,7 @@
 ;;                 space-mark tab-mark newline-mark))
 (setq whitespace-style (remove 'spaces whitespace-style))
 (setq whitespace-style (remove 'lines whitespace-style))
+(setq whitespace-style (remove 'tabs whitespace-style))
 (add-to-list 'whitespace-style 'lines-tail)
 (setq whitespace-line-column 120)
 (set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
