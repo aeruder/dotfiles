@@ -1,17 +1,18 @@
 #!/usr/bin/env perl
 
-use feature ':5.14';
 use strict;
-use warnings 'all';
-$^W = 1;
-
-use Tie::IxHash;
-use Text::xSV;
+use warnings;
+use v5.10;
 use JSON::XS;
 
-my $JSONI = JSON::XS->new->canonical->utf8;
+my $JSONI = JSON::XS->new->utf8;
 my $JSONO = JSON::XS->new->canonical->ascii;
 
-while (my $line = <STDIN) {
-my $
+while (my $line = <STDIN>) {
+  chomp $line;
+  eval {
+    print $JSONO->encode($JSONI->decode($line)), "\n";
+  } or do {
+    print $line, "\n";
+  };
 }
