@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+exec docker run -it --rm --entrypoint= --user root $1 /bin/bash
