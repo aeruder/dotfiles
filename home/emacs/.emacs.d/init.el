@@ -730,6 +730,7 @@
 (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
+(add-to-list 'interpreter-mode-alist '("raku" . perl6-mode))
 (add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
 
 ;; Put backup files neatly away
