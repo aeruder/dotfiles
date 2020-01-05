@@ -95,8 +95,7 @@ if ($docker) {
   unshift @perl,
     "docker",
     "exec",
-    "-i",
-    $istty ? ("-t") : (),
+    $istty && -t STDIN ? ("-it") : ("-i"),
     $docker_user ? ("-u", $docker_user) : (),
     $docker;
 }
