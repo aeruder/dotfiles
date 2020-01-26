@@ -27,6 +27,7 @@
 ;; Update package-archive lists
 (require 'package)
 (setq package-enable-at-startup nil)
+(setq quelpa-update-melpa-p nil)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("gnu" . "https://elpa.gnu.org/packages/")))
@@ -45,7 +46,7 @@
    :fetcher github
    :repo "quelpa/quelpa-use-package"))
 (require 'quelpa-use-package)
-(require 'use-package-ensure)
+;; (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (quelpa-use-package-activate-advice)
 

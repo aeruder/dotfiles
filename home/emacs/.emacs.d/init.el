@@ -1,4 +1,5 @@
 ;; add ~/.emacs.d/lisp to load path
+;; (toggle-debug-on-quit)
 (add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "evil-rebellion" user-emacs-directory))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -10,7 +11,6 @@
 ;; load files
 (require '00-use-package)
 
-(use-package cl)
 (use-package dash)
 (use-package diminish)
 (use-package bind-key)
@@ -248,16 +248,24 @@
 (defun copy-from-osx ()
   (with-temp-buffer
     (cd temporary-file-directory)
-    (let ((copied-text (shell-command-to-string "pbpaste")))
-      (unless (string= copied-text last-paste-to-osx)
-        copied-text))))
+    (if (executable-find "pbpaste")
+        (let ((copied-text (shell-command-to-string "pbpaste")))
+          (unless (string= copied-text last-paste-to-osx)
+            copied-text))
+      (let ((copied-text (shell-command-to-string "xsel -o")))
+        (unless (string= copied-text last-paste-to-osx)
+          copied-text)))))
 
 (defun paste-to-osx (text &optional push)
   (let ((process-connection-type nil))
-    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-      (process-send-string proc text)
-      (process-send-eof proc)))
-  (setq last-paste-to-osx text))
+    (if (executable-find "pbcopy")
+        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+          (process-send-string proc text)
+          (process-send-eof proc))
+      (let ((proc (start-process "xsel" "*Messages*" "xsel")))
+        (process-send-string proc text)
+        (process-send-eof proc)))
+    (setq last-paste-to-osx text)))
 
 (setq interprogram-cut-function 'paste-to-osx)
 (setq interprogram-paste-function 'copy-from-osx)
@@ -394,10 +402,7 @@
   "x -" 'evil-numbers/dec-at-pt
   "x a" '(nil :which-key "align")
   "x a =" 'aeruder/align=
-  "x a S" 'aeruder/reformat-sql
-  "x c" 'pbcopy
-  "x v" 'pbpaste
-  "x x" 'pbcut)
+  "x a S" 'aeruder/reformat-sql)
 (global-set-key (kbd "M-x") 'helm-M-x)
 
 ;; relative line numbers
@@ -519,7 +524,8 @@
 (use-package yasnippet
   :config
   (setq yas-indent-line 'fixed)
-  (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)
+  ;; (if (exists
+  (let ((privsnip (expand-file-name "snippets.private" user-emacs-directory))) (if (file-directory-p privsnip) (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)))
   (yas-global-mode 1))
 
 (evil-set-initial-state 'term-mode 'emacs)
@@ -569,10 +575,10 @@
   (global-origami-mode))
 
 (use-package helm-config
-  :quelpa (helm-config :fetcher github :repo "aeruder/helm"))
-(use-package helm
-  :quelpa (helm :fetcher github :repo "aeruder/helm")
+  :quelpa (helm-config :fetcher github :repo "aeruder/helm")
   :config
+  (require 'helm)
+
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
   (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
