@@ -75,6 +75,7 @@ xinput --set-prop "CyPS/2 Cypress Trackpad" "libinput Natural Scrolling Enabled"
 xinput --set-prop "CyPS/2 Cypress Trackpad" "libinput Tapping Enabled" 1
 xinput --set-button-map "Microsoft Microsoft 3-Button Mouse with IntelliEye(TM)" 1 2 3 5 4
 xinput --set-button-map "ETPS/2 Elantech Touchpad" 1 2 3 5 4 6 7 8 9 10 11 12
+xinput --set-prop "ETPS/2 Elantech Touchpad" "libinput Accel Speed" 1
 
 start-pulseaudio-x11
 feh --bg-fill ~/.wallpaper
