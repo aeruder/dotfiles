@@ -17,7 +17,7 @@ esac
 url="$1"
 
 browser=
-for a in google-chrome chromium firefox iceweasel ; do
+for a in firefox iceweasel google-chrome chromium firefox iceweasel ; do
     if which "$a"; then
         browser="$a"
         break
