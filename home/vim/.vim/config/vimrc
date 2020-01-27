@@ -169,7 +169,7 @@ endif
 let s:path = PJ(g:vim_cachedir, "dein")
 let s:plugins_path = PJ(g:vim_configdir, "plugins.yaml")
 let s:devpath = PJ(g:vim_maindir, "dev")
-if dein#load_state(s:path)
+if g:vimrc_profile >= 0 && dein#load_state(s:path)
   call dein#begin(s:path, [expand('<sfile>'), s:plugins_path])
   try
     call s:dein_load_yaml(s:plugins_path)

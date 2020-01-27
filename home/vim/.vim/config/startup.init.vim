@@ -5,6 +5,9 @@ let g:mapleader="\<Space>"
 let g:maplocalleader=';'
 
 " Create missing dirs i.e. cache/{undo,backup}
+if ! isdirectory(g:vim_cachedir)
+  call mkdir(g:vim_cachedir)
+endif
 if ! isdirectory(PJ(g:vim_cachedir, "undo"))
   call mkdir(PJ(g:vim_cachedir, "undo"))
 endif
