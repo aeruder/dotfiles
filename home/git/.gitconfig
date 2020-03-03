@@ -75,3 +75,10 @@
 	pretty = fuller
 [notes]
 	rewriteRef = refs/notes/commits
+[fetch]
+	negotiationAlgorithm = skipping
+	writeCommitGraph = true
+[pack]
+	useSparse = true
+[feature]
+	manyFiles = true
