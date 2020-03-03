@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+exec curl --header "Accept: application/json" --header "Content-Type: application/json; charset=UTF-8" "$@"

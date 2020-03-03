@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use v5.10;
+use JSON::XS;
+use TOML::Tiny qw(to_toml);
+
+binmode(STDIN, ":raw");
+binmode(STDOUT, ":utf8");
+
+my $JSON = JSON::XS->new->utf8;
+
+while (my $line = <STDIN>) {
+  my $rec = $JSON->decode($line);
+  print STDOUT to_toml($rec), "\n";
+}
