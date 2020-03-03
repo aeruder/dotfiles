@@ -739,6 +739,8 @@
 (add-to-list 'interpreter-mode-alist '("raku" . perl6-mode))
 (add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
 
+(add-hook 'conf-toml-mode-hook
+          (lambda () (modify-syntax-entry ?_ "w")))
 ;; Put backup files neatly away
 
 (let ((backup-dir "~/.emacs.d/backups")
