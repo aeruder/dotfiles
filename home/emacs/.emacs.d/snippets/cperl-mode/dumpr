@@ -1,0 +1,1 @@
+require DDP; &DDP::p({ '$1' => ${1:\$var} }, class => { expand => 'all' });$0
