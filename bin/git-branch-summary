@@ -84,7 +84,14 @@ for my $branch_info (@branches) {
     $branch_info->{behind},
     $branch_info->{msg});
   if ($verbose) {
-    open my $fh, "-|", qw(git diff --name-only), $branch_info->{merge_base}."..".$branch_info->{sha};
+    open my $fh, "-|", qw(git rev-list --abbrev-commit), "--pretty=format:%h - %s (%an)",
+      $branch_info->{merge_base}."..".$branch_info->{sha};
+    while (my $line = <$fh>) {
+      next if $line =~ /^commit /;
+      chomp $line;
+      print "  $line\n";
+    }
+    open $fh, "-|", qw(git diff --name-only), $branch_info->{merge_base}."..".$branch_info->{sha};
     while (my $line = <$fh>) {
       chomp $line;
       print "  $line\n";
