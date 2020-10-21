@@ -46,7 +46,7 @@
    :fetcher github
    :repo "quelpa/quelpa-use-package"))
 (require 'quelpa-use-package)
-;; (require 'use-package-ensure)
+(require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (quelpa-use-package-activate-advice)
 

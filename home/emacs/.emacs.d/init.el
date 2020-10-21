@@ -22,12 +22,14 @@
   :config
   (which-key-mode))
 
+(use-package undo-fu)
 (use-package evil
   :init
   (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
   (setq evil-want-integration nil)
   (setq evil-want-keybinding nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
+  (setq evil-undo-system 'undo-fu)
   :config
   (evil-mode 1))
 
@@ -131,6 +133,32 @@
     (if file
         (set-file-modes file 493))))
 
+(setq aeruder/scratch-dir
+  (cond
+    ((file-exists-p (expand-file-name "~/Projects/")) (expand-file-name "~/Projects/scratch"))
+    ((file-exists-p (expand-file-name "~/Project/")) (expand-file-name "~/Project/scratch"))
+    ((file-exists-p (expand-file-name "~/proj/")) (expand-file-name "~/proj/scratch"))
+    ((file-exists-p (expand-file-name "~/Documents/")) (expand-file-name "~/Documents/Scratch"))
+    (t (expand-file-name "~/scratch"))))
+
+(defun aeruder/new-scratch-file (filename)
+  "Create new scratch dir"
+  (interactive "sEnter scratch file name: ")
+  (let* ((ext (or (file-name-extension filename) "txt"))
+         (timedir (format-time-string "%Y-%m"))
+         (scratch (concat (file-name-as-directory aeruder/scratch-dir) timedir))
+         (bn (file-name-sans-extension filename))
+         (ver -1)
+         (done nil))
+    (unless (file-exists-p (file-name-as-directory scratch)) (mkdir scratch))
+    (while (and (not done) (< ver 1000))
+      (let ((testfile (cond ((= ver -1) (format "%s%s.%s" (file-name-as-directory scratch) bn ext))
+                            (t (format "%s%s.%03d.%s" (file-name-as-directory scratch) bn ver ext)))))
+        (unless (file-exists-p testfile)
+          (find-file testfile)
+          (setq done t)))
+      (setq ver (1+ ver)))))
+
 (defun aeruder/magit-remote-url (remote)
   (magit-git-str "remote" "get-url" remote))
 
@@ -166,14 +194,14 @@
     (let* (
            (remote (magit-get-upstream-remote branch))
            (full-branch (magit-get-upstream-branch branch)))
-      (if (string-match (format "^%s/\\(.*\\)" (regexp-quote remote)) full-branch)
+      (if (and remote full-branch (string-match (format "^%s/\\(.*\\)" (regexp-quote remote)) full-branch))
           (match-string-no-properties 1 full-branch)
-        full-branch))))
+        (if full-branch full-branch (magit-rev-parse "HEAD"))))))
 
 (defun aeruder/copy-url-path ()
   (interactive)
   (aeruder/kill-new (aeruder/magit-browse-url
-                     (magit-get-upstream-remote)
+                     (or (magit-get-upstream-remote) (magit-get-current-remote))
                      (aeruder/magit-get-upstream-branch-minus-remote)
                      (aeruder/file-path t)
                      nil) t))
@@ -181,7 +209,7 @@
 (defun aeruder/copy-url-path-line ()
   (interactive)
   (aeruder/kill-new (aeruder/magit-browse-url
-                     (magit-get-upstream-remote)
+                     (or (magit-get-upstream-remote) (magit-get-current-remote))
                      (aeruder/magit-get-upstream-branch-minus-remote)
                      (aeruder/file-path t)
                      (line-number-at-pos)) t))
@@ -319,6 +347,8 @@
   "f e d" 'aeruder/edit-init-file
   "f e D" 'aeruder/ls-dotfiles
   "f e t" 'aeruder/edit-todo-file
+  "f n" '(nil :which-key "new")
+  "f n s" 'aeruder/new-scratch-file
   "f s" 'server-edit
   "f x" 'aeruder/make-file-executable
   "f y" '(nil :which-key "yank")
@@ -415,7 +445,8 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-challenger-deep t)
+  (load-theme 'doom-dracula t)
+  ;; (load-theme 'doom-manegarm t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -451,10 +482,6 @@
 ;; (use-package
 ;;   color-theme-sanityinc-tomorrow
 ;;   :config (color-theme-sanityinc-tomorrow-eighties))
-(use-package undo-tree
-  :diminish undo-tree-mode
-  :config
-  (global-undo-tree-mode))
 ;; (use-package ivy
 ;;   :diminish ivy-mode
 ;;   :config
@@ -562,7 +589,7 @@
   (setq cperl-font-lock t)
   (setq cperl-electric-keywords nil))
 
-(use-package perl6-mode)
+(use-package raku-mode)
 (use-package typescript-mode)
 
  ;; GO SETUP
@@ -754,7 +781,7 @@
 (add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("raku" . perl6-mode))
+(add-to-list 'interpreter-mode-alist '("raku" . raku-mode))
 (add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
 
 (add-hook 'conf-toml-mode-hook
