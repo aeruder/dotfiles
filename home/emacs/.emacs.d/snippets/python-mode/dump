@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Dump with pprint
+# key: dump
+# --
+import pprint; pprint.pprint({ '$1': ${1:var} })$0
