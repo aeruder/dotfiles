@@ -1,1 +1,0 @@
-command="/root/bin/rrsync -ro /",no-port-forwarding,no-X11-forwarding,no-pty ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAqTMy2R7/J0IJCIKfT/wXhn+UZCANmJXaPUTYRo2p4GuqvavhVyj/K1vI+NtcByvZc7hv4y92Q42+UwEARhAW0= root@kberry-pi-rdiff-backup
