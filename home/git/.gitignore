@@ -26,3 +26,4 @@ tags
 /.vscode/settings.json
 instruments*.trace
 .vstags
+/.docker-sync
