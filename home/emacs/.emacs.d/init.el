@@ -493,10 +493,10 @@
 ;;   :config
 ;;   (ivy-mode)
 ;;   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
-(setenv "FZF_DEFAULT_COMMAND" "rg --files --no-ignore --hidden -g !.git")
+(setenv "FZF_DEFAULT_COMMAND" "rg --files --no-ignore --hidden -g !.git -g !node_modules")
 (use-package ripgrep
   :config
-  (setq ripgrep-arguments (split-string "--hidden --no-ignore --max-columns 400 -g !.git")))
+  (setq ripgrep-arguments (split-string "--hidden --no-ignore --max-columns 400 -g !.git -g !node_modules")))
 (use-package projectile-ripgrep)
 (use-package projectile
   :diminish projectile-mode
@@ -700,6 +700,7 @@
                                             "--max-columns" "400"
                                             "--no-ignore"
                                             "-g" "!.git"
+                                            "-g" "node_modules"
                                             "--"
                                             helm-pattern)))
          (proc (apply 'start-file-process "helm-ripgrep" helm-buffer cmd-args)))
