@@ -1800,20 +1800,6 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd "V" edit-command-line
 
-# Auto-use rr-zr sometimes
-my-accept-line () {
-  if [[ "$PWD" == "/Users/aeruder/ziprecruiter" ]] && {
-       [[ "$BUFFER" == "bin/"* ]] ||
-       [[ "$BUFFER" == "app/"* ]] ||
-       [[ "$BUFFER" == "yath "* ]] ||
-       false
-     } ; then
-    BUFFER="rr-zr ${BUFFER}"
-  fi
-  zle .accept-line
-}
-zle -N accept-line my-accept-line
-
 ##################################
 # sudo vim -> sudoedit
 ##################################
