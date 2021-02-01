@@ -3,12 +3,15 @@
 unset ALTERNATE_EDITOR
 
 files=("$@")
+exe=(vi)
 
-if false; then
-    exe=(vim)
-elif which emacsclient 2> /dev/null > /dev/null &&
+if which emacsclient 2> /dev/null > /dev/null &&
+    exe=()
+    if [ "$COLORTERM" = "truecolor" ] || [ "$TERM_PROGRAM" = "iTerm.app" ]; then
+      exe=(env TERM="xterm-24bits")
+    fi
     emacsclient -e t 2> /dev/null > /dev/null; then
-    exe=(emacsclient -q -nw)
+    exe=("${exe[@]}" emacsclient -q -nw)
     if [ ${#files[@]} = 0 ]; then
       files=(.)
     fi
@@ -16,7 +19,7 @@ elif which emacsclient 2> /dev/null > /dev/null &&
 #     exe=(code --wait)
 elif which nvim 2> /dev/null > /dev/null; then
     exe=(nvim)
-else
+elif which vim 2> /dev/null > /dev/null; then
     exe=(vim)
 fi
 exec "${exe[@]}" "${files[@]}"
