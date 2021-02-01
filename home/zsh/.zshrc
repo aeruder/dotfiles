@@ -1905,3 +1905,7 @@ if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
     return $ret
   }
 fi
+
+if ([ $TILIX_ID ] || [ $VTE_VERSION ]) && test -e /etc/profile.d/vte.sh; then
+        source /etc/profile.d/vte.sh
+fi
