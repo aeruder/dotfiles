@@ -1836,7 +1836,7 @@ function __no_hist_print() {
 }
 function nohist() {
     PR_FLAGS+=(__no_hist_print)
-    HISTFILE=/dev/null
+    unset HISTFILE
 }
 alias nohist=' nohist'
 
