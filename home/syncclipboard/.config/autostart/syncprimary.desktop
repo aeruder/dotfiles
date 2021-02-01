@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sync Primary
+Exec=autocutsel -selection PRIMARY
+Type=Application
+Categories=Development;

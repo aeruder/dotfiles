@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sync Clipboard
+Exec=autocutsel -selection CLIPBOARD
+Type=Application
+Categories=Development;
