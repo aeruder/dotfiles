@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
-require 'yaml'
+require 'psych'
 require 'json'
 
-print JSON.generate YAML.load $stdin.read
+Psych.load_stream($stdin.read) do |o|
+  puts JSON.generate o
+end
