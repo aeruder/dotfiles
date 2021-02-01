@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+if [ $# = 3 ] && [ "$1" = "internal-swap" ]; then
+  # This is called inside the container as root and running in sh, not
+  # bash
+  shift
+  user="$1"; shift
+  uid="$1"; shift
+  sed -i -e "/^${user}:/ s/^\([^:]*:[^:]*:\)\([0-9][0-9]*\)\(:.*\)/\1${uid}\3/" /etc/passwd || exit
+  exit 0
+fi
+
+set -o errexit -o pipefail -o nounset
+
+if [ $# != 1 ]; then
+  echo "Usage: $0 <image>"
+  exit 1
+fi
+
+tempdir=$(mktemp -d -t dockaddpkg.XXXXXX)
+trap "rm -fr $tempdir" EXIT
+
+function join_by { local IFS="$1"; shift; echo "$*"; }
+function quotecmd {
+  local a
+  local ARG
+  for a in "$@"; do
+    if [ "$a" = "&&" ]; then
+      ARG+=("&&")
+    else
+      ARG+=("`printf "%q" "$a"`")
+    fi
+  done
+  join_by " " "${ARG[@]}"
+}
+
+IMAGE="$1"; shift
+ORIGUSER="`docker inspect $IMAGE | jq -rc .[0].Config.User`"
+MYUID="`id -u`"
+if [ -z "$ORIGUSER" ]; then
+  ORIGUSER="root"
+fi
+
+cp "$0" "$tempdir"/swappy.sh
+cat > "$tempdir"/Dockerfile <<EOF
+FROM $IMAGE as temp
+USER root
+COPY swappy.sh /swappy.sh
+RUN sh /swappy.sh internal-swap $ORIGUSER $MYUID ; rm -f /swappy.sh
+USER $ORIGUSER
+EOF
+cat "$tempdir"/Dockerfile
+
+docker build --target temp --tag "$IMAGE" "$tempdir"

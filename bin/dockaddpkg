@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 <image> <pkg1> ..."
+  exit 1
+fi
+
+IMAGE="$1"; shift
+dockruncmd "$IMAGE" apt-get update '&&' apt-get -y install "$@"

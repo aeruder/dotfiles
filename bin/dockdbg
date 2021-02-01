@@ -2,4 +2,4 @@
 
 set -o errexit -o pipefail -o nounset
 
-exec docker run -it --rm --entrypoint= --user root $1 /bin/bash
+exec docker run -it --rm --entrypoint= --user root "$@" /bin/sh

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 <image> <cmd>"
+  exit 1
+fi
+
+tempdir=$(mktemp -d -t dockaddpkg.XXXXXX)
+trap "rm -fr $tempdir" EXIT
+
+function join_by { local IFS="$1"; shift; echo "$*"; }
+function quotecmd {
+  local a
+  local ARG
+  for a in "$@"; do
+    if [ "$a" = "&&" ]; then
+      ARG+=("&&")
+    else
+      ARG+=("`printf "%q" "$a"`")
+    fi
+  done
+  join_by " " "${ARG[@]}"
+}
+
+IMAGE="$1"; shift
+CMD="`quotecmd "$@"`"
+ORIGUSER="`docker inspect $IMAGE | jq -rc .[0].Config.User`"
+if [ -z "$ORIGUSER" ]; then
+  ORIGUSER="root"
+fi
+
+cat > "$tempdir"/Dockerfile <<EOF
+FROM $IMAGE as temp
+USER root
+RUN $CMD
+USER $ORIGUSER
+EOF
+cat "$tempdir"/Dockerfile
+
+docker build --target temp --tag $IMAGE "$tempdir"
