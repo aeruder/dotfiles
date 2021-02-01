@@ -512,7 +512,13 @@
 ;; (use-package libgit
 ;;   :quelpa (libgit :fetcher github :repo "magit/libegit2"))
 (use-package magit
-  :quelpa (magit :fetcher github :repo "magit/magit"))
+  :quelpa (magit :fetcher github :repo "magit/magit"
+                 :files ("lisp/*.el"
+                         "Documentation/*.texi"
+                         "Documentation/*.org"
+                         "Documentation/*.md"
+                         "LICENSE"
+                         (:exclude "lisp/magit-libgit.el"))))
 (use-package evil-magit)
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
