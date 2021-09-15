@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+dir="`dirname "$0"`"
+export NO_COLOR=1
+exec "$dir"/ticker.sh $(cat "$dir"/ticker-symbols)

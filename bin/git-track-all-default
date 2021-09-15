@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+
+=head1 OVERVIEW
+
+git-track-all-master - Makes all untracked local branches track origin/HEAD
+
+=cut
+
+use feature ':5.14';
+use strict;
+use warnings 'all';
+use Data::Dumper ();
+use Capture::Tiny;
+$^W = 1;
+
+my $upstream_branch = get_default_branch();
+
+open my $fh, '-|', qw(git local-branches);
+
+while (my $branch = <$fh>) {
+  chomp $branch;
+
+  Capture::Tiny::capture_stdout {
+    system qw(git config), "branch.${branch}.remote";
+  };
+  next if $? == 0;
+  print "Updating $branch to track origin/$upstream_branch\n";
+  system qw(git config), "branch.${branch}.remote", "origin";
+  system qw(git config), "branch.${branch}.merge", "refs/heads/${upstream_branch}";
+}
+
+sub get_default_branch {
+  open my $fh, '-|', qw(git remote-default-branch origin);
+  my $line = <$fh>;
+  chomp $line;
+  $line =~ s|^origin/||;
+  return $line;
+}

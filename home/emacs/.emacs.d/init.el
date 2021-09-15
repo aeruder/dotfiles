@@ -26,7 +26,7 @@
 (use-package evil
   :init
   (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
-  (setq evil-want-integration nil)
+  (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
   (setq evil-undo-system 'undo-fu)
@@ -451,7 +451,8 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-dracula t)
+  ;; (load-theme 'doom-dracula t)
+  (load-theme 'doom-gruvbox t)
   ;; (load-theme 'doom-manegarm t)
 
   ;; Enable flashing mode-line on errors
@@ -519,7 +520,7 @@
                          "Documentation/*.md"
                          "LICENSE"
                          (:exclude "lisp/magit-libgit.el"))))
-(use-package evil-magit)
+;; (use-package evil-magit)
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
   :config
@@ -528,12 +529,24 @@
   :diminish editorconfig-mode
   :config
   (editorconfig-mode 1))
-(use-package lsp-mode)
+(use-package lsp-mode
+  :config
+  (setq lsp-enable-file-watchers nil)
+  :hook (go-mode . lsp-deferred))
+
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-peek-enable t
+        lsp-ui-sideline-enable t
+        lsp-ui-imenu-enable t
+        lsp-ui-flycheck-enable t)
+  :init)
 (use-package company
   :diminish company-mode
   :config
+  (setq company-tooltip-align-annotations t)
   (add-hook 'after-init-hook 'global-company-mode))
-(use-package company-lsp)
 
 (use-package evil-escape
   :diminish evil-escape-mode
@@ -553,8 +566,13 @@
   (global-evil-surround-mode 1))
 (use-package evil-easymotion)
 (use-package evil-numbers)
-(use-package evil-search-highlight-persist)
-(use-package evil-org)
+;; (use-package evil-search-highlight-persist)
+(use-package evil-org
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 (use-package lispy
   :commands lispy-mode
   :init
@@ -584,18 +602,28 @@
  'org-babel-load-languages
  '((sql . t)))
 
-(use-package cperl-mode
-  :quelpa (cperl-mode :fetcher github :repo "aeruder/cperl-mode")
-  :init
-  (setq cperl-indent-parens-as-block t)
-  (setq cperl-close-paren-offset -2)
-  (setq cperl-under-as-char t)
-  (setq cperl-hairy nil)
-  (setq cperl-font-lock t)
-  (setq cperl-electric-keywords nil))
+(setq cperl-indent-parens-as-block t)
+(setq cperl-close-paren-offset -2)
+(setq cperl-under-as-char t)
+(setq cperl-hairy nil)
+(setq cperl-font-lock t)
+(setq cperl-electric-keywords nil)
+
+;; (use-package cperl-mode
+;;   :quelpa (cperl-mode :fetcher github :repo "aeruder/cperl-mode")
+;;   :init
+;;   (setq cperl-indent-parens-as-block t)
+;;   (setq cperl-close-paren-offset -2)
+;;   (setq cperl-under-as-char t)
+;;   (setq cperl-hairy nil)
+;;   (setq cperl-font-lock t)
+;;   (setq cperl-electric-keywords nil))
 
 (use-package raku-mode)
-(use-package typescript-mode)
+(use-package typescript-mode
+  :commands typescript-mode
+  :config
+  (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
  ;; GO SETUP
 (use-package go-mode)
@@ -619,6 +647,28 @@
 (use-package dockerfile-mode)
 (use-package processing-mode)
 (use-package rjsx-mode)
+(use-package js2-mode)
+(use-package tide)
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+(use-package web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                (setup-tide-mode))))
+  ;; enable typescript-tslint checker
+  (flycheck-add-mode 'typescript-tslint 'web-mode))
 
 (use-package origami
   :config

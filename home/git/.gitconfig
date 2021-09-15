@@ -23,16 +23,18 @@
 	smur = submodule update --recursive
 	st = ls-files -d -m -o -v --directory --no-empty-directory --exclude-per-directory=.gitignore
 	stat = status
-	tr = branch -u origin/master
+	tr = branch -u origin/HEAD
 	d = diff
 	p = pull
 	lp = log -p
 	f = fetch
-	rbm = rebase -i origin/master
+	rbm = rebase -i origin/HEAD
 	rbu = rebase -i
 	ls = log --stat
 	br = branch
 	bs = branch-summary
+	pushf = push --force-with-lease
+	fetchp = fetch --prune
 [color]
 	ui = auto
 [merge]
@@ -42,6 +44,7 @@
 	default = current
 [log]
 	decorate = True
+	date = format-local:%c %z
 [diff]
 	renames = copy
 [am]
@@ -67,6 +70,7 @@
 	pushInsteadOf = git://github.com/
 [rebase]
 	autoStash = true
+	autoSquash = true
 [commit]
 	verbose = true
 [gc]
@@ -82,3 +86,9 @@
 	useSparse = true
 [feature]
 	manyFiles = true
+[credential]
+	helper = 
+[credential "https://git.zr.org"]
+	helper = /home/aeruder/go/bin/zam git-credential-gitlab
+[credential "https://test-git.zr.org"]
+	helper = /home/aeruder/go/bin/zam git-credential-gitlab

@@ -1,0 +1,34 @@
+# -*- mode: snippet -*-
+# key: getopts
+# --
+#!/usr/bin/env perl
+
+use Getopt::Long qw(GetOptions);
+use Pod::Usage qw(pod2usage);
+
+{
+  my $prev_config = Getopt::Long::Configure(
+    qw(no_auto_abbrev no_ignore_case bundling)
+  );
+  GetOptions(
+    "help|h" => \\(my $help),
+  ) or pod2usage(-verbose => 1);
+  pod2usage(-verbose => 2) if $help;
+  Getopt::Long::Configure($prev_config);
+};
+
+__END__
+
+=head1 SYNOPSIS
+
+`(buffer-name)` [options] <args>
+
+=head1 ARGUMENTS
+
+=head1 OPTIONS
+
+=head2 --help
+
+This help
+
+=cut

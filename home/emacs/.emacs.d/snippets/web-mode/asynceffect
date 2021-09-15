@@ -1,0 +1,10 @@
+useEffect(() => {
+$>const ${2:fetchData} = async (): Promise<${1:string}> => {
+$>$>return "the end";
+$>};
+$>$2().then(good => {
+$>$>setResult(good);
+$>}, error => {
+$>$>setError(error.toString());
+$>});
+}, []);

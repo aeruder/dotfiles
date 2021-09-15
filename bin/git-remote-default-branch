@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+REMOTE="${1:-origin}"
+
+if ! res=$(git symbolic-ref refs/remotes/"$REMOTE"/HEAD); then
+  exit 1
+fi
+
+echo ${res#refs/remotes/}

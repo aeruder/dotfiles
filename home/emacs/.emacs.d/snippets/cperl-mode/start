@@ -3,10 +3,11 @@
 # --
 #!/usr/bin/env perl
 
-use v5.32;
+use v5.34;
 use utf8;
 use warnings;
 use open qw(:std :utf8);
 no feature qw(indirect);
-use feature qw(signatures);
+use feature qw(signatures try);
 no warnings qw(experimental::signatures);
+no warnings qw(experimental::try);

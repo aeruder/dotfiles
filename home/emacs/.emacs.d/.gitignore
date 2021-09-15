@@ -51,3 +51,4 @@ tramp
 
 /transient
 /async-bytecomp.log
+/eln-cache
