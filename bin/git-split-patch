@@ -1,0 +1,65 @@
+#!/usr/bin/env perl
+
+use v5.34;
+use utf8;
+use warnings;
+use open qw(:std :utf8);
+no feature qw(indirect);
+use feature qw(signatures try);
+no warnings qw(experimental::signatures);
+no warnings qw(experimental::try);
+use Getopt::Long qw(GetOptions);
+use Pod::Usage qw(pod2usage);
+
+{
+  my $prev_config = Getopt::Long::Configure(
+    qw(no_auto_abbrev no_ignore_case bundling)
+  );
+  GetOptions(
+    "help|h" => \(my $help),
+  ) or pod2usage(-verbose => 1);
+  pod2usage(-verbose => 2) if $help;
+  Getopt::Long::Configure($prev_config);
+};
+if (@ARGV < 2) {
+  pod2usage(-verbose => 2);
+}
+
+my $commit = shift @ARGV;
+
+$commit = get_sha($commit);
+
+system(qw(git checkout), "${commit}^", @ARGV) == 0 or
+  die "git checkout failed: $?";
+system(qw(git commit --fixup), $commit) == 0 or
+  die "git commit failed: $?";
+system(qw(git checkout), $commit, @ARGV) == 0 or
+  die "git checkout failed: $?";
+system(qw(git commit -c), $commit) == 0 or
+  die "git commit failed: $?";
+
+sub get_sha($desc) {
+  open my $fh, '-|', qw(git rev-parse), $desc;
+  my $line = <$fh>;
+  chomp $line;
+  close $fh;
+  die "git rev-parse $desc failed: $?"
+    if $? != 0;
+  return $line;
+}
+
+__END__
+
+=head1 SYNOPSIS
+
+git-split-patch [options] <commit> <path>
+
+=head1 ARGUMENTS
+
+=head1 OPTIONS
+
+=head2 --help
+
+This help
+
+=cut
