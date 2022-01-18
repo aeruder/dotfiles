@@ -84,12 +84,20 @@
 (defun aeruder/kill-other-buffers ()
   "Kill all other buffers."
   (interactive)
-  (mapc 'kill-buffer
-        (delq (current-buffer)
-              (-select (lambda (b)
-                         (or (buffer-file-name b)
-                             (eq 'dired-mode (buffer-local-value 'major-mode b))))
-                       (buffer-list)))))
+  (print "starting")
+  (let* ((xterm-set-window-title nil)
+          (list (delq (current-buffer) (buffer-list))
+            ))
+  (dolist (element list)
+      (print element)
+      (if (and (not (buffer-modified-p element))
+               (not (get-buffer-window element t)))
+        (progn
+          ;; (print element)
+          (ignore-errors
+            (kill-buffer element))
+            ))
+      )))
 
 (defun aeruder/kill-all-buffers ()
   "Kill all other buffers."
@@ -532,7 +540,9 @@
 (use-package lsp-mode
   :config
   (setq lsp-enable-file-watchers nil)
-  :hook (go-mode . lsp-deferred))
+  :hook
+  (go-mode . lsp-deferred)
+  (rust-mode . lsp-deferred))
 
 (use-package lsp-ui
   :config
@@ -636,6 +646,14 @@
   (setq-local whitespace-style (remove 'tab-mark whitespace-style))
   (go-guru-hl-identifier-mode))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+;; RUST
+(use-package rust-mode
+  :config
+  (setq rust-mode-on-save t))
+(defun my-rust-mode-hook ()
+  (setq indent-tabs-mode nil))
+(add-hook 'rust-mode-hook 'my-rust-mode-hook)
 
 (use-package diff-hl
   :config
@@ -839,6 +857,9 @@
 (add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
 (add-to-list 'interpreter-mode-alist '("raku" . raku-mode))
 (add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
+
+(add-hook 'c-mode-hook
+          (lambda () (modify-syntax-entry ?_ "w")))
 
 (add-hook 'conf-toml-mode-hook
           (lambda () (modify-syntax-entry ?_ "w")))
