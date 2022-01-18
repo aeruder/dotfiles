@@ -52,3 +52,5 @@ tramp
 /transient
 /async-bytecomp.log
 /eln-cache
+
+/.lsp-session-v1
