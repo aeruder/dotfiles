@@ -92,3 +92,5 @@
 	helper = /home/aeruder/go/bin/zam git-credential-gitlab
 [credential "https://test-git.zr.org"]
 	helper = /home/aeruder/go/bin/zam git-credential-gitlab
+[init]
+	defaultBranch = main
