@@ -520,13 +520,12 @@
 (use-package org)
 ;; (use-package libgit
 ;;   :quelpa (libgit :fetcher github :repo "magit/libegit2"))
+(use-package with-editor
+  :quelpa (with-editor :fetcher github :repo "magit/with-editor"
+                 :files ("lisp/*.el")))
 (use-package magit
   :quelpa (magit :fetcher github :repo "magit/magit"
                  :files ("lisp/*.el"
-                         "Documentation/*.texi"
-                         "Documentation/*.org"
-                         "Documentation/*.md"
-                         "LICENSE"
                          (:exclude "lisp/magit-libgit.el"))))
 ;; (use-package evil-magit)
 (use-package vi-tilde-fringe
@@ -692,11 +691,11 @@
   :config
   (global-origami-mode))
 
-(use-package helm-config
-  :quelpa (helm-config :fetcher github :repo "aeruder/helm")
+(use-package helm
+  :quelpa (helm :fetcher github :repo "emacs-helm/helm")
   :config
-  (require 'helm)
 
+  (require 'helm-config)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
   (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
