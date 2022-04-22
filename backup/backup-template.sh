@@ -6,10 +6,17 @@
 # gpg --gen-key
 # gpg --list-keys
 
+# 0 8 * * 1,2,3,4,5,6 chronic /root/backup.sh
+# 0 8 * * 7 chronic env FULL=1 /root/backup.sh
+
+# Generate a ssh key (ssh-keygen -f ~/.ssh/id_backup)
+# Copy into authorized_keys on remote
+# Run env FULL=1 /root/backup.sh once
+
 SIGNATURE=FOO
 export PASSPHRASE='BAR'
-REMOTE_ROOT=/mnt/backup/duplicity/HOST
-REMOTE_HOST=HOST
+REMOTE_ROOT=/mnt/backup/duplicity/OUR_HOST
+REMOTE_HOST=REMOTE_HOST
 MODE=incremental
 if [ "$FULL" = 1 ]; then
   MODE=full
