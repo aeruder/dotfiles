@@ -638,7 +638,7 @@
  ;; GO SETUP
 (use-package go-mode)
 (use-package company-go)
-(use-package flymake-go)
+;; (use-package flymake-go)
 (use-package go-guru)
 (defun my-go-mode-hook ()
   (add-hook 'before-save-hook 'gofmt-before-save t t)
