@@ -5,6 +5,7 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
+(setq package-native-compile t)
 
 (add-to-list 'default-frame-alist '(font . "IBM Plex Mono-11"))
 
