@@ -1764,6 +1764,7 @@ alias irb='irb --readline -r irb/completion'
 alias dh='dirs -v'
 alias rg='rg --hidden --no-ignore -g !.git'
 alias cpmg='cpm install --global'
+alias mplayer='unshare -cn mplayer'
 
 alias -g CA="2>&1 | cat -A"
 alias -g CNT='| wc -l'
