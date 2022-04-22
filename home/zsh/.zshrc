@@ -1911,3 +1911,7 @@ fi
 if ([ $TILIX_ID ] || [ $VTE_VERSION ]) && test -e /etc/profile.d/vte.sh; then
         source /etc/profile.d/vte.sh
 fi
+
+if [ -e "$HOME"/.asdf/asdf.sh ]; then
+  source "$HOME"/.asdf/asdf.sh
+fi
