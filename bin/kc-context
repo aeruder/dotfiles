@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+if ! command -v fzf &> /dev/null; then
+   echo "must install fzf" >&2
+   exit 1
+fi
+
+if ! command -v kubectl &> /dev/null; then
+   echo "must install kubectl" >&2
+   exit 1
+fi
+
+run() {
+  echo "$@" >&2
+  "$@"
+}
+
+context=$(
+  run kubectl config get-contexts |
+    tr -s ' ' |
+    sed -e 's/ /,/g' |
+    cut -d, -f2 |
+    tail -n +2 |
+    fzf --header="Select context"
+)
+namespace=$(
+  run kubectl --context="$context" get namespaces -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' |
+    sed '$d' |
+    fzf --header="Select namespace"
+)
+
+run kubectl config use-context "$context" > /dev/null
+run kubectl config set-context --current --namespace="$namespace" > /dev/null
