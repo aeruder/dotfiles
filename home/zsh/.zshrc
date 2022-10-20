@@ -1883,15 +1883,17 @@ function pr_aeruder_host {
     echo "%{${pr_aeruder_fg_host}%}${USERNAME[1]}@${short_hostname} "
 }
 
-source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
+if [ -z "$INSIDE_EMACS" ]; then
+  source ~/.dotfiles/home/iterm2/.iterm2_shell_integration/zsh_startup.in
+fi
 
 if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
   function ssh {
-    if [ $# = 1 ]; then
-      printf "\033]1337;RemoteHost=%s@%s\007" "$USER" "$1"
-    fi
+    # if [ $# = 1 ]; then
+    #   printf "\033]1337;RemoteHost=%s@%s\007" "$USER" "$1"
+    # fi
 
-    printf "\033]1337;SetProfile=%s\007" "remote"
+    # printf "\033]1337;SetProfile=%s\007" "remote"
 
     local has_pokemon=0
     if which pokemon >/dev/null 2>&1; then
@@ -1908,7 +1910,7 @@ if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
       pokemon -c
     fi
 
-    printf "\033]1337;SetProfile=%s\007" "Default"
+    # printf "\033]1337;SetProfile=%s\007" "Default"
 
     return $ret
   }
