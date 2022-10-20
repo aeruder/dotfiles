@@ -6,6 +6,7 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 (setq package-native-compile t)
+(setq warning-suppress-types '((comp)))
 
 (add-to-list 'default-frame-alist '(font . "IBM Plex Mono-11"))
 
