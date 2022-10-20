@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec zsh -f -c 'set -a; source ./.env; set +a; exec "$@"' withenv "$@"
