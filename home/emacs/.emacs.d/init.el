@@ -525,6 +525,9 @@
 (use-package with-editor
   :quelpa (with-editor :fetcher github :repo "magit/with-editor"
                  :files ("lisp/*.el")))
+(use-package transient
+  :quelpa (transient :fetcher github :repo "magit/transient"
+                 :files ("lisp/*.el")))
 (use-package magit
   :quelpa (magit :fetcher github :repo "magit/magit"
                  :files ("lisp/*.el"
@@ -538,21 +541,21 @@
   :diminish editorconfig-mode
   :config
   (editorconfig-mode 1))
-(use-package lsp-mode
-  :config
-  (setq lsp-enable-file-watchers nil)
-  :hook
-  (go-mode . lsp-deferred)
-  (rust-mode . lsp-deferred))
+;; (use-package lsp-mode
+;;   :config
+;;   (setq lsp-enable-file-watchers nil)
+;;   :hook
+;;   (go-mode . lsp-deferred)
+;;   (rust-mode . lsp-deferred))
 
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-peek-enable t
-        lsp-ui-sideline-enable t
-        lsp-ui-imenu-enable t
-        lsp-ui-flycheck-enable t)
-  :init)
+;; (use-package lsp-ui
+;;   :config
+;;   (setq lsp-ui-doc-enable nil
+;;         lsp-ui-peek-enable t
+;;         lsp-ui-sideline-enable t
+;;         lsp-ui-imenu-enable t
+;;         lsp-ui-flycheck-enable t)
+;;   :init)
 (use-package company
   :diminish company-mode
   :config
@@ -661,6 +664,11 @@
   (global-diff-hl-mode)
   (diff-hl-margin-mode 1)
   (diff-hl-flydiff-mode 1))
+
+;; (use-package elixir-mode)
+;; (setq elixir-format-arguments
+;;   (list "--dot-formatter" "/path/to/.formatter.exs"))
+(use-package alchemist)
 
 (use-package terraform-mode)
 (use-package dockerfile-mode)
