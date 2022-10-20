@@ -54,3 +54,6 @@ tramp
 /eln-cache
 
 /.lsp-session-v1
+
+# lsp seems to use this
+/.cache
