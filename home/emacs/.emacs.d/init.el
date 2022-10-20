@@ -541,12 +541,12 @@
   :diminish editorconfig-mode
   :config
   (editorconfig-mode 1))
-;; (use-package lsp-mode
-;;   :config
-;;   (setq lsp-enable-file-watchers nil)
-;;   :hook
-;;   (go-mode . lsp-deferred)
-;;   (rust-mode . lsp-deferred))
+
+(use-package lsp-mode
+  :commands lsp
+  :diminish lsp-mode
+  :hook
+  (elixir-mode . lsp))
 
 ;; (use-package lsp-ui
 ;;   :config
@@ -665,10 +665,8 @@
   (diff-hl-margin-mode 1)
   (diff-hl-flydiff-mode 1))
 
-;; (use-package elixir-mode)
-;; (setq elixir-format-arguments
-;;   (list "--dot-formatter" "/path/to/.formatter.exs"))
-(use-package alchemist)
+(use-package elixir-mode)
+(use-package exunit)
 
 (use-package terraform-mode)
 (use-package dockerfile-mode)
