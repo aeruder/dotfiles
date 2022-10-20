@@ -1788,6 +1788,8 @@ alias -g NUL="> /dev/null 2>&1"
 alias -g S='| sort'
 alias -g T='| tail'
 alias -g US='| sort -u'
+alias kc='kubectl'
+alias kcc='kc-context'
 
 ##################################
 # Keybindings
