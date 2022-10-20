@@ -1618,7 +1618,11 @@ fi
 
 # COMPLETION
 # Add zsh-completions to $fpath.
-fpath=("${0:h}/external/src" $fpath)
+fpath=("${HOME}/.dotfiles/zsh/func" $fpath)
+
+if type brew > /dev/null; then
+    fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
+fi
 
 # Load and initialize the completion system ignoring insecure directories.
 autoload -Uz compinit && compinit -i
