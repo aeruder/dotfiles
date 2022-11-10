@@ -252,7 +252,7 @@
   (let (string)
     (unless (mark)
       (error "No region selected"))
-    (shell-command-on-region (region-beginning) (region-end) "cli-sql-formatter" t t)))
+    (shell-command-on-region (region-beginning) (region-end) "sql-formatter-cli" t t)))
 
 (defun aeruder/reset-buffer-major-mode ()
   (interactive)
