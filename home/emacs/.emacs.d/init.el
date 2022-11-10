@@ -24,14 +24,29 @@
   :config
   (which-key-mode))
 
-(use-package undo-fu)
+(use-package vundo
+  :config
+  ;; Use `HJKL` VIM-like motion, also Home/End to jump around.
+  (define-key vundo-mode-map (kbd "l") #'vundo-forward)
+  (define-key vundo-mode-map (kbd "<right>") #'vundo-forward)
+  (define-key vundo-mode-map (kbd "h") #'vundo-backward)
+  (define-key vundo-mode-map (kbd "<left>") #'vundo-backward)
+  (define-key vundo-mode-map (kbd "j") #'vundo-next)
+  (define-key vundo-mode-map (kbd "<down>") #'vundo-next)
+  (define-key vundo-mode-map (kbd "k") #'vundo-previous)
+  (define-key vundo-mode-map (kbd "<up>") #'vundo-previous)
+  (define-key vundo-mode-map (kbd "<home>") #'vundo-stem-root)
+  (define-key vundo-mode-map (kbd "<end>") #'vundo-stem-end)
+  (define-key vundo-mode-map (kbd "q") #'vundo-quit)
+  (define-key vundo-mode-map (kbd "C-g") #'vundo-quit)
+  (define-key vundo-mode-map (kbd "RET") #'vundo-confirm))
 (use-package evil
   :init
   (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
-  (setq evil-undo-system 'undo-fu)
+  (setq evil-undo-system 'undo-redo)
   :config
   (evil-mode 1))
 
