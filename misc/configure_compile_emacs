@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+function run() {
+    echo "RUNNING: $@" >&2
+    "$@"
+}
+
+run ./autogen.sh
+run rm -fr build
+run mkdir -p build
+(
+run cd build
+run ../configure --with-native-compilation --with-json '--program-transform-name=s/^ctags$/ctags.emacs/' --prefix=/Users/aruder/.local --without-ns --without-x --with-mailutils
+run make -j8
+run make install
+)
