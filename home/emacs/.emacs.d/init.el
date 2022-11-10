@@ -172,13 +172,21 @@
 (defun aeruder/magit-remote-url (remote)
   (magit-git-str "remote" "get-url" remote))
 
+(defun aeruder/magit-normalize-ssh-host (host)
+  (let* ((ssh-command (format "/usr/bin/env ssh -TG %s" host))
+         (config-output (shell-command-to-string ssh-command))
+         (lines (split-string config-output "\n"))
+         (hostname-config (seq-find (lambda (x) (string-match-p "^hostname " x)) lines (format "hostname %s" host)))
+         (hostname (replace-regexp-in-string "^hostname " "" hostname-config)))
+    hostname))
+
 (defun aeruder/magit-remote-host (remote)
   (save-match-data
     (let* ((remote-url (aeruder/magit-remote-url remote)))
       (if (string-match "^[a-z]+://\\([^/]+\\)" remote-url)
           (match-string-no-properties 1 remote-url)
         (if (string-match "\\([a-zA-Z0-9_.-]+\\):" remote-url)
-            (match-string-no-properties 1 remote-url)
+            (aeruder/magit-normalize-ssh-host (match-string-no-properties 1 remote-url))
           nil)))))
 
 (defun aeruder/magit-remote-repo (remote)
