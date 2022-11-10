@@ -571,14 +571,14 @@
   :hook
   (elixir-mode . lsp))
 
-;; (use-package lsp-ui
-;;   :config
-;;   (setq lsp-ui-doc-enable nil
-;;         lsp-ui-peek-enable t
-;;         lsp-ui-sideline-enable t
-;;         lsp-ui-imenu-enable t
-;;         lsp-ui-flycheck-enable t)
-;;   :init)
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-peek-enable t
+        lsp-ui-sideline-enable t
+        lsp-ui-imenu-enable t
+        lsp-ui-flycheck-enable t)
+  :init)
 (use-package company
   :diminish company-mode
   :config
