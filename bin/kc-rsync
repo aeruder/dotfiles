@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+pod="$1"; shift
+
+pod=$(echo "$pod" | sed -e 's/--/\//g')
+kubectl exec -i "$pod" -- "$@"

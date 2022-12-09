@@ -5,13 +5,15 @@ use warnings;
 use v5.10;
 use JSON::XS;
 use YAML::XS qw(Dump);
+use JSON::PP ();
 
 binmode(STDIN, ":raw");
 binmode(STDOUT, ":raw");
 
-my $JSON = JSON::XS->new->utf8;
+my $JSON = JSON::XS->new->utf8->boolean_values($JSON::PP::false, $JSON::PP::true);
 
 while (my $line = <STDIN>) {
+  local $YAML::XS::Boolean = "JSON::PP";
   my $rec = $JSON->decode($line);
   print STDOUT Dump($rec);
 }
