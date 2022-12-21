@@ -48,7 +48,6 @@ use Pod::Usage;
 use AnyEvent;
 use AnyEvent::Loop;
 
-my $host = "sandbox";
 my $verbose;
 my $noaction;
 my $dryrun;
@@ -56,7 +55,6 @@ my $help;
 
 GetOptions(
   "verbose" => \$verbose,
-  "host=s" => \$host,
   "noaction|no-action" => \$noaction,
   "dry-run" => \$dryrun,
   "help|?" => \$help,
