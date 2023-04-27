@@ -646,6 +646,8 @@
 (setq cperl-font-lock t)
 (setq cperl-electric-keywords nil)
 
+(add-hook 'python-mode-hook (lambda () (editorconfig-mode 0)))
+
 ;; (use-package cperl-mode
 ;;   :quelpa (cperl-mode :fetcher github :repo "aeruder/cperl-mode")
 ;;   :init
