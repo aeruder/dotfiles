@@ -1,3 +1,4 @@
 #!/bin/sh
 
-exec zsh -f -c 'set -a; source ./.env; set +a; exec "$@"' withenv "$@"
+export WITHENV_ENVFILE=${ENVFILE:-./.env}
+exec zsh -f -c 'set -a; source "$WITHENV_ENVFILE"; set +a; unset WITHENV_ENVFILE; exec "$@"' withenv "$@"
