@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: Dump with pp
+# --
+require 'pp' ; puts({ '$1' => ${1:var} }.pretty_inspect)$0
