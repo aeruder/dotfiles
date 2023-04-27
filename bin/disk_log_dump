@@ -1,0 +1,25 @@
+#! /usr/bin/env elixir
+
+defmodule M do
+  def dump(file) do
+    filel = String.to_charlist(file)
+
+    {:ok, name} = :disk_log.open(name: :log, file: filel, mode: :read_only)
+
+    dump_disk_log([], name, :start)
+      |> Kernel.inspect(pretty: true, limit: :infinity)
+      |> IO.puts()
+    :disk_log.close(name)
+    :ok
+  end
+
+  defp dump_disk_log(so_far, name, cont) do
+    case :disk_log.chunk(name, cont) do
+      {:error, reason} -> raise reason
+      :eof -> so_far
+      {new_cont, results} -> dump_disk_log(so_far ++ results, name, new_cont)
+    end
+  end
+end
+
+System.argv() |> Enum.map(&M.dump/1)

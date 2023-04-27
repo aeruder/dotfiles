@@ -1,0 +1,91 @@
+#!/usr/bin/env elixir
+
+defmodule M do
+
+  @types [
+    :atoms,
+    :attributes,
+    :compile_info,
+    :debug_info,
+    :exports,
+    :imports,
+    # :index_imports,
+    :labeled_exports,
+    :labeled_locals,
+    :locals
+  ]
+
+  @ignore_raw_types [
+    'Atom',
+    'Attr',
+    'CInf',
+    'Dbgi',
+    'ExpT',
+    'ImpT',
+    # 'ImpT',
+    'ExpT',
+    'LocT',
+    'LocT',
+
+    # Things we take care of
+    'LitT'
+  ]
+
+  def dump(file) do
+    filel = String.to_charlist(file)
+
+    {:ok, {_module, res}} = :beam_lib.chunks(filel, @types, [:allow_missing_chunks])
+    {:ok, _module, raw_data} = :beam_lib.all_chunks(filel)
+    res = res |> Keyword.put(:literals, gen_literals(filel))
+    raw_data = raw_data |> Enum.filter(fn {chunk, _data} -> @ignore_raw_types |> Enum.member?(chunk) |> Kernel.!() end)
+    res
+      |> Keyword.put(:raw, raw_data)
+      |> Kernel.inspect(pretty: true, limit: :infinity)
+      |> IO.puts()
+    # {:ok, name} = :disk_log.open(name: :log, file: filel, mode: :read_only)
+
+    # dump_disk_log([], name, :start)
+    #   |> Kernel.inspect(pretty: true, limit: :infinity)
+    #   |> IO.puts()
+    # :disk_log.close(name)
+    :ok
+  end
+
+  def gen_literals(beam_file) do
+    {:ok, {_module, [{_type, data}]}} = :beam_lib.chunks(beam_file, ['LitT'], [:allow_missing_chunks])
+    decode_literals(data)
+  end
+
+  defp decode_literals(:missing_chunk) do
+    []
+  end
+
+  defp decode_literals(data) do
+    <<_len::binary-size(4), data1::binary>> = data
+    <<_::size(32), data_uncompressed::binary>> = :zlib.uncompress(data1)
+    decode_literal_chunk(data_uncompressed)
+  end
+
+  defp decode_literal_chunk(<< len::size(32), chunk::binary-size(len), rest::binary >>) do
+    [maybe_map_decode(chunk)|decode_literal_chunk(rest)]
+  end
+  defp decode_literal_chunk(<<>>) do
+    []
+  end
+
+  # we need to output maps in a way they won't show up as errant diffs
+  defp maybe_map_decode(bin) do
+    decoded = :erlang.binary_to_term(bin)
+    case decoded do
+      %{} -> {:was_map, bin, map_to_tuples(decoded)}
+      _ -> decoded
+    end
+  end
+
+  defp map_to_tuples(map) do
+    l = Map.to_list(map)
+    Enum.sort(l)
+  end
+end
+
+System.argv() |> Enum.map(&M.dump/1)

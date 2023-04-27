@@ -1,0 +1,8 @@
+#!/bin/bash
+filter=$1 ; shift
+in1=$1 ; shift
+in2=$1 ; shift
+diff -u \
+  --label "$filter $in1" <($filter "$in1") \
+  --label "$filter $in2" <($filter "$in2") \
+  "$@"

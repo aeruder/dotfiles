@@ -1,0 +1,27 @@
+#! /usr/bin/env elixir
+
+defmodule M do
+  def dump(file) do
+    filel = String.to_charlist(file)
+
+
+    {:ok, info} = :ets.tabfile_info(filel)
+
+    if info[:named_table] and :ets.whereis(info[:name]) != :undefined do
+      :ets.delete(info[:name])
+    end
+
+    {:ok, table} = :ets.file2tab(filel)
+    contents = :ets.tab2list(table)
+
+    [
+      tabfile_info: info,
+      info: :ets.info(table) |> Keyword.delete(:id),
+      contents: contents
+    ]
+      |> Kernel.inspect(pretty: true, limit: :infinity)
+      |> IO.puts()
+  end
+end
+
+System.argv() |> Enum.map(&M.dump/1)
