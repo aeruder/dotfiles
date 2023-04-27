@@ -560,10 +560,10 @@
   :diminish vi-tilde-fringe-mode
   :config
   (global-vi-tilde-fringe-mode))
-(use-package editorconfig
-  :diminish editorconfig-mode
-  :config
-  (editorconfig-mode 1))
+;; (use-package editorconfig
+;;   :diminish editorconfig-mode
+;;   :config
+;;   (editorconfig-mode 1))
 
 (use-package lsp-mode
   :commands lsp
