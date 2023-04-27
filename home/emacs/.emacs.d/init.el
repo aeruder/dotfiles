@@ -548,13 +548,8 @@
 (use-package with-editor
   :quelpa (with-editor :fetcher github :repo "magit/with-editor"
                  :files ("lisp/*.el")))
-(use-package transient
-  :quelpa (transient :fetcher github :repo "magit/transient"
-                 :files ("lisp/*.el")))
-(use-package magit
-  :quelpa (magit :fetcher github :repo "magit/magit"
-                 :files ("lisp/*.el"
-                         (:exclude "lisp/magit-libgit.el"))))
+(use-package transient)
+(use-package magit)
 ;; (use-package evil-magit)
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
