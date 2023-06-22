@@ -560,20 +560,22 @@
 ;;   :config
 ;;   (editorconfig-mode 1))
 
-(use-package lsp-mode
-  :commands lsp
-  :diminish lsp-mode
-  :hook
-  (elixir-mode . lsp))
+;; (use-package lsp-mode
+;;   :commands lsp
+;;   :diminish lsp-mode
+;;   :config
+;;   (setq lsp-enable-file-watchers nil)
+;;   :hook
+;;   (elixir-mode . lsp))
 
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-peek-enable t
-        lsp-ui-sideline-enable t
-        lsp-ui-imenu-enable t
-        lsp-ui-flycheck-enable t)
-  :init)
+;; (use-package lsp-ui
+;;   :config
+;;   (setq lsp-ui-doc-enable t
+;;         lsp-ui-peek-enable t
+;;         lsp-ui-sideline-enable t
+;;         lsp-ui-imenu-enable t
+;;         lsp-ui-flycheck-enable t)
+;;   :init)
 (use-package company
   :diminish company-mode
   :config
@@ -723,7 +725,7 @@
   :quelpa (helm :fetcher github :repo "emacs-helm/helm")
   :config
 
-  (require 'helm-config)
+  (require 'helm-autoloads)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
   (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
