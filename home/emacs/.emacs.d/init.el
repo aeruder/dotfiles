@@ -520,8 +520,8 @@
 ;;   borland-blue-theme
 ;;   :config (load-theme 'borland-blue t))
 (use-package
-  color-theme-sanityinc-tomorrow
-  :config (color-theme-sanityinc-tomorrow-blue))
+  cyberpunk-theme
+  :config (load-theme 'cyberpunk t))
 ;; (use-package ivy
 ;;   :diminish ivy-mode
 ;;   :config
