@@ -1,4 +1,13 @@
 #!/bin/sh
 
+if [ "$#" = 0 ]; then
+    echo "Usage: $0 [.envfile] <program...>" >&2
+    exit 1
+fi
+
+if basename "$1" | grep -q '^\.env' ; then
+    ENVFILE="$1"; shift
+fi
+
 export WITHENV_ENVFILE=${ENVFILE:-./.env}
 exec zsh -f -c 'set -a; source "$WITHENV_ENVFILE"; set +a; unset WITHENV_ENVFILE; exec "$@"' withenv "$@"
