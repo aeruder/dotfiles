@@ -1849,6 +1849,14 @@ function nohist() {
 }
 alias nohist=' nohist'
 
+function __aws_profile_print() {
+    echo "${AWS_PROFILE:-<unset>}"
+}
+function set-aws-profile() {
+    export AWS_PROFILE="$1"
+    PR_FLAGS+=(__aws_profile_print)
+}
+
 [ -z "$SSH_CLIENT" ] || export COLORTERM=truecolor
 
 if [ -e ~/.zshrc.local ]; then
