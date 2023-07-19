@@ -520,8 +520,8 @@
 ;;   borland-blue-theme
 ;;   :config (load-theme 'borland-blue t))
 (use-package
-  cyberpunk-theme
-  :config (load-theme 'cyberpunk t))
+  birds-of-paradise-plus-theme
+  :config (load-theme 'birds-of-paradise-plus t))
 ;; (use-package ivy
 ;;   :diminish ivy-mode
 ;;   :config
