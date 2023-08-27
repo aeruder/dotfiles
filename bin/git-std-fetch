@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+
+root = Pathname.new(ENV["HOME"]) + "repo"
+raise "root path #{root} does not exist" unless root.exist?
+
+todo = [root]
+gits = []
+until todo.empty?
+  f = todo.shift
+  if f.basename.to_s == ".git"
+    gits.push f
+  elsif f.directory?
+    todo.push *f.children
+  end
+end
+
+gits.sort!
+
+gits.each { |g|
+  cmd = [ "git", "-C", g.parent.to_s, "fetch", "--quiet" ]
+  $stderr.puts "Running: " + cmd.join(" ")
+  system(*cmd)
+}

@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'uri'
+
+raise "Usage: #{$0} <url>" unless ARGV.length == 1
+
+uri = URI(ARGV[0])
+
+root = Pathname.new(ENV["HOME"]) + "repo"
+raise "root path #{root} does not exist" unless root.exist?
+
+dst = root + "#{uri.host}#{uri.path}"
+
+if dst.exist?
+  $stderr.puts "#{dst} already exists"
+  exit 0
+end
+
+dst.parent.mkpath
+
+cmd = ["git", "clone", ARGV[0], dst.to_s]
+$stderr.puts "Running: #{cmd.join(" ")}"
+exec *cmd
