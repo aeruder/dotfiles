@@ -445,7 +445,7 @@ setopt UNSET
 
 # History
 
-setopt APPEND_HISTORY
+# setopt APPEND_HISTORY
 #        APPEND_HISTORY <D>
 #         If this is set, zsh sessions will append their history list to the
 #         history file, rather than replace it. Thus, multiple parallel zsh
@@ -460,7 +460,7 @@ setopt BANG_HIST
 #         Perform textual history expansion, csh-style, treating the character
 #         `!' specially.
 
-# setopt EXTENDED_HISTORY
+setopt EXTENDED_HISTORY
 #        EXTENDED_HISTORY <C>
 #         Save each command's beginning timestamp (in seconds since the epoch)
 #         and the duration (in seconds) to the history file.  The format of
@@ -477,7 +477,7 @@ setopt HIST_BEEP
 #         Beep when an attempt is made to access a history entry which isn't
 #         there.
 
-# setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_EXPIRE_DUPS_FIRST
 #        HIST_EXPIRE_DUPS_FIRST
 #         If  the  internal history needs to be trimmed to add the current
 #         command line, setting this option will cause the oldest history event
@@ -1836,8 +1836,8 @@ function man() {
 }
 
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=900000000
-SAVEHIST=100000
+HISTSIZE=250000
+SAVEHIST=200000
 DIRSTACKSIZE=20
 
 function __no_hist_print() {
