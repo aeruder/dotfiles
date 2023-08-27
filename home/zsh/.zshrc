@@ -1845,9 +1845,13 @@ function __no_hist_print() {
 }
 function nohist() {
     PR_FLAGS+=(__no_hist_print)
+    export NOHIST=1
     unset HISTFILE
 }
 alias nohist=' nohist'
+if [[ "$NOHIST" = "1" ]]; then
+    nohist
+fi
 
 function __aws_profile_print() {
     echo "${AWS_PROFILE:-<unset>}"
