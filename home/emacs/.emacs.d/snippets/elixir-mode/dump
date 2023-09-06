@@ -1,0 +1,1 @@
+%{"$1" => ${1:var}} |> IO.inspect(limit: :infinity)$0

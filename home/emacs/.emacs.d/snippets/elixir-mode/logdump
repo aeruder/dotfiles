@@ -1,0 +1,2 @@
+${1:var}
+|> fn x -> Logger.info("$1 #\{inspect(x, limit: :infinity, pretty: true)\}"); x end.()
