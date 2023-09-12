@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+DOTFILES=$(dirname -- "${BASH_SOURCE[0]}")/..
+emacs_d=$DOTFILES/home/emacs/.emacs.d
+release_info=$(gh api /repos/elixir-lsp/elixir-ls/releases/latest)
+url=$(jq --raw-output --null-input --argjson input "$release_info" '$input.assets[0].browser_download_url')
+
+rm -fr "$emacs_d"/elixir-ls
+mkdir -p "$emacs_d"/elixir-ls
+
+temp=$(mktemp)
+cleanup() {
+    rm -f "$temp"
+}
+trap cleanup EXIT
+
+curl --fail -sSL -o "$temp" "$url"
+(
+    cd "$emacs_d"/elixir-ls
+    unzip -x "$temp"
+)

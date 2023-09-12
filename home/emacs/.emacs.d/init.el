@@ -924,6 +924,9 @@
 ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
 (setq visible-bell 1)
 
+(require 'eglot)
+(add-to-list 'eglot-server-programs (list 'elixir-mode (expand-file-name "elixir-ls/language_server.sh" user-emacs-directory)))
+
 ;; org mode stuff
 (setq org-agenda-files (list (expand-file-name "~/todo.org")))
 (setq org-highest-priority ?A)
