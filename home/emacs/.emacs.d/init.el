@@ -1,22 +1,186 @@
-;; add ~/.emacs.d/lisp to load path
-;; (toggle-debug-on-quit)
+;; keybinds
 (add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "evil-rebellion" user-emacs-directory))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;; stuff dealing with setting up package, use-package, quelpa, etc.
+
+(require 'package)
+(add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(setq use-package-always-ensure t)
+(use-package quelpa)
+(quelpa
+ '(quelpa-use-package
+   :fetcher github
+   :repo "quelpa/quelpa-use-package"))
+(require 'quelpa-use-package)
+(quelpa-use-package-activate-advice)
+
 (setq package-native-compile t)
 (setq warning-suppress-types '((comp)))
-
-(add-to-list 'default-frame-alist '(font . "IBM Plex Mono-11"))
-
-;; load files
-(require '00-use-package)
-
-(use-package dash)
 (use-package diminish)
-(use-package bind-key)
-(use-package monitor)
+
+;; easier keybinds
+(use-package general
+  :diminish general-override-mode
+  :config
+  (general-override-mode))
+
+(use-package emacs
+  :ensure nil
+  :general
+  (:states '(normal visual motion)
+           :keymaps 'override
+           "SPC b" '(nil :which-key "buffer")
+           "SPC b d" 'kill-current-buffer
+           "SPC b D" 'aeruder/kill-all-buffers
+           "SPC b m" 'aeruder/kill-other-buffers
+           "SPC b x" 'aeruder/reset-buffer-major-mode
+
+           "SPC f" '(nil :which-key "file")
+           "SPC f f" 'find-file
+           "SPC f R" 'read-only-mode
+           "SPC f w" 'save-buffer
+           "SPC f b" '(nil :which-key "bookmark")
+           "SPC f b b" 'bookmark-jump
+           "SPC f b s" 'bookmark-save
+           "SPC f b l" 'bookmark-bmenu-list
+
+           "SPC f e" '(nil :which-key "edit")
+           "SPC f e d" 'aeruder/edit-init-file
+           "SPC f e D" 'aeruder/ls-dotfiles
+           "SPC f e t" 'aeruder/edit-todo-file
+           "SPC f n" '(nil :which-key "new")
+           "SPC f n s" 'aeruder/new-scratch-file
+           "SPC f s" 'server-edit
+           "SPC f x" 'aeruder/make-file-executable
+           "SPC f y" '(nil :which-key "yank")
+           "SPC f y y" 'aeruder/copy-file-path-rel
+           "SPC f y Y" 'aeruder/copy-file-path-abs
+           "SPC f y g" 'aeruder/copy-url-path
+           "SPC f y G" 'aeruder/copy-url-path-line
+
+           "SPC g" '(nil :which-key "git")
+           "SPC g l" '(nil :which-key "log")
+
+           "SPC h" '(nil :which-key "help")
+           "SPC h d" '(nil :which-key "describe")
+           "SPC h d b" 'describe-bindings
+           "SPC h d c" 'describe-char
+           "SPC h d f" 'describe-function
+           "SPC h d k" 'describe-key
+           "SPC h d p" 'describe-package
+           "SPC h d t" 'describe-theme
+           "SPC h d v" 'describe-variable
+           "SPC h n" 'view-emacs-news
+
+           "SPC p" '(nil :which-key "project")
+           "SPC p p" 'projectile-switch-project
+           "SPC p f" 'aeruder/fzf-projectile
+           "SPC p F" 'aeruder/fzf-same-projectile
+           "SPC p s" 'projectile-ripgrep
+           "SPC p S" 'aeruder/ripgrep-projectile
+           "SPC p t" 'helm-gtags-find-tag
+
+           "SPC q" '(nil :which-key "quit")
+           "SPC q q" 'spacemacs/frame-killer
+           "SPC q Q" 'aeruder/quit
+
+           "SPC w" '(nil :which-key "window")
+           "SPC w =" 'balance-windows
+           "SPC w d" 'delete-window
+           "SPC w D" 'delete-other-window
+           "SPC w s" 'split-window-below
+           "SPC w v" 'split-window-right
+
+           "SPC x" '(nil :which-key "text")
+           "SPC x a" '(nil :which-key "align")
+           "SPC x a =" 'aeruder/align=
+           "SPC x a S" 'aeruder/reformat-sql
+           )
+
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  :config
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  (setq-default display-line-numbers 'relative)
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t)
+
+  ;; relative line numbers
+  (setq-default display-line-numbers 'relative))
+
+                                        ; vim keybindings
+(use-package evil
+  :diminish evil-mode
+  :general
+  (:states '(normal visual motion)
+           :keymaps 'override
+           "SPC w h" 'evil-window-left
+           "SPC w l" 'evil-window-right
+           "SPC w j" 'evil-window-down
+           "SPC w k" 'evil-window-up
+           "SPC x +" 'evil-numbers/inc-at-pt
+           "SPC x -" 'evil-numbers/dec-at-pt)
+
+  :init
+  (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
+  (setq evil-want-integration nil)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-abbrev-expand-on-insert-exit nil)
+  (setq evil-undo-system 'undo-redo)
+  :config
+  (evil-mode 1))
+
+(use-package evil-escape
+  :diminish evil-escape-mode
+  :init
+  (setq-default evil-escape-key-sequence "jk")
+  (setq-default evil-escape-delay 0.2)
+  :config
+  (add-to-list 'evil-escape-excluded-major-modes 'magit-status-mode)
+  (add-to-list 'evil-escape-excluded-major-modes 'magit-revision-mode)
+  (add-to-list 'evil-escape-excluded-major-modes 'magit-diff-mode)
+  (evil-escape-mode))
+
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+(use-package evil-commentary)
+
+(use-package evil-collection
+  :config
+  (delq 'diff-mode evil-collection-mode-list)
+  (delq 'outline evil-collection-mode-list)
+  (evil-collection-init))
+
+                                        ; this is the thing that opens up help for keybindings
 (use-package which-key
   :diminish which-key-mode
   :init
@@ -24,46 +188,261 @@
   :config
   (which-key-mode))
 
-(use-package vundo
-  :config
-  ;; Use `HJKL` VIM-like motion, also Home/End to jump around.
-  (define-key vundo-mode-map (kbd "l") #'vundo-forward)
-  (define-key vundo-mode-map (kbd "<right>") #'vundo-forward)
-  (define-key vundo-mode-map (kbd "h") #'vundo-backward)
-  (define-key vundo-mode-map (kbd "<left>") #'vundo-backward)
-  (define-key vundo-mode-map (kbd "j") #'vundo-next)
-  (define-key vundo-mode-map (kbd "<down>") #'vundo-next)
-  (define-key vundo-mode-map (kbd "k") #'vundo-previous)
-  (define-key vundo-mode-map (kbd "<up>") #'vundo-previous)
-  (define-key vundo-mode-map (kbd "<home>") #'vundo-stem-root)
-  (define-key vundo-mode-map (kbd "<end>") #'vundo-stem-end)
-  (define-key vundo-mode-map (kbd "q") #'vundo-quit)
-  (define-key vundo-mode-map (kbd "C-g") #'vundo-quit)
-  (define-key vundo-mode-map (kbd "RET") #'vundo-confirm))
-(use-package evil
+
+
+
+;; Enable vertico
+(use-package vertico
   :init
-  (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-abbrev-expand-on-insert-exit nil)
-  (setq evil-undo-system 'undo-redo)
+  (vertico-mode)
+
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
+
+  ;; Show more candidates
+  ;; (setq vertico-count 20)
+
+  ;; Grow and shrink the Vertico minibuffer
+  ;; (setq vertico-resize t)
+
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  ;; (setq vertico-cycle t)
+  )
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+
+  ;; The :init section is always executed.
+  :init
+
+  ;; Marginalia must be activated in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode))
+
+;; Example configuration for Consult
+(use-package consult
+  :general
+  (:states '(normal visual motion)
+           :keymaps 'override
+           "SPC b b" 'consult-buffer
+           "SPC b B" 'consult-bookmark
+           "SPC b r" 'consult-recent-file
+           )
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
   :config
-  (evil-mode 1))
 
-(use-package general)
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
 
-(defvar my-leader-map (make-sparse-keymap)
-  "Keymap for \"leader key\" shortcuts.")
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; "C-+"
 
-;; (defun spacemacs//helm-hide-minibuffer-maybe ()
-;;   "Hide minibuffer in Helm session if we use the header line as input field."
-;;   (when (with-helm-buffer helm-echo-input-in-header-line)
-;;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
-;;       (overlay-put ov 'window (selected-window))
-;;       (overlay-put ov 'face
-;;                    (let ((bg-color (face-background 'default nil)))
-;;                      `(:background ,bg-color :foreground ,bg-color)))
-;;       (setq-local cursor-type nil))))
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 3. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  ;;;; 4. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 5. No project support
+  ;; (setq consult-project-function nil)
+  )
+
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+  ;; strategy, if you want to see the documentation from multiple providers.
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package
+  birds-of-paradise-plus-theme
+  :config (load-theme 'birds-of-paradise-plus t))
+
+(use-package projectile
+  :diminish projectile-mode
+  :config
+  (projectile-mode))
+
+(use-package magit
+
+  :general
+
+  (:states '(normal visual motion)
+           :keymaps 'override
+           "SPC g R" 'magit-refresh-all
+           "SPC g f" 'magit-file-dispatch
+           "SPC g b" 'magit-blame
+           "SPC g g" 'magit
+           "SPC g h" 'magit-reflog
+           "SPC g l A" 'magit-log-author
+           "SPC g l R" 'magit-reflog
+           "SPC g l a" 'magit-log-all
+           "SPC g l f" 'magit-log-buffer-file
+           "SPC g l r" 'magit-reflog-current
+           "SPC g l x" 'magit-rebase-interactive
+           "SPC g r" 'magit-refresh
+           "SPC g s" 'magit-status)
+  )
+
+(use-package vi-tilde-fringe
+  :diminish vi-tilde-fringe-mode
+  :config
+  (global-vi-tilde-fringe-mode))
+
+(global-whitespace-mode 1)
+(setq-default whitespace-display-mappings
+              '(
+                ;; (space-mark ?\  [?·] [?.])        ; space - middle dot
+                (space-mark ?\xA0 [?¤] [?_])    ; hard space - currency sign
+                ;; NEWLINE is displayed using the face `whitespace-newline'
+                ;; (newline-mark ?\n [?$ ?\n])       ; eol - dollar sign
+                ;; (newline-mark ?\n    [?↵ ?\n] [?$ ?\n]); eol - downwards arrow
+                ;; (newline-mark ?\n    [?¶ ?\n] [?$ ?\n]); eol - pilcrow
+                ;; (newline-mark ?\n    [?¯ ?\n]  [?$ ?\n]); eol - overscore
+                ;; (newline-mark ?\n    [?¬ ?\n]  [?$ ?\n]); eol - negation
+                ;; (newline-mark ?\n    [?° ?\n]  [?$ ?\n]); eol - degrees
+                ;;
+                ;; WARNING: the mapping below has a problem.
+                ;; When a TAB occupies exactly one column, it will display the
+                ;; character ?\xBB at that column followed by a TAB which goes to
+                ;; the next TAB column.
+                ;; If this is a problem for you, please, comment the line below.
+                (tab-mark ?\t [?» ?\t] [?\\ ?\t]) ; tab - right guillemet
+                ))
+;; (setq-default whitespace-style
+;;               '(face
+;;                 tabs spaces trailing lines space-before-tab newline
+;;                 indentation empty space-after-tab
+;;                 space-mark tab-mark newline-mark))
+(setq whitespace-style (remove 'spaces whitespace-style))
+(setq whitespace-style (remove 'lines whitespace-style))
+(setq whitespace-style (remove 'tabs whitespace-style))
+(add-to-list 'whitespace-style 'lines-tail)
+(setq whitespace-line-column 120)
+(set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
+(set-face-attribute 'whitespace-empty nil :background "darkred" :foreground "gray30")
+
+
+(let ((backup-dir "~/.emacs.d/backups")
+      (auto-saves-dir "~/.emacs.d/backups"))
+  (dolist (dir (list backup-dir auto-saves-dir))
+    (when (not (file-directory-p dir))
+      (make-directory dir t)))
+  (setq backup-directory-alist `(("." . ,backup-dir))
+        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
+        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
+        tramp-backup-directory-alist `((".*" . ,backup-dir))
+        tramp-auto-save-directory auto-saves-dir))
+
+(setq-default indent-tabs-mode nil)
+
+(setq backup-by-copying t            ; Don't delink hardlinks
+      delete-old-versions t          ; Clean up the backups
+      version-control t              ; Use version numbers on backups,
+      kept-new-versions 5            ; keep some new versions
+      kept-old-versions 2)           ; and some old ones, too
+
+(setq visible-bell 1)
+
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(which-function-mode 1)
+
+(diminish 'global-whitespace-mode)
+(diminish 'auto-revert-mode)
+(diminish 'helm-mode)
+(diminish 'yas-minor-mode)
+
 
 (defun aeruder/edit-init-file ()
   (interactive)
@@ -103,16 +482,16 @@
   (interactive)
   (print "starting")
   (let* ((xterm-set-window-title nil)
-          (list (delq (current-buffer) (buffer-list))
-            ))
-  (dolist (element list)
+         (list (delq (current-buffer) (buffer-list))
+               ))
+    (dolist (element list)
       (print element)
       (if (and (not (buffer-modified-p element))
                (not (get-buffer-window element t)))
-        (progn
-          ;; (print element)
-          (ignore-errors
-            (kill-buffer element))
+          (progn
+            ;; (print element)
+            (ignore-errors
+              (kill-buffer element))
             ))
       )))
 
@@ -159,12 +538,12 @@
         (set-file-modes file 493))))
 
 (setq aeruder/scratch-dir
-  (cond
-    ((file-exists-p (expand-file-name "~/Projects/")) (expand-file-name "~/Projects/scratch"))
-    ((file-exists-p (expand-file-name "~/Project/")) (expand-file-name "~/Project/scratch"))
-    ((file-exists-p (expand-file-name "~/proj/")) (expand-file-name "~/proj/scratch"))
-    ((file-exists-p (expand-file-name "~/Documents/")) (expand-file-name "~/Documents/Scratch"))
-    (t (expand-file-name "~/scratch"))))
+      (cond
+       ((file-exists-p (expand-file-name "~/Projects/")) (expand-file-name "~/Projects/scratch"))
+       ((file-exists-p (expand-file-name "~/Project/")) (expand-file-name "~/Project/scratch"))
+       ((file-exists-p (expand-file-name "~/proj/")) (expand-file-name "~/proj/scratch"))
+       ((file-exists-p (expand-file-name "~/Documents/")) (expand-file-name "~/Documents/Scratch"))
+       (t (expand-file-name "~/scratch"))))
 
 (defun aeruder/new-scratch-file (filename)
   "Create new scratch dir"
@@ -344,605 +723,5 @@
 
 (setq interprogram-cut-function 'paste-to-osx)
 (setq interprogram-paste-function 'copy-from-osx)
-
-(general-override-mode)
-(general-define-key
-  :states '(normal visual motion)
-  :keymaps 'override
-  "-" 'aeruder/edit-this-dir
-  "]n" 'diff-hl-next-hunk
-  "[n" 'diff-hl-previous-hunk
-  "]q" 'compilation-next-error
-  "[q" 'compilation-previous-error
-  "g c" 'evil-commentary-line
-  "z o" 'origami-open-node
-  "z O" 'origami-open-node-recursively
-  "z c" 'origami-close-node
-  "z C" 'origami-close-node-recursively
-  "z R" 'origami-open-all-nodes
-  "z M" 'origami-close-all-nodes)
-
-(general-define-key
- "C-c SPC" '(nil :which-key "custom")
- "C-c SPC x" '(nil :which-key "text")
- "C-c SPC x y" 'company-yasnippet)
-(general-define-key
-  :prefix "SPC"
-  :states '(normal visual motion)
-  :keymaps 'override
-  "" nil
-
-                                        ; Buffer
-  "b" '(nil :which-key "buffer")
-  "b b" 'helm-buffers-list
-  "b r" 'helm-recentf
-  "b d" 'kill-current-buffer
-  "b D" 'aeruder/kill-all-buffers
-  "b m" 'aeruder/kill-other-buffers
-  "b x" 'aeruder/reset-buffer-major-mode
-
-                                        ; File
-  "f" '(nil :which-key "file")
-  "f f" 'helm-find-files
-  "f R" 'read-only-mode
-  "f w" 'save-buffer
-  "f b" '(nil :which-key "bookmark")
-  "f b b" 'bookmark-jump
-  "f b s" 'bookmark-save
-  "f b l" 'bookmark-bmenu-list
-  "f e" '(nil :which-key "edit")
-  "f e d" 'aeruder/edit-init-file
-  "f e D" 'aeruder/ls-dotfiles
-  "f e t" 'aeruder/edit-todo-file
-  "f n" '(nil :which-key "new")
-  "f n s" 'aeruder/new-scratch-file
-  "f s" 'server-edit
-  "f x" 'aeruder/make-file-executable
-  "f y" '(nil :which-key "yank")
-  "f y y" 'aeruder/copy-file-path-rel
-  "f y Y" 'aeruder/copy-file-path-abs
-  "f y g" 'aeruder/copy-url-path
-  "f y G" 'aeruder/copy-url-path-line
-                                        ; Git
-  "g" '(nil :which-key "git")
-  "g R" 'magit-refresh-all
-  "g f" 'magit-file-dispatch
-  "g b" 'magit-blame
-  "g g" 'magit
-  "g h" 'magit-reflog
-  "g l" '(nil :which-key "log")
-  "g l A" 'magit-log-author
-  "g l R" 'magit-reflog
-  "g l a" 'magit-log-all
-  "g l f" 'magit-log-buffer-file
-  "g l r" 'magit-reflog-current
-  "g l x" 'magit-rebase-interactive
-  "g r" 'magit-refresh
-  "g s" 'magit-status
-
-                                        ; Help
-  "h" '(nil :which-key "help")
-  "h a" 'helm-apropos
-  "h b" 'helm-descbinds
-  "h d" '(nil :which-key "describe")
-  "h d b" 'describe-bindings
-  "h d c" 'describe-char
-  "h d f" 'describe-function
-  "h d k" 'describe-key
-  "h d p" 'describe-package
-  "h d t" 'describe-theme
-  "h d v" 'describe-variable
-  "h n" 'view-emacs-news
-
-                                        ; Jump
-  "j" '(nil :which-key "jump")
-  "j l" 'helm-swoop
-  "j h" 'helm-resume
-
-                                        ; Lisp
-  "l" '(nil :which-key "lisp")
-  "l e" 'eval-last-sexp
-  "l f" 'lispyville-prettify
-  "l x" 'pp-eval-expression
-
-  "o" '(nil :which-key "org")
-  "o a" 'org-agenda
-  "o c" 'org-capture
-                                        ; Project settings
-  "p" '(nil :which-key "project")
-  "p p" 'projectile-switch-project
-  "p f" 'aeruder/fzf-projectile
-  "p F" 'aeruder/fzf-same-projectile
-  "p s" 'projectile-ripgrep
-  "p S" 'aeruder/ripgrep-projectile
-  "p t" 'helm-gtags-find-tag
-                                        ; Quit
-  "q" '(nil :which-key "quit")
-  "q q" 'spacemacs/frame-killer
-  "q Q" 'aeruder/quit
-
-                                        ; Window
-  "w" '(nil :which-key "window")
-  "w =" 'balance-windows
-  "w h" 'evil-window-left
-  "w l" 'evil-window-right
-  "w j" 'evil-window-down
-  "w k" 'evil-window-up
-  "w d" 'delete-window
-  "w D" 'delete-other-window
-  "w s" 'split-window-below
-  "w v" 'split-window-right
-
-                                        ; Text
-  "x" '(nil :which-key "text")
-  "x +" 'evil-numbers/inc-at-pt
-  "x -" 'evil-numbers/dec-at-pt
-  "x a" '(nil :which-key "align")
-  "x a =" 'aeruder/align=
-  "x a S" 'aeruder/reformat-sql)
-(global-set-key (kbd "M-x") 'helm-M-x)
-
-;; relative line numbers
-(setq-default display-line-numbers 'relative)
-
-(recentf-mode 1)
-
-;; (use-package doom-themes
-;;   :config
-  ;; Global settings (defaults)
-  ;; (setq doom-themes-enable-bold t ; if nil, bold is universally disabled
-  ;;       doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;; (load-theme 'doom-dracula t)
-  ;; (load-theme 'doom-gruvbox t)
-  ;; (load-theme 'doom-manegarm t)
-
-  ;; Enable flashing mode-line on errors
-  ;; (doom-themes-visual-bell-config)
-
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;; (doom-themes-neotree-config)
-  ;; or for treemacs users
-  ;; (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  ;; (doom-themes-treemacs-config)
-
-  ;; Corrects (and improves) org-mode's native fontification.
-  ;; (doom-themes-org-config))
-;; (use-package green-is-the-new-black-theme)
-;; (use-package base16-theme
-;;   :config
-;;   (setq base16-theme-256-color-source "colors")
-;;   (load-theme 'base16-greenscreen))
-;; (use-package ample-theme
-;;   :config (load-theme 'ample-flat t))
-;; (use-package dracula-theme
-;;   :config (load-theme 'dracula t))
-;; (use-package soothe-theme
-;;   :config (load-theme 'soothe))
-;; (use-package nova-theme
-;;   :config (load-theme 'nova t))
-;; (use-package alect-themes
-;;   :config (load-theme 'alect-light-alt t))
-;; (use-package gruvbox-theme
-;;   :config (load-theme 'gruvbox-dark-soft t))
-;; (use-package
-;;   borland-blue-theme
-;;   :config (load-theme 'borland-blue t))
-(use-package
-  birds-of-paradise-plus-theme
-  :config (load-theme 'birds-of-paradise-plus t))
-;; (use-package ivy
-;;   :diminish ivy-mode
-;;   :config
-;;   (ivy-mode)
-;;   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
-(setenv "FZF_DEFAULT_COMMAND" "rg --files --no-ignore --hidden -g !.git -g !node_modules")
-(use-package ripgrep
-  :config
-  (setq ripgrep-arguments (split-string "--hidden --no-ignore --max-columns 400 -g !.git -g !node_modules")))
-(use-package projectile-ripgrep)
-(use-package projectile
-  :diminish projectile-mode
-  :init
-  (setq projectile-completion-system 'helm)
-  :config
-  (projectile-mode)
-  (defun projectile-find-file (&optional arg)
-    (interactive "P")
-    (aeruder/fzf-projectile)))
-(use-package counsel-projectile)
-(use-package org)
-;; (use-package libgit
-;;   :quelpa (libgit :fetcher github :repo "magit/libegit2"))
-(use-package with-editor
-  :quelpa (with-editor :fetcher github :repo "magit/with-editor"
-                 :files ("lisp/*.el")))
-(use-package transient)
-(use-package magit)
-;; (use-package evil-magit)
-(use-package vi-tilde-fringe
-  :diminish vi-tilde-fringe-mode
-  :config
-  (global-vi-tilde-fringe-mode))
-;; (use-package editorconfig
-;;   :diminish editorconfig-mode
-;;   :config
-;;   (editorconfig-mode 1))
-
-;; (use-package lsp-mode
-;;   :commands lsp
-;;   :diminish lsp-mode
-;;   :config
-;;   (setq lsp-enable-file-watchers nil)
-;;   :hook
-;;   (elixir-mode . lsp))
-
-;; (use-package lsp-ui
-;;   :config
-;;   (setq lsp-ui-doc-enable t
-;;         lsp-ui-peek-enable t
-;;         lsp-ui-sideline-enable t
-;;         lsp-ui-imenu-enable t
-;;         lsp-ui-flycheck-enable t)
-;;   :init)
-(use-package company
-  :diminish company-mode
-  :config
-  (setq company-tooltip-align-annotations t)
-  (add-hook 'after-init-hook 'global-company-mode))
-
-(use-package evil-escape
-  :diminish evil-escape-mode
-  :config
-  (setq-default evil-escape-key-sequence "jk")
-  (setq-default evil-escape-delay 0.2)
-  (add-to-list 'evil-escape-excluded-major-modes 'magit-status-mode)
-  (add-to-list 'evil-escape-excluded-major-modes 'magit-revision-mode)
-  (add-to-list 'evil-escape-excluded-major-modes 'magit-diff-mode)
-  (evil-escape-mode))
-(use-package evil-lisp-state)
-(use-package evil-exchange)
-(use-package evil-indent-textobject)
-(use-package evil-commentary)
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
-(use-package evil-easymotion)
-(use-package evil-numbers)
-;; (use-package evil-search-highlight-persist)
-(use-package evil-org
-  :after org
-  :hook (org-mode . (lambda () evil-org-mode))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-(use-package lispy
-  :commands lispy-mode
-  :init
-  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-  (add-hook 'lisp-mode-hook (lambda () (lispy-mode 1))))
-(use-package lispyville
-  :commands lispyville-mode
-  :init
-  (add-hook 'lispy-mode-hook #'lispyville-mode)
-  (lispyville-set-key-theme '(operators c-w prettify additional-movement slurp/barf-cp)))
-(use-package evil-collection
-  :config
-  (delq 'diff-mode evil-collection-mode-list)
-  (delq 'outline evil-collection-mode-list)
-  (evil-collection-init))
-(use-package yaml-mode)
-(use-package yasnippet
-  :config
-  (setq yas-indent-line 'fixed)
-  ;; (if (exists
-  (let ((privsnip (expand-file-name "snippets.private" user-emacs-directory))) (if (file-directory-p privsnip) (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)))
-  (yas-global-mode 1))
-
-(evil-set-initial-state 'term-mode 'emacs)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
-
-(setq cperl-indent-parens-as-block t)
-(setq cperl-close-paren-offset -2)
-(setq cperl-under-as-char t)
-(setq cperl-hairy nil)
-(setq cperl-font-lock t)
-(setq cperl-electric-keywords nil)
-
-(add-hook 'python-mode-hook (lambda () (editorconfig-mode 0)))
-
-;; (use-package cperl-mode
-;;   :quelpa (cperl-mode :fetcher github :repo "aeruder/cperl-mode")
-;;   :init
-;;   (setq cperl-indent-parens-as-block t)
-;;   (setq cperl-close-paren-offset -2)
-;;   (setq cperl-under-as-char t)
-;;   (setq cperl-hairy nil)
-;;   (setq cperl-font-lock t)
-;;   (setq cperl-electric-keywords nil))
-
-(use-package raku-mode)
-(use-package typescript-mode
-  :commands typescript-mode
-  :config
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
-
- ;; GO SETUP
-(use-package go-mode)
-(use-package company-go)
-;; (use-package flymake-go)
-(use-package go-guru)
-(defun my-go-mode-hook ()
-  (add-hook 'before-save-hook 'gofmt-before-save t t)
-  (setq-local gofmt-command "goimports")
-  (setq-local whitespace-style (remove 'tab-mark whitespace-style))
-  (go-guru-hl-identifier-mode))
-(add-hook 'go-mode-hook 'my-go-mode-hook)
-
-;; RUST
-(use-package rust-mode
-  :config
-  (setq rust-mode-on-save t))
-(defun my-rust-mode-hook ()
-  (setq indent-tabs-mode nil))
-(add-hook 'rust-mode-hook 'my-rust-mode-hook)
-
-(use-package diff-hl
-  :config
-  (global-diff-hl-mode)
-  (diff-hl-margin-mode 1)
-  (diff-hl-flydiff-mode 1))
-
-(use-package elixir-mode)
-(use-package exunit)
-
-(use-package terraform-mode)
-(use-package dockerfile-mode)
-(use-package processing-mode)
-(use-package rjsx-mode)
-(use-package js2-mode)
-(use-package tide)
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  ;; company is an optional dependency. You have to
-  ;; install it separately via package-install
-  ;; `M-x package-install [ret] company`
-  (company-mode +1))
-(use-package web-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                (setup-tide-mode))))
-  ;; enable typescript-tslint checker
-  (flycheck-add-mode 'typescript-tslint 'web-mode))
-
-(use-package origami
-  :config
-  (global-origami-mode))
-
-(use-package helm
-  :quelpa (helm :fetcher github :repo "emacs-helm/helm")
-  :config
-
-  (require 'helm-autoloads)
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
-  (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
-
-  (when (executable-find "curl")
-    (setq helm-google-suggest-use-curl-p t))
-
-  ;; (setq helm-split-window-inside-p t ; open helm buffer inside current window, not occupy whole other window
-  ;; helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
-  helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
-  ;; helm-scroll-amount 8 ; scroll 8 lines other window using M-<next>/M-<prior>
-  helm-ff-file-name-history-use-recentf t
-  ;; helm-echo-input-in-header-line t
-
-
-  ;; (add-hook 'helm-minibuffer-set-up-hook
-  ;;     'spacemacs//helm-hide-minibuffer-maybe)
-
-  ;; (setq helm-autoresize-max-height 0)
-  ;; (setq helm-autoresize-min-height 20)
-  ;; (helm-autoresize-mode 1)
-  (setq helm-split-window-default-side 'right)
-
-  (setq helm-ff-fuzzy-matching nil)
-  (helm-mode 1))
-
-(use-package helm-swoop)
-(setq helm-fzf-executable "fzf")
-(setq helm-fzf-source
-      (helm-build-async-source "fzf"
-        :candidates-process 'helm-fzf--do-candidate-process
-        :filter-one-by-one 'identity
-        :requires-pattern nil
-        :action 'helm-find-file-or-marked
-        :candidate-number-limit 100))
-
-(defun helm-fzf--do-candidate-process ()
-  (let* ((cmd-args (-filter 'identity (list helm-fzf-executable
-                                            "-f"
-                                            helm-pattern)))
-         (proc (apply 'start-file-process "helm-fzf" helm-buffer cmd-args)))
-    (prog1 proc
-      (set-process-sentinel
-       (get-buffer-process helm-buffer)
-       #'(lambda (process event)
-         (helm-process-deferred-sentinel-hook
-          process event (helm-default-directory)))))))
-
-(defun helm-fzf (directory)
-  (interactive "D")
-  (let ((default-directory directory))
-    (helm :sources '(helm-fzf-source)
-          :buffer "*helm-fzf*")))
-
-(defun helm-fzf-same (directory)
-  (interactive "D")
-  (let ((default-directory directory))
-    (helm :sources '(helm-fzf-source)
-          :buffer "*helm-fzf*"
-          :input (file-name-base (buffer-file-name)))))
-
-(setq helm-ripgrep-executable "rg")
-(setq helm-ripgrep-source
-      (helm-build-async-source "ripgrep"
-        :candidates-process 'helm-ripgrep--do-candidate-process
-        :filter-one-by-one 'identity
-        :requires-pattern nil
-        :action 'helm-ripgrep-action
-        :candidate-number-limit 100))
-
-(defun helm-ripgrep--do-candidate-process ()
-  (let* ((cmd-args (-filter 'identity (list helm-ripgrep-executable
-                                            "--no-heading" "--vimgrep" "-n"
-                                            "--hidden"
-                                            "--max-columns" "400"
-                                            "--no-ignore"
-                                            "-g" "!.git"
-                                            "-g" "node_modules"
-                                            "--"
-                                            helm-pattern)))
-         (proc (apply 'start-file-process "helm-ripgrep" helm-buffer cmd-args)))
-    (prog1 proc
-      (set-process-sentinel
-       (get-buffer-process helm-buffer)
-       #'(lambda (process event)
-         (helm-process-deferred-sentinel-hook
-          process event (helm-default-directory)))))))
-
-(defun helm-ripgrep (directory)
-  (interactive "D")
-  (let ((default-directory directory))
-    (helm :sources '(helm-ripgrep-source)
-          :buffer "*helm-ripgrep*")))
-
-(defun helm-ripgrep-action (candidate)
-  (let* ((split (split-string candidate ":"))
-         (lineno (string-to-number (nth 1 split)))
-         (col (string-to-number (nth 2 split)))
-         (loc-fname (car split))
-         (tramp-method (file-remote-p (or helm-ff-default-directory
-                                          default-directory) 'method))
-         (tramp-host (file-remote-p (or helm-ff-default-directory
-                                        default-directory) 'host))
-         (tramp-prefix (concat "/" tramp-method ":" tramp-host ":"))
-         (fname (if tramp-host
-                    (concat tramp-prefix loc-fname) loc-fname)))
-    (find-file fname)
-    (helm-goto-line lineno)
-    (forward-char (- col 1))))
-
-
-(use-package helm-descbinds)
-(use-package helm-gtags)
-;; (use-package nyan-mode
-;;   :config
-;;   (nyan-mode)
-;;   (nyan-toggle-wavy-trail))
-
-;; whitespace stuff
-(global-whitespace-mode 1)
-(setq-default whitespace-display-mappings
-      '(
-        ;; (space-mark ?\  [?·] [?.])        ; space - middle dot
-        (space-mark ?\xA0 [?¤] [?_])    ; hard space - currency sign
-        ;; NEWLINE is displayed using the face `whitespace-newline'
-        ;; (newline-mark ?\n [?$ ?\n])       ; eol - dollar sign
-        ;; (newline-mark ?\n    [?↵ ?\n] [?$ ?\n]); eol - downwards arrow
-        ;; (newline-mark ?\n    [?¶ ?\n] [?$ ?\n]); eol - pilcrow
-        ;; (newline-mark ?\n    [?¯ ?\n]  [?$ ?\n]); eol - overscore
-        ;; (newline-mark ?\n    [?¬ ?\n]  [?$ ?\n]); eol - negation
-        ;; (newline-mark ?\n    [?° ?\n]  [?$ ?\n]); eol - degrees
-        ;;
-        ;; WARNING: the mapping below has a problem.
-        ;; When a TAB occupies exactly one column, it will display the
-        ;; character ?\xBB at that column followed by a TAB which goes to
-        ;; the next TAB column.
-        ;; If this is a problem for you, please, comment the line below.
-        (tab-mark ?\t [?» ?\t] [?\\ ?\t]) ; tab - right guillemet
-        ))
-;; (setq-default whitespace-style
-;;               '(face
-;;                 tabs spaces trailing lines space-before-tab newline
-;;                 indentation empty space-after-tab
-;;                 space-mark tab-mark newline-mark))
-(setq whitespace-style (remove 'spaces whitespace-style))
-(setq whitespace-style (remove 'lines whitespace-style))
-(setq whitespace-style (remove 'tabs whitespace-style))
-(add-to-list 'whitespace-style 'lines-tail)
-(setq whitespace-line-column 120)
-(set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
-(set-face-attribute 'whitespace-empty nil :background "darkred" :foreground "gray30")
-
-;; perl stuff
-(add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("perl" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("perl5" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("miniperl" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("zrperl" . cperl-mode))
-(add-to-list 'interpreter-mode-alist '("raku" . raku-mode))
-(add-to-list 'auto-mode-alist '("\\.t\\'" . cperl-mode))
-
-(add-hook 'c-mode-hook
-          (lambda () (modify-syntax-entry ?_ "w")))
-
-(add-hook 'conf-toml-mode-hook
-          (lambda () (modify-syntax-entry ?_ "w")))
-;; Put backup files neatly away
-
-(let ((backup-dir "~/.emacs.d/backups")
-      (auto-saves-dir "~/.emacs.d/backups"))
-  (dolist (dir (list backup-dir auto-saves-dir))
-    (when (not (file-directory-p dir))
-      (make-directory dir t)))
-  (setq backup-directory-alist `(("." . ,backup-dir))
-        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
-        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
-        tramp-backup-directory-alist `((".*" . ,backup-dir))
-        tramp-auto-save-directory auto-saves-dir))
-
-(setq-default indent-tabs-mode nil)
-
-(setq backup-by-copying t            ; Don't delink hardlinks
-      delete-old-versions t          ; Clean up the backups
-      version-control t              ; Use version numbers on backups,
-      kept-new-versions 5            ; keep some new versions
-      kept-old-versions 2)           ; and some old ones, too
-
-;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
-(setq visible-bell 1)
-
-(require 'eglot)
-(add-to-list 'eglot-server-programs (list 'elixir-mode (expand-file-name "elixir-ls/language_server.sh" user-emacs-directory)))
-
-;; org mode stuff
-(setq org-agenda-files (list (expand-file-name "~/todo.org")))
-(setq org-highest-priority ?A)
-(setq org-lowest-priority ?C)
-(setq org-default-priority ?A)
-(setq org-agenda-window-setup "current-window")
-(setq org-capture-templates
-      '(("t" "todo" entry (file+headline "~/todo.org" "Tasks") "* TODO [#A] %?\n  %i\n   %a")))
-
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(which-function-mode 1)
-
-(diminish 'global-whitespace-mode)
-(diminish 'auto-revert-mode)
-(diminish 'helm-mode)
-(diminish 'yas-minor-mode)
 
 (server-start)

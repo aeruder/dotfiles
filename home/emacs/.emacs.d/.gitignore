@@ -58,3 +58,4 @@ tramp
 # lsp seems to use this
 /.cache
 /elixir-ls
+/history
