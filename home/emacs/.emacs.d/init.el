@@ -134,7 +134,38 @@
   (setq enable-recursive-minibuffers t)
 
   ;; relative line numbers
-  (setq-default display-line-numbers 'relative))
+  (setq-default display-line-numbers 'relative)
+  (let ((backup-dir "~/.emacs.d/backups")
+        (auto-saves-dir "~/.emacs.d/backups"))
+    (dolist (dir (list backup-dir auto-saves-dir))
+      (when (not (file-directory-p dir))
+        (make-directory dir t)))
+    (setq backup-directory-alist `(("." . ,backup-dir))
+          auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
+          auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
+          tramp-backup-directory-alist `((".*" . ,backup-dir))
+          tramp-auto-save-directory auto-saves-dir))
+  (setq-default indent-tabs-mode nil)
+
+  (setq backup-by-copying t            ; Don't delink hardlinks
+        delete-old-versions t          ; Clean up the backups
+        version-control t              ; Use version numbers on backups,
+        kept-new-versions 5            ; keep some new versions
+        kept-old-versions 2)           ; and some old ones, too
+
+  (setq visible-bell 1)
+
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (which-function-mode 1)
+
+  (xterm-mouse-mode 1)
+  (setq xterm-set-window-title t)
+
+  (setq last-paste-to-osx nil)
+
+  (setq interprogram-cut-function 'paste-to-osx)
+  (setq interprogram-paste-function 'copy-from-osx))
 
                                         ; vim keybindings
 (use-package evil
@@ -379,70 +410,43 @@
   :config
   (global-vi-tilde-fringe-mode))
 
-(global-whitespace-mode 1)
-(setq-default whitespace-display-mappings
-              '(
-                ;; (space-mark ?\  [?·] [?.])        ; space - middle dot
-                (space-mark ?\xA0 [?¤] [?_])    ; hard space - currency sign
-                ;; NEWLINE is displayed using the face `whitespace-newline'
-                ;; (newline-mark ?\n [?$ ?\n])       ; eol - dollar sign
-                ;; (newline-mark ?\n    [?↵ ?\n] [?$ ?\n]); eol - downwards arrow
-                ;; (newline-mark ?\n    [?¶ ?\n] [?$ ?\n]); eol - pilcrow
-                ;; (newline-mark ?\n    [?¯ ?\n]  [?$ ?\n]); eol - overscore
-                ;; (newline-mark ?\n    [?¬ ?\n]  [?$ ?\n]); eol - negation
-                ;; (newline-mark ?\n    [?° ?\n]  [?$ ?\n]); eol - degrees
-                ;;
-                ;; WARNING: the mapping below has a problem.
-                ;; When a TAB occupies exactly one column, it will display the
-                ;; character ?\xBB at that column followed by a TAB which goes to
-                ;; the next TAB column.
-                ;; If this is a problem for you, please, comment the line below.
-                (tab-mark ?\t [?» ?\t] [?\\ ?\t]) ; tab - right guillemet
-                ))
-;; (setq-default whitespace-style
-;;               '(face
-;;                 tabs spaces trailing lines space-before-tab newline
-;;                 indentation empty space-after-tab
-;;                 space-mark tab-mark newline-mark))
-(setq whitespace-style (remove 'spaces whitespace-style))
-(setq whitespace-style (remove 'lines whitespace-style))
-(setq whitespace-style (remove 'tabs whitespace-style))
-(add-to-list 'whitespace-style 'lines-tail)
-(setq whitespace-line-column 120)
-(set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
-(set-face-attribute 'whitespace-empty nil :background "darkred" :foreground "gray30")
+(use-package whitespace
+  :ensure nil
+  :init
+  (setq-default whitespace-display-mappings
+                '(
+                  ;; (space-mark ?\  [?·] [?.])        ; space - middle dot
+                  (space-mark ?\xA0 [?¤] [?_])    ; hard space - currency sign
+                  ;; NEWLINE is displayed using the face `whitespace-newline'
+                  ;; (newline-mark ?\n [?$ ?\n])       ; eol - dollar sign
+                  ;; (newline-mark ?\n    [?↵ ?\n] [?$ ?\n]); eol - downwards arrow
+                  ;; (newline-mark ?\n    [?¶ ?\n] [?$ ?\n]); eol - pilcrow
+                  ;; (newline-mark ?\n    [?¯ ?\n]  [?$ ?\n]); eol - overscore
+                  ;; (newline-mark ?\n    [?¬ ?\n]  [?$ ?\n]); eol - negation
+                  ;; (newline-mark ?\n    [?° ?\n]  [?$ ?\n]); eol - degrees
+                  ;;
+                  ;; WARNING: the mapping below has a problem.
+                  ;; When a TAB occupies exactly one column, it will display the
+                  ;; character ?\xBB at that column followed by a TAB which goes to
+                  ;; the next TAB column.
+                  ;; If this is a problem for you, please, comment the line below.
+                  (tab-mark ?\t [?» ?\t] [?\\ ?\t]) ; tab - right guillemet
+                  ))
+  ;; (setq-default whitespace-style
+  ;;               '(face
+  ;;                 tabs spaces trailing lines space-before-tab newline
+  ;;                 indentation empty space-after-tab
+  ;;                 space-mark tab-mark newline-mark))
+  (setq whitespace-style (remove 'spaces whitespace-style))
+  (setq whitespace-style (remove 'lines whitespace-style))
+  (setq whitespace-style (remove 'tabs whitespace-style))
+  (setq whitespace-line-column 120)
 
-
-(let ((backup-dir "~/.emacs.d/backups")
-      (auto-saves-dir "~/.emacs.d/backups"))
-  (dolist (dir (list backup-dir auto-saves-dir))
-    (when (not (file-directory-p dir))
-      (make-directory dir t)))
-  (setq backup-directory-alist `(("." . ,backup-dir))
-        auto-save-file-name-transforms `((".*" ,auto-saves-dir t))
-        auto-save-list-file-prefix (concat auto-saves-dir ".saves-")
-        tramp-backup-directory-alist `((".*" . ,backup-dir))
-        tramp-auto-save-directory auto-saves-dir))
-
-(setq-default indent-tabs-mode nil)
-
-(setq backup-by-copying t            ; Don't delink hardlinks
-      delete-old-versions t          ; Clean up the backups
-      version-control t              ; Use version numbers on backups,
-      kept-new-versions 5            ; keep some new versions
-      kept-old-versions 2)           ; and some old ones, too
-
-(setq visible-bell 1)
-
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(which-function-mode 1)
-
-(diminish 'global-whitespace-mode)
-(diminish 'auto-revert-mode)
-(diminish 'helm-mode)
-(diminish 'yas-minor-mode)
-
+  :config
+  (global-whitespace-mode 1)
+  (add-to-list 'whitespace-style 'lines-tail)
+  (set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
+  (set-face-attribute 'whitespace-empty nil :background "darkred" :foreground "gray30"))
 
 (defun aeruder/edit-init-file ()
   (interactive)
@@ -680,11 +684,6 @@
   (pbcopy)
   (delete-region (region-beginning) (region-end)))
 
-(xterm-mouse-mode 1)
-(setq xterm-set-window-title t)
-
-(setq last-paste-to-osx nil)
-
 (defun copy-from-osx ()
   (with-temp-buffer
     (cd temporary-file-directory)
@@ -720,8 +719,5 @@
           (process-send-string proc text)
           (process-send-eof proc)))
       (setq last-paste-to-osx text))))
-
-(setq interprogram-cut-function 'paste-to-osx)
-(setq interprogram-paste-function 'copy-from-osx)
 
 (server-start)
