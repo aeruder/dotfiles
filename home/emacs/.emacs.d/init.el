@@ -24,53 +24,71 @@
 
 (setq package-native-compile t)
 (setq warning-suppress-types '((comp)))
+(setq package-install-upgrade-built-in t)
+
 (use-package diminish)
 
-;; easier keybinds
+(use-package which-key
+  :diminish which-key-mode
+  :init
+  (setq which-key-enable-extended-define-key t)
+  :config
+  (which-key-mode))
+
 (use-package general
   :diminish general-override-mode
   :config
-  (general-override-mode))
+  (general-define-key
+    :states '(normal visual motion)
+           :keymaps 'override
+           "SPC b" '(nil :which-key "buffer")
+           "SPC f" '(nil :which-key "file")
+           "SPC f b" '(nil :which-key "bookmark")
+           "SPC f e" '(nil :which-key "edit")
+           "SPC f n" '(nil :which-key "new")
+           "SPC f y" '(nil :which-key "yank")
+           "SPC g" '(nil :which-key "git")
+           "SPC g l" '(nil :which-key "log")
+           "SPC h" '(nil :which-key "help")
+           "SPC h d" '(nil :which-key "describe")
+           "SPC p" '(nil :which-key "project")
+           "SPC q" '(nil :which-key "quit")
+           "SPC w" '(nil :which-key "window")
+           "SPC x" '(nil :which-key "text")
+           "SPC x a" '(nil :which-key "align"))
+  (general-override-mode)
+
+  )
 
 (use-package emacs
   :ensure nil
   :general
   (:states '(normal visual motion)
            :keymaps 'override
-           "SPC b" '(nil :which-key "buffer")
            "SPC b d" 'kill-current-buffer
            "SPC b D" 'aeruder/kill-all-buffers
            "SPC b m" 'aeruder/kill-other-buffers
            "SPC b x" 'aeruder/reset-buffer-major-mode
 
-           "SPC f" '(nil :which-key "file")
            "SPC f f" 'find-file
            "SPC f R" 'read-only-mode
            "SPC f w" 'save-buffer
-           "SPC f b" '(nil :which-key "bookmark")
            "SPC f b b" 'bookmark-jump
            "SPC f b s" 'bookmark-save
            "SPC f b l" 'bookmark-bmenu-list
 
-           "SPC f e" '(nil :which-key "edit")
            "SPC f e d" 'aeruder/edit-init-file
            "SPC f e D" 'aeruder/ls-dotfiles
            "SPC f e t" 'aeruder/edit-todo-file
-           "SPC f n" '(nil :which-key "new")
            "SPC f n s" 'aeruder/new-scratch-file
            "SPC f s" 'server-edit
            "SPC f x" 'aeruder/make-file-executable
-           "SPC f y" '(nil :which-key "yank")
            "SPC f y y" 'aeruder/copy-file-path-rel
            "SPC f y Y" 'aeruder/copy-file-path-abs
            "SPC f y g" 'aeruder/copy-url-path
            "SPC f y G" 'aeruder/copy-url-path-line
 
-           "SPC g" '(nil :which-key "git")
-           "SPC g l" '(nil :which-key "log")
 
-           "SPC h" '(nil :which-key "help")
-           "SPC h d" '(nil :which-key "describe")
            "SPC h d b" 'describe-bindings
            "SPC h d c" 'describe-char
            "SPC h d f" 'describe-function
@@ -80,7 +98,7 @@
            "SPC h d v" 'describe-variable
            "SPC h n" 'view-emacs-news
 
-           "SPC p" '(nil :which-key "project")
+           "SPC p b" 'consult-project-buffer
            "SPC p p" 'projectile-switch-project
            "SPC p f" 'aeruder/fzf-projectile
            "SPC p F" 'aeruder/fzf-same-projectile
@@ -88,19 +106,15 @@
            "SPC p S" 'aeruder/ripgrep-projectile
            "SPC p t" 'helm-gtags-find-tag
 
-           "SPC q" '(nil :which-key "quit")
            "SPC q q" 'spacemacs/frame-killer
            "SPC q Q" 'aeruder/quit
 
-           "SPC w" '(nil :which-key "window")
            "SPC w =" 'balance-windows
            "SPC w d" 'delete-window
            "SPC w D" 'delete-other-window
            "SPC w s" 'split-window-below
            "SPC w v" 'split-window-right
 
-           "SPC x" '(nil :which-key "text")
-           "SPC x a" '(nil :which-key "align")
            "SPC x a =" 'aeruder/align=
            "SPC x a S" 'aeruder/reformat-sql
            )
@@ -173,6 +187,7 @@
   :general
   (:states '(normal visual motion)
            :keymaps 'override
+           "-" 'aeruder/edit-this-dir
            "SPC w h" 'evil-window-left
            "SPC w l" 'evil-window-right
            "SPC w j" 'evil-window-down
@@ -203,7 +218,12 @@
 (use-package evil-surround
   :config
   (global-evil-surround-mode 1))
-(use-package evil-commentary)
+
+(use-package evil-commentary
+  :general
+  (:states '(normal visual motion)
+           :keymaps 'override
+           "g c" 'evil-commentary-line))
 
 (use-package evil-collection
   :config
@@ -211,7 +231,6 @@
   (delq 'outline evil-collection-mode-list)
   (evil-collection-init))
 
-                                        ; this is the thing that opens up help for keybindings
 (use-package which-key
   :diminish which-key-mode
   :init
@@ -219,10 +238,6 @@
   :config
   (which-key-mode))
 
-
-
-
-;; Enable vertico
 (use-package vertico
   :init
   (vertico-mode)
@@ -340,8 +355,8 @@
   ;;;; 3. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   ;;;; 4. projectile.el (projectile-project-root)
-  ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  (autoload 'projectile-project-root "projectile")
+  (setq consult-project-function (lambda (_) (projectile-project-root)))
   ;;;; 5. No project support
   ;; (setq consult-project-function nil)
   )
@@ -384,6 +399,9 @@
   :config
   (projectile-mode))
 
+(use-package transient
+  :ensure t)
+
 (use-package magit
 
   :general
@@ -412,7 +430,8 @@
 
 (use-package whitespace
   :ensure nil
-  :init
+  :config
+  (global-whitespace-mode 1)
   (setq-default whitespace-display-mappings
                 '(
                   ;; (space-mark ?\  [?·] [?.])        ; space - middle dot
@@ -442,8 +461,6 @@
   (setq whitespace-style (remove 'tabs whitespace-style))
   (setq whitespace-line-column 120)
 
-  :config
-  (global-whitespace-mode 1)
   (add-to-list 'whitespace-style 'lines-tail)
   (set-face-attribute 'whitespace-trailing nil :background "darkred" :foreground "gray30")
   (set-face-attribute 'whitespace-empty nil :background "darkred" :foreground "gray30"))
@@ -458,19 +475,19 @@
 
 (defun aeruder/ls-dotfiles ()
   (interactive)
-  (helm-fzf (expand-file-name "~/.dotfiles")))
+  (consult-fd (expand-file-name "~/.dotfiles")))
 
 (defun aeruder/fzf-projectile ()
   (interactive)
-  (helm-fzf (projectile-project-root)))
+  (consult-fd (projectile-project-root)))
 
 (defun aeruder/fzf-same-projectile ()
   (interactive)
-  (helm-fzf-same (projectile-project-root)))
+  (consult-fd (projectile-project-root)))
 
 (defun aeruder/ripgrep-projectile ()
   (interactive)
-  (helm-ripgrep (projectile-project-root)))
+  (consult-ripgrep (projectile-project-root)))
 
 (defun aeruder/align= (start end)
   (interactive "r")
