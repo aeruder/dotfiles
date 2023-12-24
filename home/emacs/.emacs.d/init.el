@@ -1,5 +1,6 @@
-;; keybinds
 (add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
+(require 'init-benchmarking) ;; Measure startup time
+
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
@@ -9,17 +10,24 @@
 (require 'package)
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
+(setq package-user-dir
+      (expand-file-name (format "elpa-%s.%s" emacs-major-version emacs-minor-version)
+                        user-emacs-directory))
+(package-initialize t)
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
+(setq use-package-compute-statistics t)
 (setq use-package-always-ensure t)
+
+(defun aeruder/activate-package (name &rest args)
+  (let ((res (apply 'use-package-ensure-elpa (cons name args))))
+    (if (package-installed-p name) (package-activate name))
+    res))
+
+(setq use-package-ensure-function 'aeruder/activate-package)
+
 (use-package quelpa)
-(quelpa
- '(quelpa-use-package
-   :fetcher github
-   :repo "quelpa/quelpa-use-package"))
-(require 'quelpa-use-package)
+(use-package quelpa-use-package)
 (quelpa-use-package-activate-advice)
 
 (setq package-native-compile t)
@@ -197,7 +205,7 @@
 
   :init
   (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
-  (setq evil-want-integration nil)
+  (setq evil-want-integration t) ; evil collection depends on this
   (setq evil-want-keybinding nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
   (setq evil-undo-system 'undo-redo)
@@ -226,6 +234,7 @@
            "g c" 'evil-commentary-line))
 
 (use-package evil-collection
+  :diminish evil-collection-unimpaired-mode
   :config
   (delq 'diff-mode evil-collection-mode-list)
   (delq 'outline evil-collection-mode-list)
@@ -257,9 +266,14 @@
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
+  :ensure nil
   :init
-  (savehist-mode))
+  (savehist-mode 1))
 
+(use-package recentf
+  :ensure nil
+  :init
+  (recentf-mode 1))
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
@@ -390,8 +404,7 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-(use-package
-  birds-of-paradise-plus-theme
+(use-package birds-of-paradise-plus-theme
   :config (load-theme 'birds-of-paradise-plus t))
 
 (use-package projectile
@@ -400,28 +413,27 @@
   (projectile-mode))
 
 (use-package transient
+  :defer t
   :ensure t)
 
 (use-package magit
+  :commands (magit-toplevel)
 
-  :general
-
-  (:states '(normal visual motion)
-           :keymaps 'override
-           "SPC g R" 'magit-refresh-all
-           "SPC g f" 'magit-file-dispatch
-           "SPC g b" 'magit-blame
-           "SPC g g" 'magit
-           "SPC g h" 'magit-reflog
-           "SPC g l A" 'magit-log-author
-           "SPC g l R" 'magit-reflog
-           "SPC g l a" 'magit-log-all
-           "SPC g l f" 'magit-log-buffer-file
-           "SPC g l r" 'magit-reflog-current
-           "SPC g l x" 'magit-rebase-interactive
-           "SPC g r" 'magit-refresh
-           "SPC g s" 'magit-status)
-  )
+  :general (:states '(normal visual motion)
+                    :keymaps 'override
+                    "SPC g R" 'magit-refresh-all
+                    "SPC g f" 'magit-file-dispatch
+                    "SPC g b" 'magit-blame
+                    "SPC g g" 'magit
+                    "SPC g h" 'magit-reflog
+                    "SPC g l A" 'magit-log-author
+                    "SPC g l R" 'magit-reflog
+                    "SPC g l a" 'magit-log-all
+                    "SPC g l f" 'magit-log-buffer-file
+                    "SPC g l r" 'magit-reflog-current
+                    "SPC g l x" 'magit-rebase-interactive
+                    "SPC g r" 'magit-refresh
+                    "SPC g s" 'magit-status))
 
 (use-package vi-tilde-fringe
   :diminish vi-tilde-fringe-mode
@@ -430,6 +442,7 @@
 
 (use-package whitespace
   :ensure nil
+  :diminish nil
   :config
   (global-whitespace-mode 1)
   (setq-default whitespace-display-mappings
@@ -736,5 +749,32 @@
           (process-send-string proc text)
           (process-send-eof proc)))
       (setq last-paste-to-osx text))))
+
+(use-package elixir-mode
+  :mode (
+         ("\\.elixir\\'" . elixir-mode)
+         ("\\.ex\\'" . elixir-mode)
+         ("\\.exs\\'" . elixir-mode)
+         ("mix\\.lock" . elixir-mode)))
+
+;; (use-package yaml-mode
+;;   :mode (("\\.\\(e?ya?\\|ra\\)ml\\'" . yaml-mode))
+;;   :magic (("^%YAML\\s-+[0-9]+\\.[0-9]+\\(\\s-+#\\|\\s-*$\\)" . yaml-mode)))
+
+(use-package terraform-mode
+  :mode (("\\.tf\\(vars\\)?\\'" . terraform-mode)))
+(use-package dockerfile-mode
+  :mode (("\\.dockerfile\\'" . dockerfile-mode)
+         ("[/\\]\\(?:Containerfile\\|Dockerfile\\)\\(?:\\.[^/\\]*\\)?\\'" . dockerfile-mode)))
+(use-package processing-mode
+  :mode (("\\.pde$" . processing-mode)))
+
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :config
+  (setq yas-indent-line 'fixed)
+  ;; (if (exists
+  (let ((privsnip (expand-file-name "snippets.private" user-emacs-directory))) (if (file-directory-p privsnip) (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)))
+  (yas-global-mode 1))
 
 (server-start)
