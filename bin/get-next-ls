@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+if [[ $# -lt 1 ]]; then
+    echo "Usage: $0 linux-arm64" >&2
+    exit 1
+fi
+
+arch="$1"
+arch=$(echo "$arch" | sed -e 's/-/_/g')
+
+mkdir -p ~/.local/bin
+gh release download --pattern next_ls_"$arch" --output ~/.local/bin/nextls --clobber --repo elixir-tools/next-ls
+chmod +x ~/.local/bin/nextls
