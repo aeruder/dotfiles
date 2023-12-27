@@ -60,3 +60,4 @@ tramp
 /.cache
 /elixir-ls
 /history
+/tree-sitter

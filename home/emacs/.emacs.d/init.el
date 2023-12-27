@@ -41,7 +41,13 @@
   :init
   (setq which-key-enable-extended-define-key t)
   :config
-  (which-key-mode))
+  (which-key-mode t))
+
+(use-package flymake
+  :diminish flymake-mode
+  :ensure nil
+  :config
+  (flymake-mode t))
 
 (use-package general
   :diminish general-override-mode
@@ -64,7 +70,7 @@
            "SPC w" '(nil :which-key "window")
            "SPC x" '(nil :which-key "text")
            "SPC x a" '(nil :which-key "align"))
-  (general-override-mode)
+  (general-override-mode t)
 
   )
 
@@ -187,7 +193,19 @@
   (setq last-paste-to-osx nil)
 
   (setq interprogram-cut-function 'paste-to-osx)
-  (setq interprogram-paste-function 'copy-from-osx))
+  (setq interprogram-paste-function 'copy-from-osx)
+  ;; Prevent stale elisp bytecode from shadowing more up-to-date source files
+  (setq load-prefer-newer t)
+
+  ;; Increase warning threshold
+  (setq large-file-warning-threshold (* 64 1000000))
+
+  ;; Set undo limit to 64 MB
+  (setq undo-outer-limit (* 64 1000000))
+
+  ;; Increase the amount of data which Emacs reads from subprocesses
+  (setq read-process-output-max (* 1024 1024)) ; 1 MB
+  )
 
                                         ; vim keybindings
 (use-package evil
@@ -239,13 +257,6 @@
   (delq 'diff-mode evil-collection-mode-list)
   (delq 'outline evil-collection-mode-list)
   (evil-collection-init))
-
-(use-package which-key
-  :diminish which-key-mode
-  :init
-  (setq which-key-enable-extended-define-key t)
-  :config
-  (which-key-mode))
 
 (use-package vertico
   :init
@@ -750,14 +761,21 @@
           (process-send-eof proc)))
       (setq last-paste-to-osx text))))
 
-(use-package elixir-mode
-  :mode (
-         ("\\.elixir\\'" . elixir-mode)
-         ("\\.ex\\'" . elixir-mode)
-         ("\\.exs\\'" . elixir-mode)
-         ("mix\\.lock" . elixir-mode)))
+(use-package elixir-ts-mode
+  :config
+    (with-eval-after-load 'eglot
+        (add-to-list 'eglot-server-programs
+                    `((elixir-ts-mode heex-ts-mode) .
+                    ("nextls" "--stdio=true"))))
 
-;; (use-package yaml-mode
+  :hook ((elixir-ts-mode heex-ts-mode) . eglot-ensure)
+
+  :mode (("\\.elixir\\'" . elixir-ts-mode)
+         ("\\.ex\\'" . elixir-ts-mode)
+         ("\\.exs\\'" . elixir-ts-mode)
+         ("mix\\.lock" . elixir-ts-mode)))
+
+;; (Use-package yaml-mode
 ;;   :mode (("\\.\\(e?ya?\\|ra\\)ml\\'" . yaml-mode))
 ;;   :magic (("^%YAML\\s-+[0-9]+\\.[0-9]+\\(\\s-+#\\|\\s-*$\\)" . yaml-mode)))
 
@@ -776,5 +794,8 @@
   ;; (if (exists
   (let ((privsnip (expand-file-name "snippets.private" user-emacs-directory))) (if (file-directory-p privsnip) (add-to-list 'yas-snippet-dirs (expand-file-name "snippets.private" user-emacs-directory) t)))
   (yas-global-mode 1))
+
+(use-package rust-mode
+  :mode (("\\.rs\\'" . rust-mode)))
 
 (server-start)
