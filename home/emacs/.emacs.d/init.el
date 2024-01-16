@@ -711,20 +711,6 @@
       (message "Deleted file %s" filename)
       (kill-buffer))))
 
-(defun pbcopy ()
-  (interactive)
-  (call-process-region (point) (mark) "pbcopy")
-  (setq deactivate-mark t))
-
-(defun pbpaste ()
-  (interactive)
-  (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
-
-(defun pbcut ()
-  (interactive)
-  (pbcopy)
-  (delete-region (region-beginning) (region-end)))
-
 (defun copy-from-osx ()
   (with-temp-buffer
     (cd temporary-file-directory)
@@ -758,8 +744,8 @@
           (process-send-eof proc))
         (let ((proc (start-process "xsel-clipboard" "*Messages*" "xsel" "-i" "-b")))
           (process-send-string proc text)
-          (process-send-eof proc)))
-      (setq last-paste-to-osx text))))
+          (process-send-eof proc))))
+      (setq last-paste-to-osx text)))
 
 (use-package elixir-ts-mode
   :config
