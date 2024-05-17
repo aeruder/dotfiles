@@ -1,0 +1,9 @@
+require 'spec_helper'
+
+describe ${1:Class} do
+  describe '#${2:method}' do
+    it '${3:whatever}' do
+      $0
+    end
+  end
+end 

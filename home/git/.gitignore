@@ -27,3 +27,5 @@ tags
 instruments*.trace
 .vstags
 /.docker-sync
+.fdignore
+.ignore

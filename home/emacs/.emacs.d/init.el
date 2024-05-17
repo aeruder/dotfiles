@@ -116,7 +116,7 @@
            "SPC p p" 'projectile-switch-project
            "SPC p f" 'aeruder/fzf-projectile
            "SPC p F" 'aeruder/fzf-same-projectile
-           "SPC p s" 'projectile-ripgrep
+           "SPC p s" 'aeruder/ripgrep-projectile
            "SPC p S" 'aeruder/ripgrep-projectile
            "SPC p t" 'helm-gtags-find-tag
 
@@ -205,7 +205,26 @@
 
   ;; Increase the amount of data which Emacs reads from subprocesses
   (setq read-process-output-max (* 1024 1024)) ; 1 MB
-  )
+
+  (setq treesit-language-source-alist
+        '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+          (cmake "https://github.com/uyha/tree-sitter-cmake")
+          (css "https://github.com/tree-sitter/tree-sitter-css")
+          (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+          (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+          (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
+          (go "https://github.com/tree-sitter/tree-sitter-go")
+          (heex "https://github.com/phoenixframework/tree-sitter-heex")
+          (html "https://github.com/tree-sitter/tree-sitter-html")
+          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+          (json "https://github.com/tree-sitter/tree-sitter-json")
+          (make "https://github.com/alemuller/tree-sitter-make")
+          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+          (python "https://github.com/tree-sitter/tree-sitter-python")
+          (toml "https://github.com/tree-sitter/tree-sitter-toml")
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+          (yaml "https://github.com/ikatyang/tree-sitter-yaml"))))
 
                                         ; vim keybindings
 (use-package evil
@@ -384,6 +403,15 @@
   (setq consult-project-function (lambda (_) (projectile-project-root)))
   ;;;; 5. No project support
   ;; (setq consult-project-function nil)
+  (setq consult-fd-args
+        (concat
+         (if (executable-find "fdfind" 'remote) "fdfind" "fd")
+         " --full-path --color=never --hidden --no-ignore-vcs --exclude .git --exclude node_modules"))
+  (setq consult-ripgrep-args
+        "rg --null --line-buffered --color=never --max-columns=1000 --path-separator /\
+         --no-heading --with-filename --line-number --search-zip \
+         --smart-case --hidden --no-ignore-vcs -g !.git -g !node_modules")
+
   )
 
 (use-package embark
@@ -415,8 +443,25 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-(use-package birds-of-paradise-plus-theme
-  :config (load-theme 'birds-of-paradise-plus t))
+;; (use-package birds-of-paradise-plus-theme
+;;   :config (load-theme 'birds-of-paradise-plus t))
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-laserwave t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;; (doom-themes-neotree-config)
+  ;; or for treemacs users
+  ;; (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  ;; (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 (use-package projectile
   :diminish projectile-mode
@@ -761,15 +806,15 @@
          ("\\.exs\\'" . elixir-ts-mode)
          ("mix\\.lock" . elixir-ts-mode)))
 
-;; (Use-package yaml-mode
-;;   :mode (("\\.\\(e?ya?\\|ra\\)ml\\'" . yaml-mode))
-;;   :magic (("^%YAML\\s-+[0-9]+\\.[0-9]+\\(\\s-+#\\|\\s-*$\\)" . yaml-mode)))
+(use-package yaml-mode
+   :mode (("\\.\\(e?ya?\\|ra\\)ml\\'" . yaml-ts-mode))
+   :magic (("^%YAML\\s-+[0-9]+\\.[0-9]+\\(\\s-+#\\|\\s-*$\\)" . yaml-ts-mode)))
 
 (use-package terraform-mode
   :mode (("\\.tf\\(vars\\)?\\'" . terraform-mode)))
-(use-package dockerfile-mode
-  :mode (("\\.dockerfile\\'" . dockerfile-mode)
-         ("[/\\]\\(?:Containerfile\\|Dockerfile\\)\\(?:\\.[^/\\]*\\)?\\'" . dockerfile-mode)))
+(use-package dockerfile-ts-mode
+  :mode (("\\.dockerfile\\'" . dockerfile-ts-mode)
+         ("[/\\]\\(?:Containerfile\\|Dockerfile\\)\\(?:\\.[^/\\]*\\)?\\'" . dockerfile-ts-mode)))
 (use-package processing-mode
   :mode (("\\.pde$" . processing-mode)))
 
@@ -782,6 +827,12 @@
   (yas-global-mode 1))
 
 (use-package rust-mode
-  :mode (("\\.rs\\'" . rust-mode)))
+  :mode (("\\.rs\\'" . rust-ts-mode)))
+
+(use-package diff-hl
+  :diminish diff-hl-mode
+  :config
+  (global-diff-hl-mode)
+  (diff-hl-margin-mode 1))
 
 (server-start)

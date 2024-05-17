@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+while IFS= read -r r; do
+    # captures are used to avoid newline issues since it kinda strips
+    # trailing newlines
+    header=$(git --no-pager log -1 --pretty=format:"%s" "$r")
+    body=$(git --no-pager log -1 --pretty=format:"%b" "$r")
+    diffstat=$(git --no-pager log -1 --pretty=format: --stat=90 "$r")
+
+    if [[ "$body" != "" ]]; then
+        body=$(cat <<-EOF
+
+\`\`\`
+$body
+\`\`\`
+EOF
+            )
+    fi
+
+    cat <<-EOF
+### $header
+
+$body
+
+\`\`\`
+$diffstat
+\`\`\`
+
+EOF
+done < <(
+    git rev-list --reverse "$@"
+)

@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'date'
+
+def ms_to_s(ms)
+  s = (ms / 1000).to_s
+  f = ms.abs % 1000
+
+  sprintf "%6s.%03d", s, f
+end
+
+first = nil
+ARGF.each do |line|
+  line.chomp!
+  if m = line.match(/(^\d\d\d\d-\d\d-\d\d[^ ]+) (.*)/)
+    begin
+      parsed = DateTime.parse(m[1])
+      first ||= parsed
+
+      msdiff = ((parsed - first) * 86400 * 1000).round
+      puts "#{ms_to_s(msdiff)} #{m[2]}"
+    rescue Date::Error
+      puts line
+    end
+  else
+    puts line
+  end
+end
