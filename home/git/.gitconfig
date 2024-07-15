@@ -45,6 +45,7 @@
 [log]
 	decorate = True
 	date = format-local:%c %z
+	diffMerges = first-parent
 [diff]
 	renames = copy
 [am]
