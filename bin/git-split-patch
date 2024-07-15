@@ -29,8 +29,16 @@ my $commit = shift @ARGV;
 
 $commit = get_sha($commit);
 
-system(qw(git checkout), "${commit}^", @ARGV) == 0 or
-  die "git checkout failed: $?";
+for my $f (@ARGV) {
+  if (system(qw(git cat-file -e), "${commit}^", $f) == 0) {
+    system(qw(git checkout), "${commit}^", $f) == 0 or
+      die "git checkout failed: $?";
+  } else {
+    system(qw(git rm), $f) == 0 or
+      die "git rm failed: $?";
+  }
+}
+
 system(qw(git commit --fixup), $commit) == 0 or
   die "git commit failed: $?";
 system(qw(git checkout), $commit, @ARGV) == 0 or
