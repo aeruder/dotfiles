@@ -1,0 +1,88 @@
+#!/usr/bin/env elixir
+
+Mix.install([
+  {:briefly, "~> 0.5.0"}
+])
+
+defmodule ConfigDups do
+  def compare(base, env) do
+    compare(base, env, [], [])
+    |> Enum.map(&Enum.reverse(&1))
+  end
+
+  defp compare(base, env, path, res) do
+    cond do
+      Keyword.keyword?(base) and Keyword.keyword?(env) ->
+        Enum.reduce(env, res, fn {k, v}, acc ->
+          if Keyword.has_key?(base, k) do
+            compare(Keyword.fetch!(base, k), v, [k | path], acc)
+          else
+            acc
+          end
+        end)
+
+      base == env ->
+        [path | res]
+
+      true ->
+        res
+    end
+  end
+end
+
+defmodule AuditConfig do
+  @env_candidates ~w{prod prd test tst dev staging stg}
+  @config_path "config"
+
+  def run() do
+    {:ok, tmpdir} = Briefly.create(type: :directory)
+    true = has_config?(:main)
+
+    active_configs =
+      @env_candidates
+      |> Enum.filter(fn x -> has_config?("#{x}.exs") end)
+
+    copy_config("config.exs", tmpdir)
+    Enum.each(active_configs, fn x -> copy_config("#{x}.exs", tmpdir) end)
+    :ok = File.touch(Path.join(tmpdir, "null.exs"))
+
+    base_config = Config.Reader.read!(Path.join(tmpdir, "config.exs"), env: :null)
+
+    env_configs =
+      active_configs
+      |> Enum.map(fn x ->
+        {"#{x}.exs", Config.Reader.read!(Path.join(tmpdir, "#{x}.exs"), env: :null)}
+      end)
+      |> Enum.into(%{})
+
+    # base_config |> IO.inspect()
+    # env_configs |> IO.inspect()
+
+    env_configs |> Enum.each(&process_config(&1, base_config))
+  end
+
+  def process_config({name, config}, base_config) do
+    ConfigDups.compare(base_config, config)
+    |> Enum.map(fn path ->
+      path = path |> Enum.map(&inspect(&1)) |> Enum.join("->")
+      "#{name}: #{path}"
+    end)
+    |> Enum.sort()
+    |> Enum.each(&IO.puts(&1))
+  end
+
+  def has_config?(:main), do: has_config?("config.exs")
+
+  def has_config?(env) do
+    File.exists?(Path.join(@config_path, env))
+  end
+
+  def copy_config(:main, tmpdir), do: copy_config("config.exs", tmpdir)
+
+  def copy_config(env, tmpdir) do
+    {:ok, _files} = File.copy(Path.join(@config_path, env), Path.join(tmpdir, env))
+    :ok
+  end
+end
+
+AuditConfig.run()
