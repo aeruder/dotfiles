@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+OUTFILE=$(mktemp)
+
+cleanup() {
+    rm -f "$OUTFILE"
+}
+
+exec 3> "$OUTFILE"
+exec 4>&1
+exec >&2
+
+trap cleanup EXIT
+
+for env in dev stg prd ; do
+    cd terraform/$env
+    terraform init
+    terraform plan -out target.plan
+    cat >&3 <<-EOF
+## $env
+
+\`\`\`terraform
+EOF
+    terraform show -no-color target.plan >&3
+    cat >&3 <<-EOF
+
+\`\`\`
+
+EOF
+    cd ../..
+done
+
+cat "$OUTFILE" >&4
