@@ -1,0 +1,76 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use v5.10;
+use JSON::XS;
+use JSON::PP ();
+
+binmode(STDIN, ":raw");
+
+my $JSON = JSON::XS->new->utf8->boolean_values($JSON::PP::false, $JSON::PP::true);
+
+my $data = do {
+  local $/ = undef;
+  $JSON->decode(<STDIN>);
+};
+
+my $indent = "  ";
+
+for my $s ($data->{Statement}->@*) {
+  print $indent x 1, "statement {", "\n";
+  print $indent x 2, "effect = \"", delete $s->{Effect}, "\"", "\n";
+
+  my $action = delete $s->{Action};
+
+  if (defined($action) && ref($action) eq "") {
+    print $indent x 2, "actions = [\"$action\"]", "\n";
+  } elsif (defined($action) && ref($action) eq "ARRAY") {
+    print $indent x 2, "actions = [", "\n";
+    print $indent x 3, join(",\n" . $indent x 3, map { "\"$_\"" } @$action), "\n";
+    print $indent x 2, "]", "\n";
+  } elsif (defined($action)) {
+    die "don't know how to interpret action: $action"
+  }
+
+  my $resource = delete $s->{Resource};
+  my $resources = delete $s->{Resources};
+
+  if (defined($resource) && !defined($resources)) {
+    $resources = [$resource];
+  } elsif (defined($resource) && defined($resources)) {
+    die "has Resource and Resources???"
+  }
+
+  if (defined($resources)) {
+    print $indent x 2, "resources = [", "\n";
+    print $indent x 3, join(",\n" . $indent x 3, map { "\"$_\"" } @$resources), "\n";
+    print $indent x 2, "]", "\n";
+  }
+
+  my $condition_top = (delete $s->{Condition}) // {};
+
+  for my $condition_test (keys %$condition_top) {
+    print "\n";
+    print $indent x 2, "condition {", "\n";
+    print $indent x 3, "test = \"$condition_test\"", "\n";
+
+    for my $var (keys $condition_top->{$condition_test}->%*) {
+      print $indent x 3, "variable = \"$var\"", "\n";
+      my $values = $condition_top->{$condition_test}{$var};
+
+      if (ref($values)) {
+        print $indent x 3, "values = [", "\n";
+        print $indent x 4, join(",\n" . $indent x 4, map { "\"$_\"" } @$values), "\n";
+        print $indent x 3, "]", "\n";
+      } else {
+        print $indent x 3, "values = [\"$values\"]", "\n";
+      }
+    }
+
+    print $indent x 2, "}", "\n";
+  }
+
+  print $indent x 1, "}", "\n";
+  print "\n";
+}
