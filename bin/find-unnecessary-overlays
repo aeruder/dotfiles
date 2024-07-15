@@ -1,0 +1,75 @@
+#!/usr/bin/env elixir
+
+Mix.install([
+  {:yaml_elixir, "~> 2.11"}
+])
+
+defmodule InvestigateDups do
+  def run(base, overlay) do
+    fbase = flatten(%{}, [], base)
+    foverlay = flatten(%{}, [], overlay)
+
+    Map.keys(foverlay)
+    |> Enum.sort()
+    |> Enum.map(fn key ->
+      if Map.has_key?(fbase, key) do
+        if Map.get(fbase, key) == Map.get(foverlay, key) do
+          {key, :unnecessary}
+        else
+          {key, :necessary}
+        end
+      else
+        if parent_has_empty_map?(fbase, key) do
+          {key, :necessary}
+        else
+          {key, :missing}
+        end
+      end
+    end)
+    |> Enum.each(&print_instructions(&1))
+  end
+
+  def parent_has_empty_map?(_map, []), do: false
+  def parent_has_empty_map?(map, [_ | _] = list) do
+    parent = list |> Enum.reverse() |> tl() |> Enum.reverse()
+    if Map.has_key?(map, parent) and Map.get(map, parent) == %{} do
+      true
+    else
+      parent_has_empty_map?(map, parent)
+    end
+  end
+
+  def print_instructions({key, :unnecessary}) do
+    IO.puts("REMOVE: #{key_to_s(key)} (same in both)")
+  end
+
+  def print_instructions({key, :missing}) do
+    IO.puts("MISSING: #{key_to_s(key)} (missing in base values file)")
+  end
+
+  def print_instructions({key, :necessary}) do
+    IO.puts("LEAVE: #{key_to_s(key)} (changed in override)")
+  end
+
+  def key_to_s(key) do
+    Enum.join(key, "->")
+  end
+
+  def flatten(res, prefix, %{} = d) when d != %{} do
+    Map.keys(d)
+    |> Enum.reduce(res, fn key, res ->
+      flatten(res, [key | prefix], Map.get(d, key))
+    end)
+  end
+
+  def flatten(res, prefix, d) do
+    Map.put(res, prefix |> Enum.reverse(), d)
+  end
+end
+
+{_, [base, overlay], _} = OptionParser.parse(System.argv(), strict: [])
+
+{:ok, base} = YamlElixir.read_from_file(base)
+{:ok, overlay} = YamlElixir.read_from_file(overlay)
+
+InvestigateDups.run(base, overlay)
