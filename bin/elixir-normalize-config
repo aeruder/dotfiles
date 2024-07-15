@@ -1,0 +1,25 @@
+#!/usr/bin/env elixir
+
+defmodule NormalizeConfig do
+  def run(config) do
+    normalize(config)
+  end
+
+  defp normalize(val) when is_list(val) do
+    if Keyword.keyword?(val) do
+      Keyword.keys(val) |> Enum.sort() |> Enum.uniq() |> Enum.map(fn x ->
+        {x, normalize(Keyword.fetch!(val, x))}
+      end)
+    else
+      val
+    end
+  end
+
+  defp normalize(val), do: val
+
+end
+
+File.read!("/dev/stdin")
+  |> :erlang.binary_to_term()
+  |> NormalizeConfig.run()
+  |> IO.inspect(limit: :infinity, printable_limit: :infinity)
