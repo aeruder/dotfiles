@@ -14,6 +14,10 @@ exec >&2
 trap cleanup EXIT
 
 for env in dev stg prd ; do
+    if ! [ -d terraform/$env ]; then
+        continue
+    fi
+
     cd terraform/$env
     terraform init
     terraform plan -out target.plan
