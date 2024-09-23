@@ -221,6 +221,7 @@
           (make "https://github.com/alemuller/tree-sitter-make")
           (markdown "https://github.com/ikatyang/tree-sitter-markdown")
           (python "https://github.com/tree-sitter/tree-sitter-python")
+          (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
           (toml "https://github.com/tree-sitter/tree-sitter-toml")
           (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
@@ -829,6 +830,11 @@
 
 (use-package rust-mode
   :mode (("\\.rs\\'" . rust-ts-mode)))
+
+(use-package ruby-mode
+  :ensure nil
+  :interpreter (("ruby" . ruby-ts-mode))
+  :mode (("\\.rb\\'" . ruby-ts-mode)))
 
 (use-package diff-hl
   :diminish diff-hl-mode
