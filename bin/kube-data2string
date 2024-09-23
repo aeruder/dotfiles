@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'yaml'
+require 'base64'
+
+def secret?(doc)
+  doc['apiVersion'] == 'v1' && doc['kind'] == 'Secret'
+end
+
+def convert_data_to_string(doc)
+  string_data = doc.fetch('stringData', {})
+  data = doc.fetch('data', {})
+  data.each do |k, v|
+    raise "duplicate key('#{k}')" if string_data.key?(k)
+
+    string_data[k] = Base64.decode64(v)
+    data.delete(k)
+  end
+  doc['stringData'] = string_data unless string_data.empty?
+  doc.delete('data') if data.empty?
+end
+
+if ARGV.length >= 1
+  filename = ARGV.join('+')
+  contents = ARGV.reduce('') do |memo, fn|
+    memo + File.read(fn)
+  end
+else
+  filename = '<stdin>'
+  contents = $stdin.read
+end
+
+YAML.load_stream(contents, filename:) do |doc|
+  convert_data_to_string(doc) if secret?(doc)
+  puts YAML.dump(doc)
+end

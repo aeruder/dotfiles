@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'yaml'
+
+def list?(doc)
+  doc['apiVersion'] == 'v1' && doc['kind'] == 'List'
+end
+
+if ARGV.length >= 1
+  filename = ARGV.join('+')
+  contents = ARGV.reduce('') do |memo, fn|
+    memo + File.read(fn)
+  end
+else
+  filename = '<stdin>'
+  contents = $stdin.read
+end
+
+YAML.load_stream(contents, filename:) do |doc|
+  if list?(doc)
+    doc.fetch('items', []).each do |subdoc|
+      puts YAML.dump(subdoc)
+    end
+  else
+    puts YAML.dump(doc)
+  end
+end
