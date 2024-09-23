@@ -30,7 +30,7 @@ my $commit = shift @ARGV;
 $commit = get_sha($commit);
 
 for my $f (@ARGV) {
-  if (system(qw(git cat-file -e), "${commit}^", $f) == 0) {
+  if (system(qw(git cat-file -e), "${commit}^:${f}") == 0) {
     system(qw(git checkout), "${commit}^", $f) == 0 or
       die "git checkout failed: $?";
   } else {
