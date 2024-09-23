@@ -18,9 +18,11 @@ my $upstream = "origin/HEAD";
 my $upstream_cache = {};
 my $help;
 my $verbose;
+my $remote;
 
 GetOptions(
   "upstream|u=s" => \$upstream,
+  "remote|r" => \$remote,
   "help|?" => \$help,
   "verbose|v" => \$verbose,
 ) or pod2usage(2);
@@ -40,7 +42,7 @@ $upstream = git_rev_parse($upstream);
   }
 }
 
-open my $fh, '-|', qw(git for-each-ref refs/heads/);
+open my $fh, '-|', qw(git for-each-ref refs/heads/), $remote ? ('refs/remotes/') : ();
 
 my @branches;
 my $longest_name = 0;
