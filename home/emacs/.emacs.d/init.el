@@ -102,7 +102,6 @@
            "SPC f y g" 'aeruder/copy-url-path
            "SPC f y G" 'aeruder/copy-url-path-line
 
-
            "SPC h d b" 'describe-bindings
            "SPC h d c" 'describe-char
            "SPC h d f" 'describe-function
@@ -111,14 +110,6 @@
            "SPC h d t" 'describe-theme
            "SPC h d v" 'describe-variable
            "SPC h n" 'view-emacs-news
-
-           "SPC p b" 'consult-project-buffer
-           "SPC p p" 'projectile-switch-project
-           "SPC p f" 'aeruder/fzf-projectile
-           "SPC p F" 'aeruder/fzf-same-projectile
-           "SPC p s" 'aeruder/ripgrep-projectile
-           "SPC p S" 'aeruder/ripgrep-projectile
-           "SPC p t" 'helm-gtags-find-tag
 
            "SPC q q" 'spacemacs/frame-killer
            "SPC q Q" 'aeruder/quit
@@ -341,6 +332,7 @@
            "SPC b l" 'consult-line
            "SPC b B" 'consult-bookmark
            "SPC b r" 'consult-recent-file
+           "SPC p b" 'consult-project-buffer
            )
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
@@ -467,6 +459,11 @@
 
 (use-package projectile
   :diminish projectile-mode
+  :general (:states '(normal visual motion)
+                    :keymaps 'override
+           "SPC p p" 'projectile-switch-project
+           "SPC p f" 'aeruder/projectile-files
+           "SPC p s" 'aeruder/projectile-search)
   :config
   (projectile-mode))
 
@@ -548,15 +545,11 @@
   (interactive)
   (consult-fd (expand-file-name "~/.dotfiles")))
 
-(defun aeruder/fzf-projectile ()
+(defun aeruder/projectile-files ()
   (interactive)
   (consult-fd (projectile-project-root)))
 
-(defun aeruder/fzf-same-projectile ()
-  (interactive)
-  (consult-fd (projectile-project-root)))
-
-(defun aeruder/ripgrep-projectile ()
+(defun aeruder/projectile-search ()
   (interactive)
   (consult-ripgrep (projectile-project-root)))
 
