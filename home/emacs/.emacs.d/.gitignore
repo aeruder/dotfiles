@@ -61,3 +61,5 @@ tramp
 /elixir-ls
 /history
 /tree-sitter
+
+/org-roam.db

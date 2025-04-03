@@ -19,6 +19,27 @@ my $indent = "  ";
 
 for my $s ($data->{Statement}->@*) {
   print $indent x 1, "statement {", "\n";
+
+  my $sid = delete $s->{Sid};
+  if (defined($sid)) {
+    print $indent x 2, "sid = \"$sid\"", "\n";
+  }
+
+  my $principals = delete $s->{Principal};
+  if (defined($principals) && ref($principals) eq "HASH") {
+    for my $k (keys $principals->%*) {
+        print $indent x 2, "principals {", "\n";
+        print $indent x 3, "type = \"$k\"", "\n";
+        my $v = $principals->{$k};
+        $v = [$v] unless ref($v) eq "ARRAY";
+        print $indent x 3, "identifiers = [", "\n";
+        print $indent x 4, join(",\n" . $indent x 4, map { "\"$_\"" } @$v), "\n";
+        print $indent x 3, "]", "\n";
+        print $indent x 2, "}", "\n";
+        print "\n";
+    }
+  }
+
   print $indent x 2, "effect = \"", delete $s->{Effect}, "\"", "\n";
 
   my $action = delete $s->{Action};
@@ -37,7 +58,11 @@ for my $s ($data->{Statement}->@*) {
   my $resources = delete $s->{Resources};
 
   if (defined($resource) && !defined($resources)) {
-    $resources = [$resource];
+    if (ref($resource) eq "ARRAY") {
+      $resources = $resource;
+    } else {
+      $resources = [$resource];
+    }
   } elsif (defined($resource) && defined($resources)) {
     die "has Resource and Resources???"
   }

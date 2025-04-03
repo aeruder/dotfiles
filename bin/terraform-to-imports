@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+if ARGV.length >= 1
+  filename = ARGV.join('+')
+  contents = ARGV.reduce('') do |memo, fn|
+    memo + File.read(fn)
+  end
+else
+  filename = '<stdin>'
+  contents = $stdin.read
+end
+
+contents.each_line do |l|
+  if l =~ /^\s*#\s*(.*) will be created/ then
+    puts 'import {'
+    puts '  id = ""'
+    puts "  to = #{$1}"
+    puts '}'
+  end
+end

@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler'
+Bundler.setup(:default)
+
+require 'optparse'
+require 'aws-sdk-ssoadmin'
+
+options = {
+  region: 'us-east-1'
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: list-users'
+
+  opts.on('--region=REGION', 'Region') do |n|
+    options[:region] = n
+  end
+end.parse!
+
+raise 'no arguments expected' unless ARGV.length == 0
+
+Aws::SSOAdmin::Client.new(region: options.fetch(:region))

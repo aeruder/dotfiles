@@ -1,0 +1,50 @@
+#!/usr/bin/env perl
+
+use v5.20;
+use utf8;
+use warnings;
+
+my @comments;
+my @crons;
+while (<>) {
+  # commented out cron
+  my $is_cron = 0;
+  my $cron_line;
+  if (/^\s*# (\{".*)/) {
+    $cron_line = $1;
+    $is_cron = 1;
+  } elsif (/^\s*#/) {
+    push @comments, $_;
+  } elsif (/^\s*(\{".*)/) {
+    $cron_line = $1;
+    $is_cron = 1;
+  } else {
+    # ignore
+  }
+
+  if ($is_cron) {
+    push @crons, parse_cron($_, $cron_line, \@comments);
+    @comments = ();
+  }
+}
+
+@crons = sort {
+  $a->{module} cmp $b->{module}
+} @crons;
+
+for my $cron (@crons) {
+  print $_ for @{$cron->{comments}};
+  print $cron->{full_line};
+}
+
+sub parse_cron {
+  my ($full_line, $cron_line, $comments) = @_;
+
+  die "bad cron?" unless $cron_line =~ /^\{"[^"]+",\s*([^,\}]+).*/;
+
+  return {
+    full_line => $full_line,
+    module => $1,
+    comments => [@$comments],
+  };
+}

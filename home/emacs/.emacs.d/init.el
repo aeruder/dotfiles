@@ -46,6 +46,8 @@
 (use-package flymake
   :diminish flymake-mode
   :ensure nil
+  :init
+  (setq-default flymake-diagnostic-functions '())
   :config
   (flymake-mode t))
 
@@ -113,6 +115,9 @@
 
            "SPC q q" 'spacemacs/frame-killer
            "SPC q Q" 'aeruder/quit
+
+           "SPC s f" 'aeruder/current-files
+           "SPC s s" 'aeruder/current-search
 
            "SPC w =" 'balance-windows
            "SPC w d" 'delete-window
@@ -205,6 +210,7 @@
           (elisp "https://github.com/Wilfred/tree-sitter-elisp")
           (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
           (go "https://github.com/tree-sitter/tree-sitter-go")
+          (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
           (heex "https://github.com/phoenixframework/tree-sitter-heex")
           (html "https://github.com/tree-sitter/tree-sitter-html")
           (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
@@ -551,7 +557,15 @@
 
 (defun aeruder/projectile-search ()
   (interactive)
-  (consult-ripgrep (projectile-project-root)))
+  (consult-ripgrep (projectile-project-root) (current-word)))
+
+(defun aeruder/current-files ()
+  (interactive)
+  (consult-fd "."))
+
+(defun aeruder/current-search ()
+  (interactive)
+  (consult-ripgrep "." (current-word)))
 
 (defun aeruder/align= (start end)
   (interactive "r")
@@ -824,6 +838,10 @@
 (use-package rust-mode
   :mode (("\\.rs\\'" . rust-ts-mode)))
 
+(use-package go-ts-mode
+  :ensure nil
+  :mode (("\\.go\\'" . go-ts-mode)))
+
 (use-package ruby-mode
   :ensure nil
   :interpreter (("ruby" . ruby-ts-mode))
@@ -834,5 +852,25 @@
   :config
   (global-diff-hl-mode)
   (diff-hl-margin-mode 1))
+
+(use-package org-roam
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/sync/roam")
+  (org-roam-completion-everywhere t)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         ;; :map org-mode-map
+         ;; ("C-M-i" . completion-at-point)
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
+  :config
+  (require 'org-roam-dailies) ;; Ensure the keymap is available
+  (org-roam-db-autosync-mode))
 
 (server-start)

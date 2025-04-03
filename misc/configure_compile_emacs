@@ -2,18 +2,19 @@
 
 set -euo pipefail
 
-function run() {
-    echo "RUNNING: $@" >&2
-    "$@"
-}
-
+set -x
 git clean -x -d -f .
-run ./autogen.sh
-run rm -fr build
-run mkdir -p build
+./autogen.sh
+rm -fr build
+mkdir -p build
 (
-run cd build
-run ../configure --with-native-compilation --with-tree-sitter --with-json '--program-transform-name=s/^ctags$/ctags.emacs/' --prefix=$HOME/.local --without-ns --without-x --with-mailutils
-run make -j8
-run make install
+    cd build
+    # if [[ -d /opt/homebrew ]]; then
+    #     export TREE_SITTER_CFLAGS="-I/opt/homebrew/include/tree_sitter"
+    #     export TREE_SITTER_LIBS="-l/opt/homebrew/lib/libtree-sitter.a"
+    # fi
+
+    ../configure --with-native-compilation --with-tree-sitter --with-json '--program-transform-name=s/^ctags$/ctags.emacs/' --prefix=$HOME/.local --without-ns --without-x --with-mailutils
+    make -j8
+    make install
 )
