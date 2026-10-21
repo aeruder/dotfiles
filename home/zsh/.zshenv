@@ -126,15 +126,15 @@ export LD_LIBRARY_PATH="${(j%:%)ldpath}"
 # Temporary Files
 #
 
-if [[ ! -d "$TMPDIR" ]]; then
-  export TMPDIR="/tmp/$USER"
-  mkdir -p -m 700 "$TMPDIR"
-fi
+# if [[ ! -d "$TMPDIR" ]]; then
+#   export TMPDIR="/tmp/$USER"
+#   mkdir -p -m 700 "$TMPDIR"
+# fi
 
-TMPPREFIX="${TMPDIR%/}/zsh"
-if [[ ! -d "$TMPPREFIX" ]]; then
-  mkdir -p "$TMPPREFIX"
-fi
+# TMPPREFIX="${TMPDIR%/}/zsh"
+# if [[ ! -d "$TMPPREFIX" ]]; then
+#   mkdir -p "$TMPPREFIX"
+# fi
 
 # GTK stuff
 export GTK_IM_MODULE="xim"

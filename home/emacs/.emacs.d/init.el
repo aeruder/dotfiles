@@ -11,7 +11,7 @@
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (setq package-user-dir
-      (expand-file-name (format "elpa-%s.%s" emacs-major-version emacs-minor-version)
+      (expand-file-name (format "elpa-%s" emacs-version)
                         user-emacs-directory))
 (package-initialize t)
 (eval-when-compile
@@ -219,6 +219,7 @@
           (markdown "https://github.com/ikatyang/tree-sitter-markdown")
           (python "https://github.com/tree-sitter/tree-sitter-python")
           (ruby "https://github.com/tree-sitter/tree-sitter-ruby")
+          (rust "https://github.com/tree-sitter/tree-sitter-rust")
           (toml "https://github.com/tree-sitter/tree-sitter-toml")
           (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
@@ -451,7 +452,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-opera t)
+  (load-theme 'doom-acario-dark t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
