@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
 (require 'init-benchmarking) ;; Measure startup time
 
@@ -113,6 +115,8 @@
            "SPC h d v" 'describe-variable
            "SPC h n" 'view-emacs-news
 
+           "SPC p p" 'project-switch-project
+
            "SPC q q" 'spacemacs/frame-killer
            "SPC q Q" 'aeruder/quit
 
@@ -128,6 +132,15 @@
            "SPC x a =" 'aeruder/align=
            "SPC x a S" 'aeruder/reformat-sql
            )
+
+  :custom
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (tab-always-indent 'complete)
+
+  ;; Emacs 30 and newer: Disable Ispell completion function.
+  ;; Try `cape-dict' as an alternative.
+  (text-mode-ispell-word-completion nil)
 
   :init
   ;; Add prompt indicator to `completing-read-multiple'.
@@ -150,8 +163,12 @@
 
   ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
   ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
+
+  ;; TAB cycle if there are only few candidates
+  ;; (completion-cycle-threshold 3)
+
 
   (setq-default display-line-numbers 'relative)
   ;; Enable recursive minibuffers
@@ -202,6 +219,9 @@
   ;; Increase the amount of data which Emacs reads from subprocesses
   (setq read-process-output-max (* 1024 1024)) ; 1 MB
 
+  ;; project roots
+  (setq project-vc-extra-root-markers '(".project.el" ".projectile" "mix.exs"))
+
   (setq treesit-language-source-alist
         '((bash "https://github.com/tree-sitter/tree-sitter-bash")
           (cmake "https://github.com/uyha/tree-sitter-cmake")
@@ -240,19 +260,19 @@
            "SPC x -" 'evil-numbers/dec-at-pt)
 
   :init
-  (setq evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
-  (setq evil-want-integration t) ; evil collection depends on this
-  (setq evil-want-keybinding nil)
-  (setq evil-want-abbrev-expand-on-insert-exit nil)
-  (setq evil-undo-system 'undo-redo)
+  (setopt evil-want-C-i-jump nil)         ; necessary for terminal because C-i is tab
+  (setopt evil-want-integration t) ; evil collection depends on this
+  (setopt evil-want-keybinding nil)
+  (setopt evil-want-abbrev-expand-on-insert-exit nil)
+  (setopt evil-undo-system 'undo-redo)
   :config
   (evil-mode 1))
 
 (use-package evil-escape
   :diminish evil-escape-mode
   :init
-  (setq-default evil-escape-key-sequence "jk")
-  (setq-default evil-escape-delay 0.2)
+  (setopt evil-escape-key-sequence "jk")
+  (setopt evil-escape-delay 0.2)
   :config
   (add-to-list 'evil-escape-excluded-major-modes 'magit-status-mode)
   (add-to-list 'evil-escape-excluded-major-modes 'magit-revision-mode)
@@ -340,6 +360,8 @@
            "SPC b B" 'consult-bookmark
            "SPC b r" 'consult-recent-file
            "SPC p b" 'consult-project-buffer
+           "SPC p f" 'aeruder/projectile-files
+           "SPC p s" 'aeruder/projectile-search
            )
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
@@ -400,8 +422,8 @@
   ;;;; 3. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   ;;;; 4. projectile.el (projectile-project-root)
-  (autoload 'projectile-project-root "projectile")
-  (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
   ;;;; 5. No project support
   ;; (setq consult-project-function nil)
   (setq consult-fd-args
@@ -463,16 +485,6 @@
   ;; (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
-
-(use-package projectile
-  :diminish projectile-mode
-  :general (:states '(normal visual motion)
-                    :keymaps 'override
-           "SPC p p" 'projectile-switch-project
-           "SPC p f" 'aeruder/projectile-files
-           "SPC p s" 'aeruder/projectile-search)
-  :config
-  (projectile-mode))
 
 (use-package transient
   :defer t
@@ -554,11 +566,13 @@
 
 (defun aeruder/projectile-files ()
   (interactive)
-  (consult-fd (projectile-project-root)))
+  (when-let* ((proj (project-current t)))
+    (consult-fd (project-root proj))))
 
 (defun aeruder/projectile-search ()
   (interactive)
-  (consult-ripgrep (projectile-project-root) (current-word)))
+  (when-let* ((proj (project-current t)))
+    (consult-ripgrep (project-root proj) (current-word))))
 
 (defun aeruder/current-files ()
   (interactive)
@@ -731,7 +745,7 @@
   (let (string)
     (unless (mark)
       (error "No region selected"))
-    (shell-command-on-region (region-beginning) (region-end) "sql-formatter-cli" t t)))
+    (shell-command-on-region (region-beginning) (region-end) "sql-formatter -l postgresql" t t)))
 
 (defun aeruder/reset-buffer-major-mode ()
   (interactive)
@@ -804,10 +818,21 @@
 
 (use-package elixir-ts-mode
   :config
-    (with-eval-after-load 'eglot
-        (add-to-list 'eglot-server-programs
-                    `((elixir-ts-mode heex-ts-mode) .
-                    ("nextls" "--stdio=true"))))
+
+  (with-eval-after-load 'eglot
+    (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
+                     eglot-server-programs
+                     nil nil #'equal)
+          (if (and (fboundp 'w32-shell-dos-semantics)
+                   (w32-shell-dos-semantics))
+              '("expert_windows_amd64")
+            (eglot-alternatives
+             '("expert" "start_lexical.sh")))))
+
+  ;; (with-eval-after-load 'eglot
+  ;;     (add-to-list 'eglot-server-programs
+  ;;                 `((elixir-ts-mode heex-ts-mode) .
+  ;;                 ("nextls" "--stdio=true"))))
 
   :hook ((elixir-ts-mode heex-ts-mode) . eglot-ensure)
 
@@ -873,5 +898,102 @@
   :config
   (require 'org-roam-dailies) ;; Ensure the keymap is available
   (org-roam-db-autosync-mode))
+
+;; (use-package claude-code-ide
+;;   :straight (:type git :host github :repo "manzaltu/claude-code-ide.el")
+;;   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+;;   :config
+;;   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+
+;; we recommend using use-package to organize your init.el
+(use-package codeium
+  ;; if you use straight
+  ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+  ;; otherwise, make sure that the codeium.el file is on load-path
+
+  :quelpa (codeium :fetcher github :repo "Exafunction/codeium.el")
+  :init
+  ;; use globally
+  ;; (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+  ;; or on a hook
+  ;; (add-hook 'python-mode-hook
+  ;;     (lambda ()
+  ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+
+  ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+  ;; (add-hook 'python-mode-hook
+  ;;     (lambda ()
+  ;;         (setq-local completion-at-point-functions
+  ;;             (list (cape-capf-super #'codeium-completion-at-point #'lsp-completion-at-point)))))
+  ;; an async company-backend is coming soon!
+
+  ;; codeium-completion-at-point is autoloaded, but you can
+  ;; optionally set a timer, which might speed up things as the
+  ;; codeium local language server takes ~0.2s to start up
+  ;; (add-hook 'emacs-startup-hook
+  ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+
+  ;; :defer t ;; lazy loading, if you want
+  :config
+  (setq use-dialog-box nil) ;; do not use popup boxes
+
+  ;; if you don't want to use customize to save the api-key
+  ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+
+  ;; get codeium status in the modeline
+  (setq codeium-mode-line-enable
+        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+  ;; alternatively for a more extensive mode-line
+  ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+
+  ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+  (setq codeium-api-enabled
+        (lambda (api)
+          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+  ;; you can also set a config for a single buffer like this:
+  ;; (add-hook 'python-mode-hook
+  ;;     (lambda ()
+  ;;         (setq-local codeium/editor_options/tab_size 4)))
+
+  ;; You can overwrite all the codeium configs!
+  ;; for example, we recommend limiting the string sent to codeium for better performance
+  (defun my-codeium/document/text ()
+    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+  ;; if you change the text, you should also change the cursor_offset
+  ;; warning: this is measured by UTF-8 encoded bytes
+  (defun my-codeium/document/cursor_offset ()
+    (codeium-utf8-byte-length
+     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+  (setq codeium/document/text 'my-codeium/document/text)
+  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+
+(use-package corfu
+  ;; Optional customizations
+  :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-auto t)
+
+  ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  :init
+
+  ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
+  ;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
+  ;; variable `global-corfu-modes' to exclude certain modes.
+  (global-corfu-mode)
+
+  ;; Enable optional extension modes:
+  ;; (corfu-history-mode)
+  ;; (corfu-popupinfo-mode)
+  )
 
 (server-start)
