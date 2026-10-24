@@ -1,0 +1,21 @@
+{
+  "lastChangelogVersion": "1.4.0",
+  "packages": [
+    "npm:pi-llama-cpp"
+  ],
+  "llamaSettings": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:9931",
+        "id": "local",
+        "name": "Local Server",
+        "overrides": {}
+      }
+    ],
+    "reactToModelSelect": true,
+    "autoloadOnMessage": true,
+    "sortBy": "asc",
+    "pollingTimeout": 60000,
+    "serverTimeout": 1000
+  }
+}
