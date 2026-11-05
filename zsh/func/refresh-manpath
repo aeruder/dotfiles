@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+
+local -a manpath prepaths postpaths
+
+# Read in from .zsh-pre-manpaths and .zsh-post-manpaths
+if [ -z "$MANPATH" ]; then
+    unset MANPATH
+    if ( which manpath >/dev/null 2>&1 ); then
+        export MANPATH="`manpath`"
+    else
+        export MANPATH="`man -w`"
+    fi
+fi
+
+if [ "`uname`" = "Darwin" ]; then
+    eval `/usr/libexec/path_helper -s | grep "^MANPATH="`
+fi
+
+manpath=( "${(s%:%)MANPATH}" )
+[ -e ~/.zsh-pre-manpaths ] || touch ~/.zsh-pre-manpaths
+[ -e ~/.zsh-post-manpaths ] || touch ~/.zsh-post-manpaths
+
+prepaths=( ~/.dotfiles/man )
+prepaths+=( ${(f)"$(<~/.zsh-pre-manpaths)"} )
+
+postpaths=( )
+postpaths+=( ${(f)"$(<~/.zsh-post-manpaths)"} )
+
+for a in "${(Oa)prepaths[@]}"; do
+    manpath=( "$a" "${manpath[@]}" )
+done
+for a in "${postpaths[@]}"; do
+    manpath+=( "$a" )
+done
+manpath=( ${(u)manpath[@]} )
+export MANPATH="${(j%:%)manpath}"

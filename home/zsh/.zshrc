@@ -1617,9 +1617,6 @@ if [[ "$KONSOLE_PROFILE_NAME" = Solarized* ]]; then
 fi
 
 # COMPLETION
-# Add zsh-completions to $fpath.
-fpath=("${HOME}/.dotfiles/zsh/func" $fpath)
-
 if type brew > /dev/null; then
     fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
 fi

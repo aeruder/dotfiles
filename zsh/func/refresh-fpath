@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+
+fpath=(~/.dotfiles/zsh/func ${fpath[@]})
+fpath=( ${(u)fpath[@]} )
+
+autoload -Uz ${fpath[1]}/*(:t)

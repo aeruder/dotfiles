@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+
+local -a prepaths postpaths
+
+if [ "`uname`" = "Darwin" ]; then
+    eval `/usr/libexec/path_helper -s | grep "^PATH="`
+fi
+
+# Read in from .zsh-pre-paths and .zsh-post-paths
+[ -e ~/.zsh-pre-paths ] || touch ~/.zsh-pre-paths
+[ -e ~/.zsh-post-paths ] || touch ~/.zsh-post-paths
+
+prepaths=( ~/.local/bin ~/.dotfiles/bin )
+prepaths+=( ${(f)"$(<~/.zsh-pre-paths)"} )
+
+postpaths=( )
+postpaths+=( ${(f)"$(<~/.zsh-post-paths)"} )
+
+for a in "${(Oa)prepaths[@]}"; do
+    path=( "$a" "${path[@]}" )
+done
+for a in "${postpaths[@]}"; do
+    path+=( "$a" )
+done
+path=( ${(u)path[@]} )

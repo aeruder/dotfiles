@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+
+local -a ldpath prepaths postpaths
+
+# Read in from .zsh-pre-ldpaths and .zsh-post-ldpaths
+[ -e ~/.zsh-pre-ldpaths ] || touch ~/.zsh-pre-ldpaths
+[ -e ~/.zsh-post-ldpaths ] || touch ~/.zsh-post-ldpaths
+
+ldpath=( "${(s%:%)LD_LIBRARY_PATH}" )
+prepaths=( )
+prepaths+=( ${(f)"$(<~/.zsh-pre-ldpaths)"} )
+
+postpaths=( )
+postpaths+=( ${(f)"$(<~/.zsh-post-ldpaths)"} )
+
+for a in "${(Oa)prepaths[@]}"; do
+    ldpath=( "$a" "${ldpath[@]}" )
+done
+for a in "${postpaths[@]}"; do
+    ldpath+=( "$a" )
+done
+ldpath=( ${(u)ldpath[@]} )
+export LD_LIBRARY_PATH="${(j%:%)ldpath}"
