@@ -96,3 +96,4 @@ fi
 
 export GOPATH="$HOME"/go
 export PATH="$PATH":"$GOPATH"/bin
+export HOMEBREW_NO_INSTALL_FROM_API=1
