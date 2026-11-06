@@ -5,12 +5,23 @@ use strict;
 use warnings 'all';
 $^W = 1;
 
+use Tie::IxHash;
 use Text::xSV;
-use JSON::XS;
+use JSON::PP;
+use List::MoreUtils qw(natatime zip);
 
 my $CSV = Text::xSV->new();
-my $JSON = JSON::XS->new->canonical->utf8;
-$CSV->read_header();
-while (my $row = $CSV->fetchrow_hash) {
-    print $JSON->encode($row) . "\n";
+my $JSON = JSON::PP->new->utf8;
+
+my @headers = $CSV->get_row;
+
+while (my @row = $CSV->get_row) {
+    my @combined = zip @headers, @row;
+    my $it = natatime 2, @combined;
+
+    tie my %ordered_hash, 'Tie::IxHash';
+    while (my ($k, $v) = $it->()) {
+        $ordered_hash{$k} = $v;
+    }
+    print $JSON->encode(\%ordered_hash), "\n";
 }
