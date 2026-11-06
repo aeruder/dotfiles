@@ -63,3 +63,5 @@ tramp
 /tree-sitter
 
 /org-roam.db
+/projects
+/codeium
