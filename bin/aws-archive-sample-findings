@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+# Set your target AWS Region and GuardDuty Detector ID
+DETECTOR_ID=$(aws guardduty list-detectors --query "DetectorIds[0]" --output text)
+
+echo "Fetching sample finding IDs..."
+
+# 1. Pull active findings and isolate sample findings client-side
+aws guardduty list-findings \
+    --detector-id "$DETECTOR_ID" \
+    --finding-criteria '{"Criterion":{"service.archived":{"Equals":["false"]}}}' \
+    --query "FindingIds" --output json |
+    jq -r .[] |
+    xargs -I {} \
+          aws guardduty get-findings --detector-id "$DETECTOR_ID" \
+          --query "Findings[?contains(Service.AdditionalInfo.Value, '\"sample\":true')]" \
+          --finding-ids {}  |
+    jq -c '.[]' | while read -r finding ; do
+    echo "$finding" | jq -r .Description
+    finding=$(echo "$finding" | jq -r .Id)
+    aws guardduty archive-findings \
+        --detector-id "$DETECTOR_ID" \
+        --finding-ids "$finding"
+done
