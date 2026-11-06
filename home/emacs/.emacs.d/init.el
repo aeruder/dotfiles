@@ -495,6 +495,10 @@
 (use-package magit
   :commands (magit-toplevel)
 
+  :init
+  (with-eval-after-load 'project
+    (add-to-list 'project-switch-commands '(magit-project-status "Magit status" ?m) t))
+
   :general (:states '(normal visual motion)
                     :keymaps 'override
                     "SPC g R" 'magit-refresh-all
