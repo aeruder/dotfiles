@@ -22,4 +22,4 @@ end
 File.read!("/dev/stdin")
   |> :erlang.binary_to_term()
   |> NormalizeConfig.run()
-  |> IO.inspect(limit: :infinity, printable_limit: :infinity)
+  |> IO.inspect(limit: :infinity, printable_limit: :infinity, custom_options: [sort_maps: true])
