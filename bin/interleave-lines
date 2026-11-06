@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+if ARGV.length >= 1
+  filename = ARGV.join('+')
+  contents = ARGV.reduce('') do |memo, fn|
+    memo + File.read(fn)
+  end
+else
+  filename = '<stdin>'
+  contents = $stdin.read
+end
+
+lines = contents.lines
+if (lines.length % 2) == 1
+  lines << "".dup
+end
+
+first_half = lines[0...(lines.length/2)]
+second_half = lines[(lines.length/2)...]
+
+first_half.zip(second_half).flatten.each do |l|
+  l.chomp!
+
+  puts l
+end
