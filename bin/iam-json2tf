@@ -12,9 +12,18 @@ my $JSON = JSON::XS->new->utf8->boolean_values($JSON::PP::false, $JSON::PP::true
 
 my $data = do {
   local $/ = undef;
-  $JSON->decode(<STDIN>);
+  <STDIN>;
 };
 
+if ($data =~ /^ *[a-zA-Z_]+ *= *"({.*})" *$/) {
+    $data = $1;
+    $data =~ s/\\([\\"])/$1/g;
+    $data = $JSON->decode($data)
+} else {
+    $data = $JSON->decode($data)
+}
+
+print "data \"aws_iam_policy_document\" \"example\" {", "\n";
 my $indent = "  ";
 
 for my $s ($data->{Statement}->@*) {
@@ -99,3 +108,5 @@ for my $s ($data->{Statement}->@*) {
   print $indent x 1, "}", "\n";
   print "\n";
 }
+
+print "}", "\n";
