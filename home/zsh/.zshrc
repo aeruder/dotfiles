@@ -1103,7 +1103,7 @@ setopt MULTIOS
 #         MATCH variable contains the  entire matched text and the match array
 #         variable contains substrings.
 
-# setopt BSD_ECHO
+setopt BSD_ECHO
 #        BSD_ECHO <S>
 #         Make the echo builtin compatible with the BSD echo(1) command.  This
 #         disables backslashed escape sequences in echo strings unless the -e
@@ -1623,7 +1623,6 @@ fi
 
 # Load and initialize the completion system ignoring insecure directories.
 autoload -Uz compinit && compinit -i
-
 
 #
 # Styles
