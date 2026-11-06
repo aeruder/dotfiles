@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@earendil-works/pi-coding-agent": "^1.5.0",
-    "@schpet/linear-cli": "^3.1.0"
+    "@schpet/linear-cli": "^3.1.0",
+    "sql-formatter": "^15.9.0"
   }
 }
