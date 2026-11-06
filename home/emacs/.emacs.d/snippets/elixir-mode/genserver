@@ -1,0 +1,32 @@
+use GenServer
+
+@spec start_link(fast?: boolean()) :: GenServer.on_start()
+def start_link(opts) do
+  fast? = Keyword.get(opts, :fast?, false)
+
+  GenServer.start_link(
+    __MODULE__,
+    %{fast?: fast?},
+    name: __MODULE__
+  )
+end
+
+@impl true
+def init(state = %{}) do
+  {:ok, state}
+end
+
+@impl true
+def handle_call(:fast?, _from, state) do
+  {
+    :reply,
+    Map.fetch!(state, :fast?),
+    state
+  }
+end
+
+def fast? do
+  GenServer.call(__MODULE__, :fast?)
+end
+
+$0
