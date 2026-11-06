@@ -21,6 +21,7 @@ tags
 .\#*
 .local.vimrc
 .projectile
+.project.el
 .byebug_history
 .tramp_history
 /.vscode/settings.json
@@ -29,3 +30,5 @@ instruments*.trace
 /.docker-sync
 .fdignore
 .ignore
+.expert/
+**/.claude/settings.local.json

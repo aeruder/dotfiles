@@ -92,3 +92,5 @@
 [advice]
 	skippedCherryPicks = false
 	detachedHead = false
+[branch]
+	sort = -committerdate
