@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail -o nounset
+
+if [ -z "${NODE_DEVTOOL_SCRIPT_NAME:-}" ]; then
+    scriptname=$(basename "$0")
+else
+    scriptname=$(basename "$NODE_DEVTOOL_SCRIPT_NAME")
+fi
+
+nodedir="$(dirname "$0")/../node"
+nodeversion=$(cd "$nodedir" && asdf current --no-header nodejs | awk '{print $2}')
+export ASDF_NODEJS_VERSIOn="$nodeversion"
+exec asdf exec npm exec --prefix "$nodedir" -- "$scriptname" "$@"

@@ -3,8 +3,8 @@
 set -o errexit -o pipefail -o nounset
 
 nodedir="$(dirname "$0")/../node"
-nodeversion=$(cd "$nodedir" && asdf current --no-header nodejs | awk '{print $2}')
-env ASDF_NODEJS_VERSION="$nodeversion" \
-    PI_CODING_AGENT_DIR="$nodedir"/agent \
-    PI_OFFLINE=true \
-    asdf exec npm exec --prefix "$nodedir" -- pi "$@"
+export PI_CODING_AGENT_DIR="$nodedir"/agent
+export PI_OFFLINE=true
+
+export NODE_DEVTOOL_SCRIPT_NAME="$0"
+exec ~/.dotfiles/bin/node-devtool "$@"
