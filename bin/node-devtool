@@ -10,5 +10,5 @@ fi
 
 nodedir="$(dirname "$0")/../node"
 nodeversion=$(cd "$nodedir" && asdf current --no-header nodejs | awk '{print $2}')
-export ASDF_NODEJS_VERSIOn="$nodeversion"
+export ASDF_NODEJS_VERSION="$nodeversion"
 exec asdf exec npm exec --prefix "$nodedir" -- "$scriptname" "$@"
