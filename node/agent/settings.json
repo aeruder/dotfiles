@@ -1,7 +1,9 @@
 {
   "lastChangelogVersion": "1.5.0",
   "packages": [
-    "npm:pi-llama-cpp"
+    "npm:pi-llama-cpp",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-cursor-sdk"
   ],
   "llamaSettings": {
     "servers": [
@@ -17,5 +19,8 @@
     "sortBy": "asc",
     "pollingTimeout": 60000,
     "serverTimeout": 1000
+  },
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-cursor-sdk\",\"scope\":\"user\"}": "0.5.26"
   }
 }
